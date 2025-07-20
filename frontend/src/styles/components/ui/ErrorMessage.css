@@ -1,0 +1,21 @@
+.error-display {
+  display: flex;
+  align-items: center;
+  color: var(--color-error);
+  margin: var(--spacing-sm) 0;
+  padding: var(--spacing-sm);
+  background-color: hsla(0, 70%, 55%, 0.1);
+  border: 1px solid var(--color-error);
+  border-radius: var(--border-radius-full);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-regular);
+  gap: var(--spacing-sm);
+}
+
+.error-display__icon {
+  font-size: var(--font-size-lg);
+}
+
+.error-display__message {
+  flex-grow: 1;
+}

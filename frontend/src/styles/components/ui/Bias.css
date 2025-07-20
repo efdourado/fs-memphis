@@ -1,0 +1,142 @@
+.bias-card {
+  position: relative;
+  display: flex;
+  align-items: center;
+  height: 80px;
+  transition: var(--transition-default);
+}
+
+.bias-card__cover {
+  position: absolute;
+  width: 98px;
+  height: 98px;
+  border-radius: var(--border-radius-md);
+  overflow: hidden;
+  z-index: 2;
+}
+
+.bias-card__cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+
+.bias-card__content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+
+  flex-grow: 1;
+  height: 76px;
+  margin-left: 51px;
+  padding: 16px 16px 16px 56px;
+  
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--border-radius-md);
+  overflow: hidden;
+}
+
+.bias-card__text {
+  flex: 1;
+  min-width: 0;
+  padding-right: 12px;
+}
+
+.bias-card__title {
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-regular);
+  color: #fff;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+.bias-card__subtitle {
+  font-size: var(--font-size-sm);
+  color: rgba(255, 255, 255, 0.7);
+  font-weight: var(--font-weight-light);
+  margin: 4px 0 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+
+.bias-card__actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  opacity: 0;
+  transform: translateX(8px);
+  transition: all 0.3s ease;
+}
+
+.bias-card:hover .bias-card__actions {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.action-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--spacing-xl);
+  height: var(--spacing-xl);
+  background-color: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.8);
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.action-btn:hover {
+  background-color: rgba(255, 255, 255, 0.15);
+  color: #fff;
+}
+
+.action-btn.play {
+  background-color: var(--color-primary);
+  color: #fff;
+  width: 42px;
+  height: 42px;
+}
+
+.action-btn.play:hover {
+  opacity: 0.8;
+  transform: scale(1.03);
+}
+
+.action-btn.menu {
+  transform: rotate(90deg);
+}
+
+
+.bias-card.is-playing .bias-card__cover {
+  box-shadow: 0 0 0 2px var(--color-primary), 0 3px 8px rgba(29, 185, 84, 0.3);
+}
+
+.bias-card.is-playing .action-btn.play {
+  background-color: var(--color-primary);
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.2);
+}
+
+.bias-card.is-playing .bias-card__title {
+  color: var(--color-primary);
+}
+
+.bias-card.is-playing .bias-card__actions {
+  opacity: 1;
+  transform: translateX(0);
+}

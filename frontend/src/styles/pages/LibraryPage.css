@@ -1,0 +1,11 @@
+.library-page {
+  padding: var(--spacing-xl) var(--container-padding-x);
+  min-height: calc(100vh - var(--header-height) - 150px);
+}
+
+.playlists-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: var(--spacing-sm);
+  margin-left: -12px;
+}
