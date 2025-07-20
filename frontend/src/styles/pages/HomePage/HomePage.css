@@ -1,0 +1,5 @@
+.home-content {
+  flex: 1;
+  padding: var(--spacing-lg) var(--container-padding-x);
+  background-color: var(--color-background);
+}

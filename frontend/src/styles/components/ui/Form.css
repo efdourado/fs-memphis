@@ -1,0 +1,210 @@
+.form-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  width: 100%;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--spacing-lg);
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+  position: relative;
+}
+
+.form-group.span-2 {
+  grid-column: span 2 / span 2;
+}
+
+.form-group label {
+  font-weight: var(--font-weight-light);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  padding-left: var(--spacing-xxs);
+}
+
+.form-group input[type="text"],
+.form-group input[type="url"],
+.form-group input[type="date"],
+.form-group input[type="number"],
+.form-group input[type="email"],
+.form-group textarea,
+.form-group select {
+  width: 100%;
+  padding: var(--spacing-sm) var(--spacing-md);
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-md);
+  color: var(--color-text-primary);
+  font-size: var(--font-size-sm);
+  transition: border-color 0.2s, box-shadow 0.2s;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
+.form-group input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(0.6);
+  cursor: pointer;
+  transition: filter 0.2s;
+}
+
+.form-group input[type="date"]::-webkit-calendar-picker-indicator:hover {
+  filter: invert(0.8);
+}
+
+.form-group select {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+  background-position: right 0.5rem center;
+  background-repeat: no-repeat;
+  background-size: 1.5em 1.5em;
+  padding-right: 2.5rem;
+}
+
+.form-group:focus-within .checkbox-container,
+.form-group input:focus, 
+.form-group textarea:focus, 
+.form-group select:focus {
+  outline: none;
+  border-color: var(--color-primary);
+}
+
+
+.admin-form__multiselect select[multiple] {
+  padding: var(--spacing-sm);
+  height: 150px;
+  background-image: none;
+  overflow-y: auto;
+}
+
+.admin-form__multiselect select[multiple] option {
+  padding: var(--spacing-sm);
+  border-radius: var(--border-radius-sm);
+  transition: all 0.2s ease-out;
+}
+
+.admin-form__multiselect select[multiple] option:checked {
+  background: var(--color-primary);
+  color: var(--color-white);
+}
+
+
+.form-group textarea {
+  resize: vertical;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.form-group textarea::-webkit-scrollbar {
+  display: none;
+}
+
+
+.checkbox-container {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-sm) var(--spacing-md);
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-md);
+  cursor: pointer;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  height: 47px;
+}
+
+.form-group:focus-within .checkbox-container {
+  border-color: var(--color-primary);
+}
+
+.form-checkbox {
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  background-color: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 4px;
+  position: relative;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.form-checkbox:checked {
+  background-color: var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+.form-checkbox:checked::after {
+  content: '✓';
+  position: absolute;
+  color: var(--color-white);
+  font-size: 12px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.checkbox-label {
+  color: var(--color-text-primary);
+  cursor: pointer;
+  user-select: none;
+}
+
+.form-group > input:focus + label,
+.form-group > input:not(:placeholder-shown) + label,
+.form-group > textarea:focus + label,
+.form-group > textarea:not(:placeholder-shown) + label,
+.form-group > select:valid + label {
+  top: 0;
+  transform: translateY(-50%) scale(0.85);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-primary);
+}
+
+.form-group > textarea {
+  min-height: 80px;
+  padding-top: var(--spacing-md);
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  color: var(--color-primary);
+  align-items: center;
+  gap: var(--spacing-md);
+  margin-top: var(--spacing-md);
+  padding-top: var(--spacing-lg);
+  border-top: 1px solid var(--color-border);
+}
+
+.form-divider {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  color: var(--color-text-tertiary);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin: var(--spacing-2xl) 0 var(--spacing-xl);
+}
+
+.form-divider::before, .form-divider::after {
+  content: '';
+  flex: 1;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.form-divider:not(:empty)::before {
+  margin-right: var(--spacing-md);
+}
+
+.form-divider:not(:empty)::after {
+  margin-left: var(--spacing-md);
+}
