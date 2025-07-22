@@ -14,7 +14,6 @@ export const normalizeDataForPage = (type, data) => {
         title: data.name,
         description: data.artistProfile?.description,
         
-        primaryImage: data.profilePic,
         backgroundImage: data.profilePic,
         
         mainContent: {
@@ -35,10 +34,11 @@ export const normalizeDataForPage = (type, data) => {
       };
 
     case 'album':
+      const albumType = data.type ? data.type.charAt(0).toUpperCase() + data.type.slice(1) : 'Album';
       return {
-        pageType: data.type ? data.type.charAt(0).toUpperCase() + data.type.slice(1) : 'Album',
+        pageType: albumType,
         title: data.title,
-        description: `Album by ${data.artist?.name || 'Unknown Artist'}`,
+        description: `${albumType} by ${data.artist?.name || 'Unknown Artist'}`,
         primaryImage: data.coverImage,
         backgroundImage: data.coverImage,
         
@@ -74,7 +74,7 @@ export const normalizeDataForPage = (type, data) => {
         subContent: null,
 
         stats: [
-          { value: 'Created by', label: data.owner?.name || 'Anonymous' },
+          { value: 'Playlist by', label: data.owner?.name || 'Anonymous' },
           { label: 'Songs', value: data.songs?.length || 0 },
         ],
         isVerified: false,

@@ -14,7 +14,7 @@
 
 .carousel__title {
   font-size: var(--font-size-2xl);
-  font-weight: var(--font-weight-semibold);
+  font-weight: var(--font-weight-regular);
 }
 
 .carousel__items-container {

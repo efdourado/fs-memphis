@@ -59,7 +59,7 @@ const PlaylistForm = ({ playlist, onSaved, isSaving, onDelete }) => {
         <input id="playlist-coverImage" type="url" name="coverImage" value={formData.coverImage} onChange={handleChange} spellCheck='false' />
       </div>
       <div className="form-actions">
-        <button type="submit" disabled={isSaving} className="modal-btn">
+        <button type="submit" disabled={isSaving} className="login-btn">
           {isSaving ? 'Saving...' : 'Save Changes'}
         </button>
 
