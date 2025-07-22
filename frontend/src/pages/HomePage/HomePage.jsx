@@ -61,7 +61,7 @@ const HomePage = () => {
 
       {albums.length > 0 && (
         <Carousel
-          title="Popular Albums & Singles"
+          title="Popular Albums"
           items={albums}
           type="album"
         />

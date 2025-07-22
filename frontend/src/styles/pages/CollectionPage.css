@@ -12,6 +12,7 @@
   position: relative;
   display: flex;
   flex-direction: column;
+  justify-content: end;
   align-items: flex-end;
   overflow-y: auto;
   text-align: right;
@@ -41,7 +42,7 @@
 .collection-page__metadata {
   position: relative;
   z-index: 2;
-  max-width: 500px;
+  max-width: 300px;
   margin-bottom: var(--spacing-2xl);
 }
 
@@ -66,6 +67,7 @@
 
 .collection-page__description {
   font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-light);
   color: var(--color-text-tertiary);
   line-height: var(--line-height-normal);
   margin-bottom: 0;
@@ -73,14 +75,20 @@
 
 .collection-page__stats {
   font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-light);
   color: var(--color-text-secondary);
-  margin-bottom: var(--spacing-md);
+  margin: var(--spacing-md) 0;
 }
 
 .collection-page__actions {
-  margin-top: var(--spacing-xs);
   display: flex;
   gap: var(--spacing-md);
+  justify-content: space-between;
+}
+
+.actions-left, .actions-right {
+  display: flex;
+  gap: 0.5rem;
   align-items: center;
 }
 
@@ -96,6 +104,11 @@
   color: var(--color-text-secondary);
 }
 
+.collection-page__play-button {
+  font-size: var(--font-size-5xl);
+  color: var(--color-primary);
+}
+
 @media (max-width: 992px) {
   .collection-page {
     grid-template-columns: 1fr;
@@ -105,25 +118,21 @@
 
   .collection-page__left-column {
     min-height: 60vh;
-    justify-content: flex-end;
+    align-items: flex-start;
     text-align: left;
     padding: 0 var(--spacing-xl);
   }
   .collection-page__left-column::before {
-    background: linear-gradient(to top, var(--color-background) 1%, transparent 100%);
-  }
-
-  .collection-page__actions {
-    justify-content: left;
+    background: linear-gradient(to top, var(--color-background) 2%, transparent 100%);
   }
 
   .collection-page__right-column {
     height: auto;
     overflow-y: visible;
+    padding: 0 var(--spacing-xl);
   }
-  
+
   .artist-profile-pic {
     margin-left: 0;
     margin-right: auto;
-  }
-}
+} }

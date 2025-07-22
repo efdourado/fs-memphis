@@ -165,7 +165,7 @@ const AdminForm = ({ id, config, onSaved, onCancel }) => {
         })}
       </div>
       <div className="form-actions">
-        <button type="submit" className="modal-btn" disabled={saving}>
+        <button type="submit" className="login-btn" disabled={saving}>
           {saving ? 'Saving...' : (isEditing ? 'Save Changes' : 'Create')}
         </button>
       </div>

@@ -2,7 +2,7 @@ import React, { useEffect, useState, useCallback, memo } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlay, faPause, faEdit } from "@fortawesome/free-solid-svg-icons";
+import { faPlay, faPause, faEllipsis } from "@fortawesome/free-solid-svg-icons";
 
 import * as collectionService from "../services/collectionService";
 import { deletePlaylist, removeSongFromPlaylist } from "../services/userService";
@@ -71,8 +71,7 @@ const CollectionPage = ({ type }) => {
         navigate("/library");
       } catch (err) {
         setError("Failed to delete playlist.");
-      }
-    }
+    } }
   }, [id, isOwner, navigate]);
 
   const handlePlaylistUpdated = useCallback((updatedData) => {
@@ -84,7 +83,7 @@ const CollectionPage = ({ type }) => {
   const handleRemoveSong = useCallback(async (songIdToRemove) => {
     try {
       await removeSongFromPlaylist(id, songIdToRemove);
-      loadPageData(); // Reload all data to ensure consistency
+      loadPageData();
     } catch (error) {
       setError("Failed to remove song from playlist.");
     }
@@ -111,7 +110,6 @@ const CollectionPage = ({ type }) => {
   const {
     title,
     description,
-    primaryImage,
     backgroundImage,
     mainContent,
     subContent,
@@ -130,38 +128,42 @@ const CollectionPage = ({ type }) => {
           <div className="collection-page__metadata">
             <h1 className="collection-page__title">{title}</h1>
             <p className="collection-page__description">{description}</p>
-            {stats && (
-              <div className="collection-page__stats">
-                {stats.map((stat, index) => (
-                  <React.Fragment key={index}>
-                    {`${stat.value} ${stat.label}`}
-                    {index < stats.length - 1 && <span className="stat-separator"> • </span>}
-                  </React.Fragment>
-                ))}
-              </div>
-            )}
           </div>
         </aside>
 
         <main className="collection-page__right-column">
           <div className="collection-page__actions">
-            <button className="login-btn create-btn" onClick={handlePlayMainContent}>
-              <FontAwesomeIcon icon={isMainContentPlaying && isPlaying ? faPause : faPlay} />
-              <span>{isMainContentPlaying && isPlaying ? 'Pause' : 'Play'}</span>
-            </button>
-            
-            {isOwner && (
-              <button className="login-btn create-btn" onClick={() => setEditModalOpen(true)}>
-                <FontAwesomeIcon icon={faEdit} />
-                <span>Edit Details</span>
+            <div className="actions-left">
+              {stats && (
+                <div className="collection-page__stats">
+                  {stats.map((stat, index) => (
+                    <React.Fragment key={index}>
+                      {`${stat.value} ${stat.label}`}
+                      {index < stats.length - 1 && <span className="stat-separator"> • </span>}
+                    </React.Fragment>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            <div className="actions-right">
+              {isOwner && (
+                <button className="action-btn menu" onClick={() => setEditModalOpen(true)}>
+                  <FontAwesomeIcon icon={faEllipsis} />
+                </button>
+              )}
+
+              <button className="action-btn play" onClick={handlePlayMainContent}>
+                <FontAwesomeIcon icon={isMainContentPlaying && isPlaying ? faPause : faPlay} />
               </button>
-            )}
+            </div>
           </div>
-          <div className="form-divider span-2"></div>
           
           {mainContent?.items?.length > 0 ? (
             <section className="entity-content-section">
-              <h2 className="carousel__title">{mainContent.title}</h2>
+              <div className="carousel__header">
+                <h2 className="carousel__title">{mainContent.title}</h2>
+              </div>
               <SongList
                 songs={mainContent.items}
                 showHeader={false}
@@ -172,20 +174,25 @@ const CollectionPage = ({ type }) => {
               />
             </section>
           ) : (
-            type === 'artist' && <p>This artist has no songs yet.</p>
+            type === 'artist' && <p>This artist has no songs yet</p>
           )}
 
           {subContent?.items?.length > 0 ? (
             <section className="entity-content-section">
-              <h2 className="carousel__title">{subContent.title}</h2>
-              <div className="items-grid">
+              <div className="carousel__header">
+                <h2 className="carousel__title">
+                  {subContent.title}
+                </h2>
+              </div>
+
+              <div className="playlists-grid">
                 {subContent.items.map((item) => (
                   <Card key={item._id} item={item} type={subContent.type} />
                 ))}
               </div>
             </section>
           ) : (
-            type === 'artist' && <p>This artist has no albums yet.</p>
+            type === 'artist' && <p>This artist has no albums yet</p>
           )}
         </main>
       </div>
