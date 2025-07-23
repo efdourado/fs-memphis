@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import fallbackImage from '/fb.jpg';
 
-const Card = ({ item, type }) => {
+const Card = ({ item, type, displayArtistName = true }) => {
   if (!item) return null;
 
   const isArtistCard = type === 'artist';
@@ -20,13 +20,13 @@ const Card = ({ item, type }) => {
     case 'album':
       const artistName = item.artist?.name || 'Unknown';
       const albumType = item.type ? item.type.charAt(0).toUpperCase() + item.type.slice(1) : 'Album';
-      subtitle = `${albumType} • ${artistName}`;
+      subtitle = displayArtistName ? `${albumType} • ${artistName}` : albumType;
       break;
     case 'playlist':
       subtitle = `Playlist • ${item.owner?.name || 'Unknown'}`;
       break;
     case 'song':
-       subtitle = `Single • ${item.artist?.name || 'Unknown'}`;
+       subtitle = displayArtistName ? `Single • ${item.artist?.name || 'Unknown'}` : 'Single';
       break;
     default:
       subtitle = '';
@@ -60,7 +60,6 @@ Card.propTypes = {
     _id: PropTypes.string.isRequired,
     title: PropTypes.string,
     name: PropTypes.string,
-    name: PropTypes.string,
     coverImage: PropTypes.string,
     image: PropTypes.string,
     profilePic: PropTypes.string,
@@ -73,6 +72,7 @@ Card.propTypes = {
     }),
   }).isRequired,
   type: PropTypes.oneOf(['artist', 'album', 'playlist', 'song']).isRequired,
+  displayArtistName: PropTypes.bool,
 };
 
 export default Card;

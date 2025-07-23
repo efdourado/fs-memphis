@@ -44,7 +44,6 @@ const CreatePlaylistView = ({ song, onPlaylistCreated, onCancel }) => {
           type="text"
           value={name}
           onChange={(e) => setName(e.target.value)}
-          placeholder="My Awesome Playlist"
           required
           disabled={loading}
         />
@@ -61,11 +60,8 @@ const CreatePlaylistView = ({ song, onPlaylistCreated, onCancel }) => {
         />
       </div>
 
-      <div className="form-actions" style={{ paddingTop: '0', marginTop: '0' }}>
-        <button type="button" onClick={onCancel} className="cta-button cancel" disabled={loading}>
-          Cancel
-        </button>
-        <button type="submit" disabled={loading} className="cta-button secondary-cta">
+      <div className="form-actions">
+        <button type="submit" disabled={loading} className="login-btn">
           {loading ? "Creating..." : `Create & Add`}
         </button>
       </div>
@@ -164,7 +160,7 @@ const SongModal = () => {
 
   const getTitle = () => {
     if (feedback.message) return "";
-    if (view === 'create') return "Create & Add Song";
+    if (view === 'create') return "Create Playlist & Add Song";
     return song.title;
   }
 

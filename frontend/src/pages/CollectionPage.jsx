@@ -187,7 +187,12 @@ const CollectionPage = ({ type }) => {
 
               <div className="playlists-grid">
                 {subContent.items.map((item) => (
-                  <Card key={item._id} item={item} type={subContent.type} />
+                  <Card
+                    key={item._id}
+                    item={item}
+                    type={subContent.type}
+                    displayArtistName={type !== 'artist'}
+                  />
                 ))}
               </div>
             </section>

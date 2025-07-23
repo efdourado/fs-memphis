@@ -301,7 +301,6 @@ body.light-mode ::-webkit-scrollbar-thumb:hover {
 }
 
 
-
 @media (max-width: 768px) {
   :root {
     --container-padding-x: var(--spacing-lg);

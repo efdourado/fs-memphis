@@ -170,6 +170,8 @@
 .form-group > textarea {
   min-height: 80px;
   padding-top: var(--spacing-md);
+  resize: none;
+  overflow: auto;
 }
 
 .form-actions {

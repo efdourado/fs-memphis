@@ -35,6 +35,9 @@ const Carousel = ({ title, items, type }) => {
     <section className="carousel">
       <div className="carousel__header">
         <h2 className="carousel__title">{title}</h2>
+        {type === 'artist' && (
+          <Link to="/artists" className="show-more-link">Show More</Link>
+        )}
       </div>
  
       <div className={`carousel__items-container ${showFade ? '' : 'hide-fade'}`}>
