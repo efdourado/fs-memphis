@@ -23,7 +23,7 @@ export const normalizeDataForPage = (type, data) => {
         },
         subContent: {
           title: 'Albums',
-          type: 'albums',
+          type: 'album',
           items: data.albums || [],
         },
 
@@ -36,7 +36,7 @@ export const normalizeDataForPage = (type, data) => {
     case 'album':
       const albumType = data.type ? data.type.charAt(0).toUpperCase() + data.type.slice(1) : 'Album';
       return {
-        pageType: albumType,
+        pageType: 'albumType',
         title: data.title,
         description: `${albumType} by ${data.artist?.name || 'Unknown Artist'}`,
         primaryImage: data.coverImage,

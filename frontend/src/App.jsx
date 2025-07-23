@@ -22,6 +22,7 @@ import HomePage from './pages/HomePage/HomePage';
 import CollectionPage from './pages/CollectionPage';
 import ComingSoonPage from './pages/ComingSoonPage';
 import LibraryPage from './pages/LibraryPage';
+import ArtistsPage from './pages/ArtistsPage';
 
 import AuthCallbackPage from './pages/Auth/AuthCallbackPage';
 
@@ -84,7 +85,7 @@ const App = () => {
                 <Route path="/playlist/:id" element={<CollectionPage type="playlist" />} />
                 <Route path="/album/:id" element={<CollectionPage type="album" />} />
 
-                <Route path="/artists" element={<ComingSoonPage />} />
+                <Route path="/artists" element={<ArtistsPage />} />
                 <Route path="/discover" element={<ComingSoonPage />} />
                 <Route path="/archived" element={<ComingSoonPage />} />
                 <Route path="/help" element={<ComingSoonPage />} />
