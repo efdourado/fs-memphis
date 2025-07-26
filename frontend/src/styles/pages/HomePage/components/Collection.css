@@ -25,7 +25,7 @@
 
 .collection-view__cover-art {
   width: 100%;
-  max-width: 320px;
+  max-width: 305px;
   aspect-ratio: 1/1;
   border-radius: var(--border-radius-lg);
   box-shadow: var(--shadow-lg);
@@ -155,7 +155,7 @@
 }
 
 
-@media (max-width: 992px) {
+@media (max-width: 1624px) {
   .collection-view__content {
     grid-template-columns: 1fr;
     gap: var(--spacing-lg);
@@ -165,7 +165,7 @@
     margin-left: 0;
 } }
 
-@media (max-width: 480px) {
+@media (max-width: 768px) {
   .collection-view__title {
     font-size: var(--font-size-xl);
   }
