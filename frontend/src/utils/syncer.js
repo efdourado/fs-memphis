@@ -1,7 +1,14 @@
+import { formatTotalDuration } from './formatters';
+
 const formatNumber = (num) => {
   if (num >= 1000000) return `${(num / 1000000).toFixed(1)}M`;
   if (num >= 1000) return `${(num / 1000).toFixed(1)}K`;
   return num?.toString() || '0';
+};
+
+const calculateTotalDuration = (songs) => {
+  if (!songs || songs.length === 0) return 0;
+  return songs.reduce((acc, song) => acc + (song?.duration || 0), 0);
 };
 
 export const normalizeDataForPage = (type, data) => {
@@ -18,7 +25,7 @@ export const normalizeDataForPage = (type, data) => {
         
         mainContent: {
           title: 'Popular Songs',
-          type: 'songs',
+          type: 'song',
           items: data.topSongs || [],
         },
         subContent: {
@@ -34,9 +41,14 @@ export const normalizeDataForPage = (type, data) => {
       };
 
     case 'album':
+      const albumSongs = data.songs || [];
+      const albumTotalDuration = calculateTotalDuration(albumSongs);
       const albumType = data.type ? data.type.charAt(0).toUpperCase() + data.type.slice(1) : 'Album';
+      
+      const albumSongStat = `${albumSongs.length} songs${albumTotalDuration > 0 ? `, ${formatTotalDuration(albumTotalDuration)}` : ''}`;
+
       return {
-        pageType: 'albumType',
+        pageType: albumType,
         title: data.title,
         description: `${albumType} by ${data.artist?.name || 'Unknown Artist'}`,
         primaryImage: data.coverImage,
@@ -44,20 +56,25 @@ export const normalizeDataForPage = (type, data) => {
         
         mainContent: {
           title: 'Songs',
-          type: 'songs',
-          items: data.songs || [],
+          type: 'song',
+          items: albumSongs,
         },
 
         subContent: null,
 
         stats: [
           { label: 'Released', value: new Date(data.releaseDate).getFullYear() },
-          { label: 'Songs', value: data.songs?.length || 0 },
+          { label: '', value: albumSongStat },
         ],
         isVerified: data.artist?.artistProfile?.verified,
       };
 
     case 'playlist':
+      const playlistSongs = data.songs ? data.songs.map(item => item.song).filter(Boolean) : [];
+      const playlistTotalDuration = calculateTotalDuration(playlistSongs);
+      
+      const playlistSongStat = `${playlistSongs.length} songs${playlistTotalDuration > 0 ? `, ${formatTotalDuration(playlistTotalDuration)}` : ''}`;
+
       return {
         pageType: 'Playlist',
         title: data.name,
@@ -67,15 +84,14 @@ export const normalizeDataForPage = (type, data) => {
         
         mainContent: {
           title: 'Songs',
-          type: 'songs',
-
-          items: data.songs ? data.songs.map(item => item.song).filter(Boolean) : [],
+          type: 'song',
+          items: playlistSongs,
         },
         subContent: null,
 
         stats: [
           { value: 'Playlist by', label: data.owner?.name || 'Anonymous' },
-          { label: 'Songs', value: data.songs?.length || 0 },
+          { label: '', value: playlistSongStat },
         ],
         isVerified: false,
       };
