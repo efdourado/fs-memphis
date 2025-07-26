@@ -26,7 +26,6 @@
 }
 
 
-
 .hero-talents {
   display: flex;
   flex-direction: column;
@@ -262,12 +261,20 @@
 
 
 @media (max-width: 1200px) {
+  .music-hero {
+    min-height: 300px;
+  }
+  
+  .music-hero .subtitle {
+    max-width: 100%;
+  }
+
   .hero-content {
     grid-template-columns: 1fr;
     padding: var(--spacing-xl) var(--spacing-lg);
   }
   
-   .hero-talents,
+  .hero-talents,
   .hero-feature-section,
   .hero-tabs-nav {
     display: none;
@@ -282,10 +289,6 @@
   }
   
   .text-content {
-    max-width: 100%;
-  }
-  
-  .music-hero .subtitle {
     max-width: 100%;
   }
   
