@@ -55,11 +55,11 @@
 .show-more-link {
   color: var(--color-text-secondary);
   font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-regular);
+  font-weight: var(--font-weight-light);
   text-decoration: none;
-  transition: color 0.3s ease-out;
+  transition: color 0.3s ease;
 }
 
 .show-more-link:hover {
-  color: var(--color-primary);
+  color: var(--color-white);
 }

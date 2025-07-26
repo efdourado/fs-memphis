@@ -2,15 +2,14 @@ import { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faBell, faBars, faPlus, faSearch, faTimes,
-  faChevronDown, faRightFromBracket, faUserCircle, faMoon,
+  faBell, faBars, faPlus, faSearch, faTimes, faChevronDown, faRightFromBracket, faUserCircle, faMoon, faSun
 } from "@fortawesome/free-solid-svg-icons";
 import { useAuth } from "../../context/AuthContext";
 import fallbackImage from '/fb.jpg';
 
 const themes = [
   { name: 'dark', icon: faMoon, className: 'theme-dark' },
-  { name: 'ocean', icon: faMoon, className: 'theme-ocean' },
+  { name: 'ocean', icon: faSun, className: 'theme-ocean' },
 ];
 
 const Header = ({ toggleSidebar }) => {

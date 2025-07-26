@@ -74,6 +74,7 @@
 .song-item__info {
   min-width: 0;
   font-weight: var(--font-weight-light);
+  align-items: center;
 }
 
 .song-item__title {
