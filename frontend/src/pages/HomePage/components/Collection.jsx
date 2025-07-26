@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
 import PropTypes from 'prop-types';
@@ -8,6 +8,7 @@ import { faPlay, faPause, faEllipsis } from '@fortawesome/free-solid-svg-icons';
 
 import { fetchAlbumById, fetchPlaylistById } from '../../../services/collectionService';
 import { deletePlaylist } from '../../../services/userService';
+import { formatTotalDuration } from '../../../utils/formatters';
 
 import SongList from '../../../components/songs/SongList';
 import LoadingSpinner from '../../../components/ui/LoadingSpinner';
@@ -56,6 +57,11 @@ const Collection = ({ collectionId, type = "album" }) => {
       loadCollectionData();
     }
   }, [collectionId, type]);
+
+  const totalDuration = useMemo(() => {
+    if (!songs || songs.length === 0) return 0;
+    return songs.reduce((acc, song) => acc + (song?.duration || 0), 0);
+  }, [songs]);
 
   const isCollectionCurrentlyPlaying = playContext?.type === type && playContext?.id === collectionId && isPlaying;
 
@@ -128,10 +134,17 @@ const Collection = ({ collectionId, type = "album" }) => {
               <p className="collection-view__owner">By {ownerName}</p>
               <div className="collection-view__meta">
                 {type === "album" && collection.releaseDate && (
-                  <span>{new Date(collection.releaseDate).getFullYear()}</span>
+                  <>
+                    <span>{new Date(collection.releaseDate).getFullYear()}</span>
+                    <span className="meta-divider">•</span>
+                  </>
                 )}
-                {type === "album" && songs.length > 0 && <span className="meta-divider">•</span>}
-                {songs.length > 0 && <span>{songs.length} songs</span>}
+                {songs.length > 0 && (
+                  <span>
+                    {`${songs.length} songs`}
+                    {totalDuration > 0 && `, ${formatTotalDuration(totalDuration)}`}
+                  </span>
+                )}
               </div>
               {collection.description && (
                 <p className="collection-view__description">
