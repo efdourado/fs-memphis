@@ -261,15 +261,16 @@
 }
 
 
-
 @media (max-width: 1200px) {
   .hero-content {
     grid-template-columns: 1fr;
     padding: var(--spacing-xl) var(--spacing-lg);
   }
   
-  .hero-talents {
-    display: none; /* hide talents on smaller screens or adjust as needed */
+   .hero-talents,
+  .hero-feature-section,
+  .hero-tabs-nav {
+    display: none;
   }
   
   .hero-main {
@@ -277,7 +278,7 @@
   }
   
   .hero-feature-section {
-    padding-top: var(--spacing-xl);
+    display: none;
   }
   
   .text-content {
