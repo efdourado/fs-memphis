@@ -26,7 +26,6 @@
 }
 
 
-
 .sidebar-nav::-webkit-scrollbar {
   width: 3px;
 }
@@ -40,9 +39,8 @@
   opacity: 0.6;
 }
 .sidebar-nav::-webkit-scrollbar-thumb:hover {
-    opacity: 1;
+  opacity: 1;
 }
-
 
 
 .nav-section {

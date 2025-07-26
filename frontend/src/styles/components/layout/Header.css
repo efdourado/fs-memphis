@@ -68,21 +68,19 @@
 }
 
 .search-trigger-btn {
-  background: transparent;
-  border: none;
-  color: var(--color-text-secondary);
-  cursor: pointer;
-  padding: var(--spacing-xs);
-  font-size: var(--font-size-md);
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 100%;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: var(--color-text-secondary);
+  padding-right: var(--spacing-sm);
+  font-size: var(--font-size-sm);
   transition: color var(--transition-duration-short) var(--transition-timing-function-ease);
 }
-
 .search-trigger-btn:hover {
-  color: var(--color-primary-hover);
+  color: var(--color-white);
 }
 
 .search-input {
@@ -288,7 +286,6 @@ body.light-mode .search-input {
 }
 
 
-
 .btn-ghost {
   background-color: transparent;
   border: none;
@@ -302,16 +299,14 @@ body.light-mode .search-input {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border-radius: var(--border-radius-full);
-  font-weight: var(--font-weight-semibold);
-  transition: all var(--transition-duration-medium) var(--transition-timing-function-ease);
-  white-space: nowrap;
-  text-decoration: none;
   
-  padding: var(--spacing-xs);
   width: var(--button-height-sm);
   height: var(--button-height-sm);
+  padding: var(--spacing-xs);
+  border-radius: var(--border-radius-full);
   border: none;
+  
+  transition: all var(--transition-duration-medium) var(--transition-timing-function-ease);
 }
 
 .btn-icon-only .btn-icon-graphic {

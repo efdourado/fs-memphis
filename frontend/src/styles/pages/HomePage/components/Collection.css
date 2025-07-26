@@ -101,7 +101,7 @@
   margin-left: var(--spacing-lg);
   overflow-y: auto;
   -ms-overflow-style: none;
-  scrollbar-width: none;
+  scrollbar-width: 2px;
 }
 
 .collection-view__tracks-panel::-webkit-scrollbar {
@@ -171,7 +171,6 @@
   }
 
   .collection-view__tracks-panel {
-    max-height: none;
     margin-left: 0;
 } }
 

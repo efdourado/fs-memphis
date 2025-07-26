@@ -94,6 +94,7 @@
 
 .music-hero .subtitle {
   font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-light);
   color: var(--color-text-secondary);
   line-height: var(--line-height-relaxed);
   max-width: 90%;
@@ -199,6 +200,7 @@
 
 .feature-description {
   color: var(--color-text-secondary);
+  font-weight: var(--font-weight-light);
 }
 
 
