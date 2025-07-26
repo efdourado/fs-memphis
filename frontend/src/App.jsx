@@ -71,6 +71,8 @@ const App = () => {
         <div className="app-container">
           <Sidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
 
+          {isSidebarOpen && <div className="sidebar-overlay" onClick={toggleSidebar}></div>}
+
           <div className={`content-pusher ${isSidebarOpen ? 'sidebar-open' : ''}`}>
             <Header toggleSidebar={toggleSidebar} />
             <main style={{ flex: 1 }}>

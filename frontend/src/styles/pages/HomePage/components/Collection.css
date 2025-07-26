@@ -87,7 +87,6 @@
   margin: 0;
 }
 
-
 .collection-view__actions {
   display: flex;
   align-items: center;
@@ -95,19 +94,12 @@
   margin-top: var(--spacing-lg);
 }
 
-
 .collection-view__tracks-panel {
   max-height: 320px;
   margin-left: var(--spacing-lg);
   overflow-y: auto;
   -ms-overflow-style: none;
-  scrollbar-width: 2px;
 }
-
-.collection-view__tracks-panel::-webkit-scrollbar {
-  display: none;
-}
-
 
 .collection-view__actions {
   display: flex;
@@ -121,7 +113,6 @@
 .collection-view__actions.visible {
   opacity: 1;
 }
-
 
 .action-btn {
   display: flex;
