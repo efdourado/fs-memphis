@@ -73,7 +73,6 @@
   font-size: var(--font-size-sm);
   color: var(--color-text-tertiary);
   margin-bottom: var(--spacing-md);
-
 }
 
 .collection-view__meta .meta-divider {
@@ -161,6 +160,10 @@
     gap: var(--spacing-lg);
   }
 
+  .collection-view__actions {
+    opacity: 1;
+  }
+
   .collection-view__tracks-panel {
     margin-left: 0;
 } }
@@ -172,4 +175,9 @@
   
   .collection-view__owner {
     font-size: var(--font-size-sm);
+} }
+
+@media (max-width: 568px) {
+  .collection-view__meta {
+    display: none;
 } }

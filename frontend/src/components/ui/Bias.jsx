@@ -41,7 +41,7 @@ const Bias = ({ item, type }) => {
   if (!item) return null;
 
   const title = item.title || item.name;
-  const imageUrl = item.coverImage || item.image || fallbackImage;
+  const imageUrl = item.album?.coverImage || item.image || fallbackImage;
   const detailPath = type === 'song' && item.album?._id ? `/album/${item.album._id}` : `/${type}/${item._id}`;
   const isOwner = currentUser && type === "playlist" && currentUser._id === item.owner?._id;
 

@@ -3,11 +3,6 @@
   background-color: var(--color-surface);
   color: var(--color-text-secondary);
   border-top: 1px solid var(--color-border);
-  transition: margin-bottom 0.3s ease-in-out;
-}
-
-.footer.with-player {
-  margin-bottom: var(--player-height);
 }
 
 .footer-container {

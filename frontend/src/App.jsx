@@ -107,7 +107,7 @@ const App = () => {
             <SongModal />
           </div>
         </div>
-        <Player isSidebarOpen={isSidebarOpen} />
+        <Player />
     </PlayerProvider>
 ); };
 

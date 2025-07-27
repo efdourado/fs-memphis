@@ -114,6 +114,9 @@
 }
 
 .theme-ocean {
+  --color-primary-accent: #6f88a9;
+  --color-primary: var(--color-primary-accent);
+
   --color-background: hsl(210, 30%, 12%);
   --color-background-header: hsla(210, 30%, 18%, 0.85);
   --color-surface: hsl(210, 30%, 15%);
@@ -125,6 +128,7 @@
   --hero-gradient-start: hsla(210, 30%, 12%, 0.8);
   --hero-gradient-end: hsla(210, 30%, 12%, 0.6);
 }
+
 
 *, *::before, *::after {
   box-sizing: border-box;
