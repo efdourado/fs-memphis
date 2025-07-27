@@ -5,7 +5,6 @@ export class SongDTO {
   album = null;
   duration = 0;
   audioUrl = '';
-  releaseDate = null;
   isExplicit = false;
   genre = [];
   lyrics = '';
@@ -17,7 +16,6 @@ export class SongDTO {
       album: this.album,
       duration: this.duration,
       audioUrl: this.audioUrl,
-      releaseDate: this.releaseDate,
       isExplicit: this.isExplicit,
       genre: this.genre,
       lyrics: this.lyrics,

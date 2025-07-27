@@ -34,9 +34,11 @@
 
 .collection-page__right-column {
   height: 100%;
-  overflow-y: auto;
+  overflow-y: hidden;
   background-color: var(--color-background);
   padding: var(--spacing-2xl) var(--spacing-xl);
+  display: flex;
+  flex-direction: column;
 }
 
 .collection-page__metadata {
@@ -98,6 +100,13 @@
 
 .entity-content-section {
   margin-top: var(--spacing-xl);
+}
+
+.song-list-container {
+  flex-grow: 1;
+  overflow-y: auto;
+  min-height: 0;
+  padding-right: var(--spacing-sm);
 }
 
 .lyrics-text {

@@ -11,6 +11,7 @@ import { useSongModal } from "../context/SongModalContext";
 import { usePlayer } from "../hooks/usePlayer";
 import { normalizeDataForPage } from "../utils/syncer";
 
+import Carousel from "../components/ui/Carousel";
 import SongList from "../components/songs/SongList";
 import PlaylistModal from "../components/playlists/PlaylistModal";
 import Card from "../components/ui/Card";
@@ -160,7 +161,7 @@ const CollectionPage = ({ type }) => {
           </div>
           
           {mainContent?.items?.length > 0 ? (
-            <section className="entity-content-section">
+            <section className="entity-content-section song-list-container">
               <div className="carousel__header">
                 <h2 className="carousel__title">{mainContent.title}</h2>
               </div>
@@ -176,25 +177,15 @@ const CollectionPage = ({ type }) => {
           ) : (
             type === 'artist' && <p>This artist has no songs yet</p>
           )}
-
+          
           {subContent?.items?.length > 0 ? (
             <section className="entity-content-section">
-              <div className="carousel__header">
-                <h2 className="carousel__title">
-                  {subContent.title}
-                </h2>
-              </div>
-
-              <div className="playlists-grid">
-                {subContent.items.map((item) => (
-                  <Card
-                    key={item._id}
-                    item={item}
-                    type={subContent.type}
-                    displayArtistName={type !== 'artist'}
-                  />
-                ))}
-              </div>
+              <Carousel
+                title={subContent.title}
+                items={subContent.items}
+                type={subContent.type}
+                displayArtistName={type !== 'artist'}
+              />
             </section>
           ) : (
             type === 'artist' && <p>This artist has no albums yet</p>

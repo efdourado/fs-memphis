@@ -9,7 +9,6 @@ const songSchema = new mongoose.Schema({
   album: { type: mongoose.Schema.Types.ObjectId, ref: "Album" },
   duration: { type: Number, required: true },
   audioUrl: { type: String },
-  releaseDate: { type: Date },
   isExplicit: { type: Boolean, default: false },
   genre: { type: [String], default: [] },
   plays: { type: Number, default: 0 },

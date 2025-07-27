@@ -4,7 +4,7 @@ import { useAuth } from "../../context/AuthContext";
 import { useHomePageData } from "../../hooks/useHomePageData";
 
 import Hero from "../../components/ui/Hero.jsx";
-import Carousel from "./components/Carousel.jsx";
+import Carousel from "../../components/ui/Carousel.jsx";
 import Collection from "./components/Collection.jsx";
 import LoadingSpinner from "../../components/ui/LoadingSpinner.jsx";
 import ErrorMessage from "../../components/ui/ErrorMessage.jsx";

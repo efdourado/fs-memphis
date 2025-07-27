@@ -28,7 +28,7 @@ const commonAlbumValidations = [
     .isIn(albumTypes).withMessage(`Invalid type. Must be one of: ${albumTypes.join(', ')}`),
   body('genre')
     .optional({ checkFalsy: true })
-    .isString().withMessage('Genre must be a string.'),
+    .isArray().withMessage('Genre must be an array.'),
 ];
 
 export const createAlbumValidator = [ ...commonAlbumValidations, handleValidationErrors ];

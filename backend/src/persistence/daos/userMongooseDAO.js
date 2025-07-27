@@ -11,18 +11,19 @@ export class UserMongooseDAO extends IUserDAO {
   }
 
   async findArtistProfileById(id) {
-    return await this.model.findById(id)
-      .populate('topSongs')
-      .populate('albums')
-      .lean();
+    return await this.model.findById(id).populate('topSongs').populate('albums').lean();
   }
 
   async findById(id) {
-    return await this.model.findById(id);
+    return await this.model.findById(id).select('-password');
   }
 
   async findByEmail(email) {
     return await this.model.findOne({ email });
+  }
+
+  async findByEmailForAuth(email) {
+    return await this.model.findOne({ email }).select('+password');
   }
 
   async create(userData) {

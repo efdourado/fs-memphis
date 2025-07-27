@@ -6,7 +6,7 @@ import container from '../container.js';
 import { createAlbumValidator, updateAlbumValidator } from '../validators/albumValidators.js';
 import { createPlaylistValidator, updatePlaylistValidator } from '../validators/playlistValidators.js';
 import { createSongValidator, updateSongValidator } from '../validators/songValidators.js';
-import { updateUserValidator } from '../validators/userValidators.js';
+import { updateUserValidator, createUserValidator } from '../validators/userValidators.js';
 
 const router = express.Router();
 
@@ -29,7 +29,8 @@ router.get('/artist/:artistId/albums', albumController.getAlbumsByArtist);
 
 
 router.route('/users')
-    .get(protect, admin, userController.getAllUsers);
+    .get(protect, admin, userController.getAllUsers)
+    .post(protect, admin, createUserValidator, userController.createUser);
 
 router.route('/user/:id')
     .get(protect, admin, userController.getUserById)

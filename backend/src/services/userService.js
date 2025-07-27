@@ -13,7 +13,7 @@ export class UserService {
   }); }
 
   async getAllUsers() {
-    return this.userDAO.findAll({ isAdmin: false, isArtist: false });
+    return this.userDAO.findAll();
   }
 
   async getUserById(id) {
@@ -57,12 +57,28 @@ export class UserService {
       token: this._generateToken(user._id),
   }; }
 
+  async createUser(userData) {
+    const { email } = userData;
+    if (!email) {
+      throw new AppError('Email is required', 400);
+    }
+    const userExists = await this.userDAO.findByEmail(email);
+    if (userExists) {
+      throw new AppError('User with this email already exists', 409);
+    }
+    const userWithDefaultPassword = { ...userData, password: 'password123' };
+    const newUser = await this.userDAO.create(userWithDefaultPassword);
+    const userObject = newUser.toObject();
+    delete userObject.password;
+    return userObject;
+  }
+
   async loginUser({ email, password }) {
     if (!email || !password) {
       throw new AppError('Please provide email and password', 400);
     }
     
-    const user = await this.userDAO.findByEmail(email).select('+password');
+    const user = await this.userDAO.findByEmailForAuth(email);
 
     if (!user || !(await user.comparePassword(password))) {
       throw new AppError('Invalid email or password', 401);
@@ -77,9 +93,8 @@ export class UserService {
   }; }
 
   async updateUser(id, updateData) {
-    if (updateData.password) {
-      throw new AppError("Password cannot be updated through this route.", 400);
-    }
+    delete updateData.password;
+
     const user = await this.userDAO.updateById(id, updateData);
      if (!user) {
       throw new AppError("User not found", 404);

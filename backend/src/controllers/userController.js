@@ -18,7 +18,7 @@ export class UserController extends IUserController {
   });
   
   getCurrentUser = asyncHandler(async (req, res) => {
-    const user = await this.userService.getUserById(req.user.id);
+    const user = await this.userService.getUserById(req.user._id);
     res.json(user);
   });
 
@@ -35,6 +35,11 @@ export class UserController extends IUserController {
   updateUser = asyncHandler(async (req, res) => {
     const updatedUser = await this.userService.updateUser(req.params.id, req.body);
     res.json(updatedUser);
+  });
+
+  createUser = asyncHandler(async (req, res) => {
+    const newUser = await this.userService.createUser(req.body);
+    res.status(201).json(newUser);
   });
   
   deleteUser = asyncHandler(async (req, res) => {
