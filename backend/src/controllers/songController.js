@@ -1,13 +1,13 @@
-import { SongService } from '../services/songService.js';
+import { ISongController } from '../interfaces/controllers/iSongController.js';
+import { SongDAO_Encap_Mongoose } from '../persistence/daos/songDAO_Encap_Mongoose.js';
+import { SongDTO } from '../persistence/dtos/SongDTO.js';
 
-export class SongController {
-  constructor() {
-    this.songService = new SongService();
-  }
+const songDAO = new SongDAO_Encap_Mongoose();
 
+export class SongController extends ISongController {
   async getAllSongs(req, res) {
     try {
-      const songs = await this.songService.getAllSongs();
+      const songs = await songDAO.findAll();
       res.json(songs);
     } catch (error) {
       res.status(500).json({ error: error.message });
@@ -15,7 +15,7 @@ export class SongController {
 
   async getSongById(req, res) {
     try {
-      const song = await this.songService.getSongById(req.params.id);
+      const song = await songDAO.findById(req.params.id);
       if (!song) {
         return res.status(404).json({ error: 'Song not found' });
       }
@@ -25,24 +25,37 @@ export class SongController {
   } }
 
   async createSong(req, res) {
+    const songDTO = new SongDTO();
+    Object.assign(songDTO, req.body);
+
     try {
-      const song = await this.songService.createSong(req.body);
-      res.status(201).json(song);
+      if (!songDTO.audioUrl || !songDTO.duration) {
+        return res.status(400).json({ error: 'Audio URL and duration are required.' });
+      }
+      const newSong = await songDAO.create(songDTO);
+      res.status(201).json(newSong);
     } catch (error) {
-      res.status(error.statusCode || 400).json({ error: error.message });
+      res.status(400).json({ error: error.message });
   } }
-  
+
   async updateSong(req, res) {
+    const songDTO = new SongDTO();
+    songDTO.id = req.params.id;
+    Object.assign(songDTO, req.body);
+    
     try {
-      const updatedSong = await this.songService.updateSong(req.params.id, req.body);
+      const updatedSong = await songDAO.updateById(songDTO);
+      if (!updatedSong) {
+        return res.status(404).json({ error: 'Song not found' });
+      }
       res.json(updatedSong);
     } catch (error) {
-      res.status(error.statusCode || 400).json({ error: error.message });
+      res.status(400).json({ error: error.message });
   } }
 
   async incrementPlay(req, res) {
     try {
-      const song = await this.songService.incrementPlayCount(req.params.id);
+      const song = await songDAO.incrementPlayCount(req.params.id);
       if (!song) {
         return res.status(404).json({ error: 'Song not found' });
       }
@@ -52,9 +65,15 @@ export class SongController {
   } }
 
   async deleteSong(req, res) {
+    const songDTO = new SongDTO();
+    songDTO.id = req.params.id;
+
     try {
-      await this.songService.deleteSong(req.params.id);
+      const deletedSong = await songDAO.deleteById(songDTO);
+      if (!deletedSong) {
+        return res.status(404).json({ error: 'Song not found' });
+      }
       res.status(204).end();
     } catch (error) {
-      res.status(error.statusCode || 500).json({ error: error.message });
+      res.status(500).json({ error: error.message });
 } } }

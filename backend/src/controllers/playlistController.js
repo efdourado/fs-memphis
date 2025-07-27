@@ -1,14 +1,15 @@
-import { PlaylistService } from '../services/playlistService.js';
-import { SongService } from '../services/songService.js';
+import { IPlaylistController } from '../interfaces/controllers/iPlaylistController.js';
+import { PlaylistDAO_Encap_Mongoose } from '../persistence/daos/playlistDAO_Encap_Mongoose.js';
+import { PlaylistDTO } from '../persistence/dtos/PlaylistDTO.js';
+import { SongDAO_Encap_Mongoose } from '../persistence/daos/songDAO_Encap_Mongoose.js';
 
-export class PlaylistController {
-  constructor() {
-    this.playlistService = new PlaylistService();
-    this.songService = new SongService();
-  }
+const playlistDAO = new PlaylistDAO_Encap_Mongoose();
+const songDAO = new SongDAO_Encap_Mongoose();
+
+export class PlaylistController extends IPlaylistController {
 
   async _checkOwnership(playlistId, userId) {
-    const playlist = await this.playlistService.getPlaylistById(playlistId);
+    const playlist = await playlistDAO.findById(playlistId);
     if (!playlist) {
       const err = new Error('Playlist not found');
       err.statusCode = 404;
@@ -24,27 +25,15 @@ export class PlaylistController {
 
   async getAllPlaylists(req, res) {
     try {
-      const playlists = await this.playlistService.getAllPlaylists();
-
-      const playlistsWithSongs = await Promise.all(
-        playlists.map(async (playlist) => {
-          const songDocs = await Promise.all(
-            playlist.songs.map(item => this.songService.getSongById(item.song))
-          );
-
-          return {
-            ...playlist.toObject(),
-            songs: songDocs.filter(Boolean).map(song => ({ song })),
-      }; }) );
-
-      res.json(playlistsWithSongs);
+      const playlists = await playlistDAO.findAll();
+      res.json(playlists);
     } catch (error) {
       res.status(error.statusCode || 500).json({ message: error.message });
   } }
 
   async getPlaylistById(req, res) {
     try {
-      const playlist = await this.playlistService.getPlaylistById(req.params.id);
+      const playlist = await playlistDAO.findById(req.params.id);
       if (!playlist) {
         return res.status(404).json({ message: 'Playlist not found' });
       }
@@ -54,9 +43,8 @@ export class PlaylistController {
   } }
 
   async getPlaylistsByOwner(req, res) {
-    const { ownerId } = req.params;
-    try {
-      const playlists = await this.playlistService.getPlaylistsByOwner(ownerId);
+     try {
+      const playlists = await playlistDAO.findByOwner(req.params.ownerId);
       res.json(playlists);
     } catch (error) {
       res.status(error.statusCode || 500).json({ message: error.message });
@@ -64,34 +52,44 @@ export class PlaylistController {
 
   async getMyPlaylists(req, res) {
     try {
-      const playlists = await this.playlistService.getPlaylistsByOwner(req.user._id);
+      const playlists = await playlistDAO.findByOwner(req.user._id);
       res.json(playlists);
     } catch (error) {
       res.status(error.statusCode || 500).json({ message: error.message });
   } }
 
   async createPlaylist(req, res) {
+    const playlistDTO = new PlaylistDTO();
+    Object.assign(playlistDTO, req.body);
+    playlistDTO.owner = req.user._id;
+
     try {
-      const playlistData = { ...req.body, owner: req.user._id };
-      const playlist = await this.playlistService.createPlaylist(playlistData);
+      const playlist = await playlistDAO.create(playlistDTO);
       res.status(201).json(playlist);
     } catch (error) {
       res.status(error.statusCode || 400).json({ message: error.message });
   } }
 
   async updatePlaylist(req, res) {
+    const playlistDTO = new PlaylistDTO();
+    playlistDTO.id = req.params.id;
+    Object.assign(playlistDTO, req.body);
+    
     try {
       await this._checkOwnership(req.params.id, req.user._id);
-      const updatedPlaylist = await this.playlistService.updatePlaylist(req.params.id, req.body);
+      const updatedPlaylist = await playlistDAO.updateById(playlistDTO);
       res.json(updatedPlaylist);
     } catch (error) {
       res.status(error.statusCode || 400).json({ message: error.message });
   } }
 
   async deletePlaylist(req, res) {
+    const playlistDTO = new PlaylistDTO();
+    playlistDTO.id = req.params.id;
+    
     try {
       await this._checkOwnership(req.params.id, req.user._id);
-      await this.playlistService.deletePlaylist(req.params.id);
+      await playlistDAO.deleteById(playlistDTO);
       res.status(204).end();
     } catch (error) {
       res.status(error.statusCode || 500).json({ message: error.message });
@@ -101,7 +99,7 @@ export class PlaylistController {
     try {
       const { id, songId } = req.params;
       await this._checkOwnership(id, req.user._id);
-      const updatedPlaylist = await this.playlistService.addSongToPlaylist(id, songId);
+      const updatedPlaylist = await playlistDAO.addSong(id, songId);
       res.json(updatedPlaylist);
     } catch (error) {
       res.status(error.statusCode || 400).json({ message: error.message });
@@ -111,7 +109,7 @@ export class PlaylistController {
     try {
       const { id, songId } = req.params;
       await this._checkOwnership(id, req.user._id);
-      const updatedPlaylist = await this.playlistService.removeSongFromPlaylist(id, songId);
+      const updatedPlaylist = await playlistDAO.removeSong(id, songId);
       res.json(updatedPlaylist);
     } catch (error) {
       res.status(error.statusCode || 400).json({ message: error.message });

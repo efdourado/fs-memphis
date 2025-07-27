@@ -1,6 +1,6 @@
-import Song from "../models/songModel.js";
-import Album from "../models/albumModel.js";
-import User from "../models/userModel.js";
+import Song from "../persistence/models/songModel.js";
+import Album from "../persistence/models/albumModel.js";
+import User from "../persistence/models/userModel.js";
 
 export const isArtistOwner = async (req, res, next) => {
   if (!req.user || !req.user.isArtist) {

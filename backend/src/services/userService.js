@@ -1,15 +1,11 @@
 import jwt from 'jsonwebtoken';
-import { UserModel } from '../models/userModel.js';
-import Playlist from '../models/playlistModel.js';
-import { AlbumModel } from '../models/albumModel.js';
-import { SongModel } from '../models/songModel.js';
-import User from '../models/userModel.js';
+import { UserDAO } from '../persistence/daos/userDAO.js';
+import Playlist from '../persistence/models/playlistModel.js';
+import User from '../persistence/models/userModel.js';
 
 export class UserService {
   constructor() {
-    this.userModel = new UserModel();
-    this.albumModel = new AlbumModel();
-    this.songModel = new SongModel();
+    this.userDAO = new UserDAO();
   }
 
   _generateToken(id) {
@@ -18,15 +14,15 @@ export class UserService {
   }); }
 
   async getAllUsers() {
-    return this.userModel.findAll();
+    return this.userDAO.findAll();
   }
 
   async getUserById(id) {
-    return this.userModel.findById(id);
+    return this.userDAO.findById(id);
   }
 
   async getAllArtists() {
-    return this.userModel.findAll({ isArtist: true });
+    return this.userDAO.findAll({ isArtist: true });
   }
 
   async getArtistProfileById(id) {
@@ -40,7 +36,6 @@ export class UserService {
       err.statusCode = 404;
       throw err;
     }
-
     return artist;
   }
 
@@ -50,12 +45,12 @@ export class UserService {
       err.statusCode = 400;
       throw err;
     }
-    return this.userModel.updateById(id, updateData);
+    return this.userDAO.updateById(id, updateData);
   }
 
   async deleteUser(id) {
     await Playlist.deleteMany({ owner: id });
-    return this.userModel.deleteById(id);
+    return this.userDAO.deleteById(id);
   }
 
   async registerUser({ name, email, password }) {
@@ -65,14 +60,14 @@ export class UserService {
       throw err;
     }
     
-    const userExistsByEmail = await this.userModel.findByEmail(email);
+    const userExistsByEmail = await this.userDAO.findByEmail(email);
     if (userExistsByEmail) {
       const err = new Error('User with this email already exists');
       err.statusCode = 400;
       throw err;
     }
 
-    const user = await this.userModel.create({ name, email, password });
+    const user = await this.userDAO.create({ name, email, password });
     
     const userObject = user.toObject();
     delete userObject.password;
@@ -82,7 +77,6 @@ export class UserService {
       token: this._generateToken(user._id),
   }; }
 
-
   async loginUser({ email, password }) {
     if (!email || !password) {
       const err = new Error('Please provide email and password');
@@ -90,7 +84,7 @@ export class UserService {
       throw err;
     }
     
-    const user = await this.userModel.findByEmail(email);
+    const user = await this.userDAO.findByEmail(email);
 
     if (user && (await user.comparePassword(password))) {
       const userObject = user.toObject();
@@ -105,8 +99,7 @@ export class UserService {
       err.statusCode = 401;
       throw err;
   } }
-  
-  
+
   async createUser(userData) {
     if (!userData.name || !userData.email) {
       const err = new Error('Name and email are required.');
@@ -114,17 +107,16 @@ export class UserService {
       throw err;
     }
 
-    const userExists = await this.userModel.findByEmail(userData.email);
+    const userExists = await this.userDAO.findByEmail(userData.email);
     if (userExists) {
-        const err = new Error('User with this email already exists.');
-        err.statusCode = 409;
-        throw err;
+      const err = new Error('User with this email already exists.');
+      err.statusCode = 409;
+      throw err;
     }
 
     if (!userData.password) {
       userData.password = "default000";
     }
 
-    return this.userModel.create(userData);
-  }
-}
+    return this.userDAO.create(userData);
+} }

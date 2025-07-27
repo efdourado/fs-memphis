@@ -57,11 +57,11 @@ const tableConfig = {
         <td
           className="item-cell-background"
           style={{
-            backgroundImage: `url(${item.profilePic || fallbackImage})`,
+            backgroundImage: `url(${fallbackImage})`,
           }}
         >
           <div className="item-cell">
-            <img src={item.profilePic || fallbackImage} alt={item.name} className="admin-table-image" />
+            <img src={item.profilePic || fallbackImage} alt={item.name} className="admin-table-image artist" />
             <div>
               <div style={{ fontWeight: 'var(--font-weight-semibold)' }}>{item.name}</div>
               <div style={{ fontSize: 'var(--font-size-sm)', color: 'var(--color-text-secondary)' }}>
@@ -90,7 +90,7 @@ const tableConfig = {
         <td
           className="item-cell-background"
           style={{
-            backgroundImage: `url(${item.artist?.profilePic || fallbackImage})`,
+            backgroundImage: `url(${fallbackImage})`,
           }}
         >
            <div className="item-cell">
@@ -116,11 +116,11 @@ const tableConfig = {
         <td
           className="item-cell-background"
           style={{
-            backgroundImage: `url(${item.artist?.profilePic || fallbackImage})`,
+            backgroundImage: `url(${fallbackImage})`,
           }}
         >
           <div className="item-cell">
-            <img src={item.coverImage || fallbackImage} alt={item.title} className="admin-table-image" />
+            <img src={item.album?.coverImage || fallbackImage} alt={item.title} className="admin-table-image" />
             <div>
               <div style={{ fontWeight: 'var(--font-weight-semibold)' }}>{item.title}</div>
               <div style={{ fontSize: 'var(--font-size-sm)', color: 'var(--color-text-secondary)', display: 'flex', alignItems: 'center', gap: '8px' }}>

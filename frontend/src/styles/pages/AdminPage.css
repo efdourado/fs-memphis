@@ -77,6 +77,10 @@
   border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
+.admin-table-image.artist {
+  border-radius: var(--border-radius-full);
+}
+
 
 .item-cell {
   display: flex;

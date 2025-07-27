@@ -1,8 +1,6 @@
-// backend/src/services/spotifyService.js
-
 import axios from "axios";
 import querystring from "querystring";
-import User from "../models/userModel.js";
+import User from "../persistence/models/userModel.js";
 
 const getNewAccessToken = async (refreshToken) => {
   if (!refreshToken) {
@@ -11,7 +9,7 @@ const getNewAccessToken = async (refreshToken) => {
   try {
     const response = await axios({
       method: "post",
-      // URL CORRETA para autenticação
+
       url: "https://accounts.spotify.com/api/token",
       data: querystring.stringify({
         grant_type: "refresh_token",
@@ -26,8 +24,8 @@ const getNewAccessToken = async (refreshToken) => {
               process.env.SPOTIFY_CLIENT_SECRET
           ).toString("base64"),
         "Content-Type": "application/x-www-form-urlencoded",
-      },
-    });
+    }, });
+    
     return response.data.access_token;
   } catch (error) {
     console.error(
@@ -35,8 +33,7 @@ const getNewAccessToken = async (refreshToken) => {
       error.response ? error.response.data : error.message
     );
     throw new Error("Failed to refresh Spotify token.");
-  }
-};
+} };
 
 export const getSpotifyApi = (userId, accessToken, refreshToken) => {
   const spotifyApi = axios.create({
@@ -76,11 +73,9 @@ export const getSpotifyApi = (userId, accessToken, refreshToken) => {
           return spotifyApi(originalRequest);
         } catch (refreshError) {
           return Promise.reject(refreshError);
-        }
-      }
+      } }
       return Promise.reject(error);
-    }
-  );
+  } );
 
   return spotifyApi;
 };

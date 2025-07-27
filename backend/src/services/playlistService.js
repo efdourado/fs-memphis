@@ -1,36 +1,36 @@
-import { PlaylistModel } from '../models/playlistModel.js';
+import { PlaylistDAO } from '../persistence/daos/playlistDAO.js';
 
 export class PlaylistService {
   constructor() {
-    this.playlistModel = new PlaylistModel();
+    this.playlistDAO = new PlaylistDAO();
   }
 
   async getAllPlaylists() {
-    return this.playlistModel.findAll();
+    return this.playlistDAO.findAll();
   }
 
   async getPlaylistById(id) {
-    return this.playlistModel.findById(id);
+    return this.playlistDAO.findById(id);
   }
 
   async getPlaylistsByOwner(ownerId) {
-    return this.playlistModel.findByOwner(ownerId);
+    return this.playlistDAO.findByOwner(ownerId);
   }
-  
+
   async createPlaylist(playlistData) {
-    return this.playlistModel.create(playlistData);
+    return this.playlistDAO.create(playlistData);
   }
 
   async updatePlaylist(id, updateData) {
-    return this.playlistModel.updateById(id, updateData);
+    return this.playlistDAO.updateById(id, updateData);
   }
 
   async deletePlaylist(id) {
-    return this.playlistModel.deleteById(id);
+    return this.playlistDAO.deleteById(id);
   }
 
   async addSongToPlaylist(playlistId, songId) {
-    const updatedPlaylist = await this.playlistModel.addSong(playlistId, songId);
+    const updatedPlaylist = await this.playlistDAO.addSong(playlistId, songId);
     if (!updatedPlaylist) {
       const err = new Error('Song is already in this playlist.');
       err.statusCode = 409;
@@ -40,5 +40,5 @@ export class PlaylistService {
   }
 
   async removeSongFromPlaylist(playlistId, songId) {
-    return this.playlistModel.removeSong(playlistId, songId);
+    return this.playlistDAO.removeSong(playlistId, songId);
 } }

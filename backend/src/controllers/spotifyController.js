@@ -1,7 +1,7 @@
 import axios from "axios";
 import querystring from "querystring";
 import jwt from "jsonwebtoken";
-import User from "../models/userModel.js";
+import User from "../persistence/models/userModel.js";
 
 const generateToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, {
