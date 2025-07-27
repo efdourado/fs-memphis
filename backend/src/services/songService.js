@@ -1,20 +1,20 @@
-import { SongModel } from '../models/songModel.js';
+import { SongDAO } from '../persistence/daos/songDAO.js';
 
 export class SongService {
   constructor() {
-    this.songModel = new SongModel();
+    this.songDAO = new SongDAO();
   }
 
   async getAllSongs() {
-    return this.songModel.findAll();
+    return this.songDAO.findAll();
   }
 
   async getSongById(id) {
-    return this.songModel.findById(id);
+    return this.songDAO.findById(id);
   }
 
   async getSongsByAlbumId(albumId) {
-    return this.songModel.findByAlbumId(albumId);
+    return this.songDAO.findByAlbumId(albumId);
   }
 
   async createSong(songData) {
@@ -23,12 +23,11 @@ export class SongService {
       err.statusCode = 400;
       throw err;
     }
-    const song = await this.songModel.create(songData);
-    return song;
+    return await this.songDAO.create(songData);
   }
-  
+
   async updateSong(id, updateData) {
-    const updatedSong = await this.songModel.updateById(id, updateData);
+    const updatedSong = await this.songDAO.updateById(id, updateData);
     if (!updatedSong) {
       const err = new Error('Song not found');
       err.statusCode = 404;
@@ -38,12 +37,11 @@ export class SongService {
   }
 
   async incrementPlayCount(id) {
-    const song = await this.songModel.incrementPlayCount(id);
-    return song;
+    return await this.songDAO.incrementPlayCount(id);
   }
 
   async deleteSong(id) {
-    const song = await this.songModel.deleteById(id);
+    const song = await this.songDAO.deleteById(id);
     if (!song) {
         const err = new Error('Song not found');
         err.statusCode = 404;

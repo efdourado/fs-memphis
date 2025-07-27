@@ -1,30 +1,30 @@
-import { AlbumModel } from '../models/albumModel.js';
+import { AlbumDAO } from '../persistence/daos/albumDAO.js';
 
 export class AlbumService {
   constructor() {
-    this.albumModel = new AlbumModel();
+    this.albumDAO = new AlbumDAO();
   }
 
   async getAllAlbums() {
-    return await this.albumModel.findAll();
+    return await this.albumDAO.findAll();
   }
 
   async getAlbumById(id) {
-    return await this.albumModel.findById(id);
+    return await this.albumDAO.findById(id);
   }
 
   async createAlbum(albumData) {
-    return await this.albumModel.create(albumData);
+    return await this.albumDAO.create(albumData);
   }
 
   async updateAlbum(id, updateData) {
-    return await this.albumModel.updateById(id, updateData);
+    return await this.albumDAO.updateById(id, updateData);
   }
 
   async deleteAlbum(id) {
-    return await this.albumModel.deleteById(id);
+    return await this.albumDAO.deleteById(id);
   }
 
   async getAlbumsByArtist(artistId) {
-    return await this.albumModel.findByArtist(artistId);
+    return await this.albumDAO.findByArtist(artistId);
 } }
