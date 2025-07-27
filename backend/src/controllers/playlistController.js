@@ -1,10 +1,10 @@
 import { IPlaylistController } from '../interfaces/controllers/iPlaylistController.js';
-import { PlaylistDAO_Encap_Mongoose } from '../persistence/daos/playlistDAO_Encap_Mongoose.js';
-import { PlaylistDTO } from '../persistence/dtos/PlaylistDTO.js';
-import { SongDAO_Encap_Mongoose } from '../persistence/daos/songDAO_Encap_Mongoose.js';
+import { PlaylistDAO } from '../persistence/daos/playlistDAO.js';
+import { PlaylistDTO } from '../persistence/dtos/playlistDTO.js';
+import { SongDAO } from '../persistence/daos/songDAO.js';
 
-const playlistDAO = new PlaylistDAO_Encap_Mongoose();
-const songDAO = new SongDAO_Encap_Mongoose();
+const playlistDAO = new PlaylistDAO();
+const songDAO = new SongDAO();
 
 export class PlaylistController extends IPlaylistController {
 

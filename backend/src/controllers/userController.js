@@ -1,9 +1,9 @@
 import { IUserController } from '../interfaces/controllers/iUserController.js';
-import { UserDTO } from '../persistence/dtos/UserDTO.js';
-import { UserDAO_Encap_Mongoose } from '../persistence/daos/userDAO_Encap_Mongoose.js';
+import { UserDTO } from '../persistence/dtos/userDTO.js';
+import { UserDAO } from '../persistence/daos/userDAO.js';
 import { UserService } from '../services/userService.js';
 
-const userDAO = new UserDAO_Encap_Mongoose();
+const userDAO = new UserDAO();
 const userService = new UserService();
 
 export class UserController extends IUserController {
