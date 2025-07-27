@@ -1,4 +1,4 @@
-import { IUserController } from '../interfaces/controllers/iUserController.js';
+import { IUserController } from './interfaces/iUserController.js';
 import asyncHandler from '../middlewares/asyncHandler.js';
 
 export class UserController extends IUserController {
@@ -18,14 +18,12 @@ export class UserController extends IUserController {
   });
   
   getCurrentUser = asyncHandler(async (req, res) => {
-    // req.user é populado pelo middleware 'protect'
     const user = await this.userService.getUserById(req.user.id);
     res.json(user);
   });
 
-
   getAllUsers = asyncHandler(async (req, res) => {
-    const users = await this.userService.getAllUsers({ isAdmin: false, isArtist: false });
+    const users = await this.userService.getAllUsers();
     res.json(users);
   });
 
@@ -44,9 +42,8 @@ export class UserController extends IUserController {
     res.status(204).send();
   });
 
-
   getAllArtists = asyncHandler(async (req, res) => {
-    const artists = await this.userService.getAllUsers({ isArtist: true });
+    const artists = await this.userService.getAllArtists();
     res.json(artists);
   });
 

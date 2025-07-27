@@ -1,24 +1,18 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-
 import PropTypes from 'prop-types';
-
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlay, faPause, faEllipsis } from '@fortawesome/free-solid-svg-icons';
-
 import { fetchAlbumById, fetchPlaylistById } from '../../../services/collectionService';
 import { deletePlaylist } from '../../../services/userService';
 import { formatTotalDuration } from '../../../utils/formatters';
-
 import SongList from '../../../components/songs/SongList';
 import LoadingSpinner from '../../../components/ui/LoadingSpinner';
 import SoundWave from '../../../components/ui/SoundWave';
 import PlaylistModal from '../../../components/playlists/PlaylistModal';
-
 import { useSongModal } from '../../../context/SongModalContext';
 import { usePlayer } from '../../../hooks/usePlayer';
 import { useAuth } from '../../../context/AuthContext';
-
 import fallbackImage from '/fb.jpg';
 
 const Collection = ({ collectionId, type = "album" }) => {
@@ -32,31 +26,33 @@ const Collection = ({ collectionId, type = "album" }) => {
   const [isEditModalOpen, setEditModalOpen] = useState(false);
   const navigate = useNavigate();
 
+  const loadCollectionData = useCallback(async () => {
+    try {
+      setLoading(true);
+      const fetcher = type === "album" ? fetchAlbumById : fetchPlaylistById;
+      const { data: collectionData } = await fetcher(collectionId);
+
+      if (collectionData) {
+        setCollection(collectionData);
+        const tracks =
+          type === "playlist"
+            ? collectionData.songs.map((item) => item.song).filter(Boolean)
+            : collectionData.songs || [];
+        setSongs(tracks);
+      }
+    } catch (error) {
+      console.error(`Error loading ${type} data:`, error);
+    } finally {
+      setLoading(false);
+    }
+  }, [collectionId, type]);
+
+
   useEffect(() => {
-    const loadCollectionData = async () => {
-      try {
-        setLoading(true);
-        const fetcher = type === "album" ? fetchAlbumById : fetchPlaylistById;
-        const { data: collectionData } = await fetcher(collectionId);
-
-        if (collectionData) {
-          setCollection(collectionData);
-          const tracks =
-            type === "playlist"
-              ? collectionData.songs.map((item) => item.song).filter(Boolean)
-              : collectionData.songs || [];
-          setSongs(tracks);
-        }
-      } catch (error) {
-        console.error(`Error loading ${type} data:`, error);
-      } finally {
-        setLoading(false);
-    } };
-
     if (collectionId) {
       loadCollectionData();
     }
-  }, [collectionId, type]);
+  }, [collectionId, loadCollectionData]);
 
   const totalDuration = useMemo(() => {
     if (!songs || songs.length === 0) return 0;
@@ -108,10 +104,10 @@ const Collection = ({ collectionId, type = "album" }) => {
   if (loading) return <LoadingSpinner />;
   if (!collection) return <div className="collection-view error">Failed to load collection.</div>;
 
-  const collectionName = type === "playlist" ? collection.name : collection.title;
-  const ownerName = type === "playlist" ? collection.owner?.name : collection.artist?.name;
+  const collectionName = type === "artist" ? collection.name : (collection.name || collection.title);
+  const ownerName = type === "artist" ? "Artist" : (collection.owner?.name || collection.artist?.name);
   
-  const coverImageUrl = collection.coverImage || fallbackImage;
+  const coverImageUrl = type === "artist" ? collection.profilePic : collection.coverImage || fallbackImage;
   const detailPath = `/${type}/${collection._id}`;
 
   return (
@@ -196,7 +192,7 @@ const Collection = ({ collectionId, type = "album" }) => {
 
 Collection.propTypes = {
   collectionId: PropTypes.string.isRequired,
-  type: PropTypes.oneOf(["album", "playlist"]),
+  type: PropTypes.oneOf(["album", "playlist", "artist"]),
 };
 
 export default Collection;

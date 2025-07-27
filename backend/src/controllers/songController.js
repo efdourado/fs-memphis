@@ -1,4 +1,4 @@
-import { ISongController } from '../interfaces/controllers/iSongController.js';
+import { ISongController } from './interfaces/iSongController.js';
 import asyncHandler from '../middlewares/asyncHandler.js';
 
 export class SongController extends ISongController {

@@ -21,7 +21,7 @@ import { UserService } from './services/userService.js';
 const albumService = new AlbumService(albumDAO, songDAO);
 const playlistService = new PlaylistService(playlistDAO, songDAO);
 const songService = new SongService(songDAO);
-const userService = new UserService(userDAO);
+const userService = new UserService(userDAO, playlistDAO);
 
 import { AlbumController } from './controllers/albumController.js';
 import { PlaylistController } from './controllers/playlistController.js';

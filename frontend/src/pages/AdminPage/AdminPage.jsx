@@ -66,7 +66,7 @@ const AdminPage = () => {
     const currentTypeName = activeTab.slice(0, -1);
     if (window.confirm(`Are you sure you want to delete this ${currentTypeName}? This action cannot be undone.`)) {
       try {
-        await TABS[active-tab].delete(id);
+        await TABS[activeTab].delete(id);
         loadData();
       } catch (err) {
         setError(`Failed to delete ${currentTypeName}.`);

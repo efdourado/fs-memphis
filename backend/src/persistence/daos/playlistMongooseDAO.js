@@ -1,4 +1,4 @@
-import { IPlaylistDAO } from '../../interfaces/daos/iPlaylistDAO.js';
+import { IPlaylistDAO } from './interfaces/iPlaylistDAO.js';
 
 export class PlaylistMongooseDAO extends IPlaylistDAO {
   constructor(playlistModel) {

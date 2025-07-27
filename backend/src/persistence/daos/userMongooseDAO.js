@@ -1,4 +1,4 @@
-import { IUserDAO } from '../../interfaces/daos/iUserDAO.js';
+import { IUserDAO } from './interfaces/iUserDAO.js';
 
 export class UserMongooseDAO extends IUserDAO {
   constructor(userModel) {
@@ -8,6 +8,13 @@ export class UserMongooseDAO extends IUserDAO {
 
   async findAll(filter = {}) {
     return await this.model.find(filter);
+  }
+
+  async findArtistProfileById(id) {
+    return await this.model.findById(id)
+      .populate('topSongs')
+      .populate('albums')
+      .lean();
   }
 
   async findById(id) {

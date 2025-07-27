@@ -29,10 +29,7 @@ export class UserService {
   }
 
   async getArtistProfileById(id) {
-    const artist = await this.userDAO.findById(id)
-      .populate('topSongs')
-      .populate('albums')
-      .lean();
+    const artist = await this.userDAO.findArtistProfileById(id);
 
     if (!artist || !artist.isArtist) {
       throw new AppError('Artist not found', 404);
