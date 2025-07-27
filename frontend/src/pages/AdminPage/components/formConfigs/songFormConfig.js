@@ -8,7 +8,6 @@ export const songFormConfig = {
     album: '',
     duration: 0,
     audioUrl: '',
-    releaseDate: '',
     lyrics: '',
     isExplicit: false,
   },
@@ -23,7 +22,6 @@ export const songFormConfig = {
   },
   processDataForForm: (data) => ({
     ...data,
-    releaseDate: data.releaseDate ? new Date(data.releaseDate).toISOString().split('T')[0] : '',
     artist: data.artist?._id || '',
     album: data.album?._id || '',
   }),
@@ -37,7 +35,6 @@ export const songFormConfig = {
     { name: 'artist', label: 'Artist', component: 'select', optionsKey: 'artists', required: true },
     { name: 'album', label: 'Album', component: 'select', optionsKey: 'albums' },
     { name: 'duration', label: 'Duration (seconds)', type: 'number', required: true },
-    { name: 'releaseDate', label: 'Release Date', type: 'date' },
-    { name: 'audioUrl', label: 'Audio (URL)', type: 'url', required: true, span: 'span-2' },
+    { name: 'audioUrl', label: 'Audio (URL)', type: 'url' },
     { name: 'lyrics', label: 'Lyrics', component: 'textarea', rows: '5', span: 'span-2' },
 ], };

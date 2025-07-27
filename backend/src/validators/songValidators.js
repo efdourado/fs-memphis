@@ -22,11 +22,8 @@ const commonSongValidations = [
         .notEmpty().withMessage('Duration is required.')
         .isNumeric().withMessage('Duration must be a number (in seconds).'),
     body('audioUrl')
-        .notEmpty().withMessage('Audio URL is required.')
-        .isURL().withMessage('Audio URL must be a valid URL.'),
-    body('releaseDate')
         .optional({ checkFalsy: true })
-        .isISO8601().withMessage('Invalid date format.').toDate(),
+        .isURL().withMessage('Audio URL must be a valid URL.'),
     body('isExplicit')
         .optional()
         .isBoolean().withMessage('isExplicit must be a boolean.'),

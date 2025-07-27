@@ -20,6 +20,16 @@ export const registerUserValidator = [
   handleValidationErrors,
 ];
 
+export const createUserValidator = [
+  body('name')
+    .trim()
+    .notEmpty().withMessage('Name is required.'),
+  body('email')
+    .isEmail().withMessage('Please provide a valid email.')
+    .normalizeEmail(),
+  handleValidationErrors,
+];
+
 export const loginUserValidator = [
   body('email')
     .isEmail().withMessage('Please provide a valid email.')

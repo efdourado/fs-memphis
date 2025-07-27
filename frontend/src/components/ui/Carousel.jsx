@@ -1,9 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-
 import PropTypes from 'prop-types';
-
-import Card from '../../../components/ui/Card';
+import Card from './Card';
 
 const Carousel = ({ title, items, type }) => {
   const [showFade, setShowFade] = useState(true);

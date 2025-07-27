@@ -9,3 +9,9 @@
   gap: var(--spacing-sm);
   margin-left: -12px;
 }
+
+@media (max-width: 480px) {
+  .playlists-grid {
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: var(--spacing-xs);
+} }

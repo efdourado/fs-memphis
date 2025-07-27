@@ -48,7 +48,7 @@ userSchema.virtual('albums', {
 
 userSchema.virtual('topSongs', {
   ref: 'Song',
-  localField: 'id',
+  localField: '_id',
   foreignField: 'artist',
   options: { sort: { plays: -1 }, limit: 10 }
 });
