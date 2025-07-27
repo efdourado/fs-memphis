@@ -3,9 +3,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFire, faMagnet, faFlask, faFireFlameCurved } from '@fortawesome/free-solid-svg-icons';
-
 import { useAuth } from '../../context/AuthContext';
-import Bias from './Bias'; // Make sure Bias is imported
+import Bias from './Bias';
 import fallbackImage from '/fb.jpg';
 
 const Hero = ({ title, subtitle, talents = [], bgImage, songs = [], playlists = [] }) => {

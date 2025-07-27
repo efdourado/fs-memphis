@@ -1,4 +1,4 @@
-import { IPlaylistController } from '../interfaces/controllers/iPlaylistController.js';
+import { IPlaylistController } from './interfaces/iPlaylistController.js';
 import asyncHandler from '../middlewares/asyncHandler.js';
 
 export class PlaylistController extends IPlaylistController {

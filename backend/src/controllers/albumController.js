@@ -1,4 +1,4 @@
-import { IAlbumController } from '../interfaces/controllers/iAlbumController.js';
+import { IAlbumController } from './interfaces/iAlbumController.js';
 import asyncHandler from '../middlewares/asyncHandler.js';
 
 export class AlbumController extends IAlbumController {

@@ -1,4 +1,4 @@
-import { ISongDAO } from '../../interfaces/daos/iSongDAO.js';
+import { ISongDAO } from './interfaces/iSongDAO.js';
 
 export class SongMongooseDAO extends ISongDAO {
   constructor(songModel) {

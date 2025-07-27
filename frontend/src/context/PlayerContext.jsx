@@ -1,9 +1,7 @@
 import React, { createContext, useCallback, useEffect, useMemo, useState } from 'react';
 import { useAudio } from '../hooks/useAudio';
 import PropTypes from 'prop-types';
-import axios from 'axios';
-
-const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3000/api";
+import apiClient from '../services/apiClient';
 
 export const PlayerContext = createContext();
 
@@ -18,7 +16,7 @@ export const PlayerProvider = ({ children }) => {
   });
 
   const handlePlayCount = (trackId) => {
-    axios.post(`${API_URL}/song/${trackId}/play`)
+    apiClient.post(`/song/${trackId}/play`)
       .catch(err => console.error("Failed to update play count", err));
   };
 

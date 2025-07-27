@@ -6,7 +6,7 @@ export class AlbumService {
     this.songDAO = songDAO;
   }
 
-  async getAllAlbums() {
+  async getAllAlbumsWithSongs() {
     const albums = await this.albumDAO.findAll();
     const albumsWithSongs = await Promise.all(
       albums.map(async (album) => {
@@ -17,7 +17,7 @@ export class AlbumService {
     return albumsWithSongs;
   }
 
-  async getAlbumById(id) {
+  async getAlbumWithSongs(id) {
     const album = await this.albumDAO.findById(id);
     if (!album) {
       throw new AppError('Album not found', 404);

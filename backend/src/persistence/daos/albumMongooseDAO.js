@@ -1,4 +1,4 @@
-import { IAlbumDAO } from '../../interfaces/daos/iAlbumDAO.js';
+import { IAlbumDAO } from './interfaces/iAlbumDAO.js';
 
 export class AlbumMongooseDAO extends IAlbumDAO {
   constructor(albumModel) {
