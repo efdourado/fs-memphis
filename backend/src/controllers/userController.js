@@ -1,85 +1,56 @@
 import { IUserController } from '../interfaces/controllers/iUserController.js';
-import { UserDTO } from '../persistence/dtos/userDTO.js';
-import { UserDAO } from '../persistence/daos/userDAO.js';
-import { UserService } from '../services/userService.js';
-
-const userDAO = new UserDAO();
-const userService = new UserService();
+import asyncHandler from '../middlewares/asyncHandler.js';
 
 export class UserController extends IUserController {
-  constructor() {
+  constructor(userService) {
     super();
+    this.userService = userService;
   }
 
-  async getAllUsers(req, res) {
-    try {
-      const users = await userDAO.findAll({ isAdmin: false, isArtist: false });
-      res.json(users);
-    } catch (error) {
-      res.status(500).json({ error: error.message });
-  } }
+  registerUser = asyncHandler(async (req, res) => {
+    const result = await this.userService.registerUser(req.body);
+    res.status(201).json(result);
+  });
 
-  async registerUser(req, res) {
-    try {
-      const result = await userService.registerUser(req.body);
-      res.status(201).json(result);
-    } catch (error) {
-      res.status(error.statusCode || 500).json({ message: error.message });
-  } }
+  loginUser = asyncHandler(async (req, res) => {
+    const result = await this.userService.loginUser(req.body);
+    res.json(result);
+  });
   
-  async loginUser(req, res) {
-    try {
-      const result = await userService.loginUser(req.body);
-      res.json(result);
-    } catch (error) {
-      res.status(error.statusCode || 500).json({ message: error.message });
-  } }
+  getCurrentUser = asyncHandler(async (req, res) => {
+    // req.user é populado pelo middleware 'protect'
+    const user = await this.userService.getUserById(req.user.id);
+    res.json(user);
+  });
 
-  async updateUser(req, res) {
-    const userDTO = new UserDTO();
-    userDTO.id = req.params.id;
-    Object.assign(userDTO, req.body);
 
-    try {
-      const updatedUser = await userDAO.updateById(userDTO);
-      res.json(updatedUser);
-    } catch (error) {
-      res.status(error.statusCode || 400).json({ error: error.message });
-  } }
+  getAllUsers = asyncHandler(async (req, res) => {
+    const users = await this.userService.getAllUsers({ isAdmin: false, isArtist: false });
+    res.json(users);
+  });
+
+  getUserById = asyncHandler(async (req, res) => {
+    const user = await this.userService.getUserById(req.params.id);
+    res.json(user);
+  });
   
-  async deleteUser(req, res) {
-    const userDTO = new UserDTO();
-    userDTO.id = req.params.id;
-
-    try {
-      await userService.deleteUser(userDTO.id);
-      res.status(204).end();
-    } catch (error) {
-      res.status(error.statusCode || 500).json({ error: error.message });
-  } }
-
-  async getAllArtists(req, res) {
-     try {
-      const artists = await userDAO.findAll({ isArtist: true });
-      res.json(artists);
-    } catch (error) {
-      res.status(500).json({ error: error.message });
-  } }
-
-  async getUserById(req, res) {
-    try {
-      const user = await userDAO.findById(req.params.id);
-      if (!user) {
-        return res.status(404).json({ error: "User not found" });
-      }
-      res.json(user);
-    } catch (error) {
-      res.status(error.statusCode || 500).json({ error: error.message });
-  } }
+  updateUser = asyncHandler(async (req, res) => {
+    const updatedUser = await this.userService.updateUser(req.params.id, req.body);
+    res.json(updatedUser);
+  });
   
-  async getCurrentUser(req, res) {
-    if (req.user) {
-      res.json(req.user);
-    } else {
-      res.status(404).json({ message: 'User not found' });
-} } }
+  deleteUser = asyncHandler(async (req, res) => {
+    await this.userService.deleteUser(req.params.id);
+    res.status(204).send();
+  });
+
+
+  getAllArtists = asyncHandler(async (req, res) => {
+    const artists = await this.userService.getAllUsers({ isArtist: true });
+    res.json(artists);
+  });
+
+  getArtistProfileById = asyncHandler(async (req, res) => {
+      const artist = await this.userService.getArtistProfileById(req.params.id);
+      res.json(artist);
+}); }

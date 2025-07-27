@@ -1,55 +1,76 @@
 import express from 'express';
 import { protect, admin } from '../middlewares/authMiddleware.js';
-
-import { UserController } from '../controllers/userController.js';
-import { SongController } from '../controllers/songController.js';
-import { AlbumController } from '../controllers/albumController.js';
-import { PlaylistController } from '../controllers/playlistController.js';
 import { connectToDatabase } from '../config/db.js';
-import { createAuthRouter } from './authRoutes.js';
+import container from '../container.js';
+
+import { createAlbumValidator, updateAlbumValidator } from '../validators/albumValidators.js';
+import { createPlaylistValidator, updatePlaylistValidator } from '../validators/playlistValidators.js';
+import { createSongValidator, updateSongValidator } from '../validators/songValidators.js';
+import { updateUserValidator } from '../validators/userValidators.js';
 
 const router = express.Router();
 
 await connectToDatabase();
 
-const userController = new UserController();
-const songController = new SongController();
-const albumController = new AlbumController();
-const playlistController = new PlaylistController();
+const { 
+  userController, 
+  songController, 
+  albumController, 
+  playlistController, 
+  authRouter 
+} = container;
 
-const authRouter = createAuthRouter(userController);
 router.use('/auth', authRouter);
 
-router.get('/artists', userController.getAllArtists.bind(userController));
-router.get('/artist/:id', userController.getArtistProfileById.bind(userController));
 
-router.get('/users', protect, admin, userController.getAllUsers.bind(userController));
-router.get('/user/:id', protect, admin, userController.getUserById.bind(userController));
-router.put('/user/:id', protect, admin, userController.updateUser.bind(userController));
-router.delete('/user/:id', protect, admin, userController.deleteUser.bind(userController));
+router.get('/artists', userController.getAllArtists);
+router.get('/artist/:id', userController.getArtistProfileById);
+router.get('/artist/:artistId/albums', albumController.getAlbumsByArtist);
 
-router.get('/albums', albumController.getAllAlbums.bind(albumController));
-router.get('/album/:id', albumController.getAlbumById.bind(albumController));
-router.get('/artist/:artistId/albums', albumController.getAlbumsByArtist.bind(albumController));
-router.post('/albums', protect, admin, albumController.createAlbum.bind(albumController));
-router.put('/album/:id', protect, admin, albumController.updateAlbum.bind(albumController));
-router.delete('/album/:id', protect, admin, albumController.deleteAlbum.bind(albumController));
 
-router.get('/songs', songController.getAllSongs.bind(songController));
-router.get('/song/:id', songController.getSongById.bind(songController));
-router.post('/song/:id/play', songController.incrementPlay.bind(songController));
-router.post('/songs', protect, admin, songController.createSong.bind(songController));
-router.put('/song/:id', protect, admin, songController.updateSong.bind(songController));
-router.delete('/song/:id', protect, admin, songController.deleteSong.bind(songController));
+router.route('/users')
+    .get(protect, admin, userController.getAllUsers);
 
-router.get('/playlists', playlistController.getAllPlaylists.bind(playlistController));
-router.get('/playlist/:id', playlistController.getPlaylistById.bind(playlistController));
-router.get('/user/:ownerId/playlists', playlistController.getPlaylistsByOwner.bind(playlistController));
-router.get('/me/playlists', protect, playlistController.getMyPlaylists.bind(playlistController));
-router.post('/playlists', protect, playlistController.createPlaylist.bind(playlistController));
-router.put('/playlist/:id', protect, playlistController.updatePlaylist.bind(playlistController));
-router.delete('/playlist/:id', protect, playlistController.deletePlaylist.bind(playlistController));
-router.post('/playlist/:id/song/:songId', protect, playlistController.addSongToPlaylist.bind(playlistController));
-router.delete('/playlist/:id/song/:songId', protect, playlistController.removeSongFromPlaylist.bind(playlistController));
+router.route('/user/:id')
+    .get(protect, admin, userController.getUserById)
+    .put(protect, admin, updateUserValidator, userController.updateUser)
+    .delete(protect, admin, userController.deleteUser);
+
+
+router.route('/albums')
+    .get(albumController.getAllAlbums)
+    .post(protect, admin, createAlbumValidator, albumController.createAlbum);
+
+router.route('/album/:id')
+    .get(albumController.getAlbumById)
+    .put(protect, admin, updateAlbumValidator, albumController.updateAlbum)
+    .delete(protect, admin, albumController.deleteAlbum);
+
+
+router.route('/songs')
+    .get(songController.getAllSongs)
+    .post(protect, admin, createSongValidator, songController.createSong);
+
+router.route('/song/:id')
+    .get(songController.getSongById)
+    .put(protect, admin, updateSongValidator, songController.updateSong)
+    .delete(protect, admin, songController.deleteSong);
+
+router.post('/song/:id/play', songController.incrementPlay);
+
+
+router.route('/playlists')
+  .get(playlistController.getAllPlaylists)
+  .post(protect, createPlaylistValidator, playlistController.createPlaylist);
+
+router.route('/playlist/:id')
+  .get(playlistController.getPlaylistById)
+  .put(protect, updatePlaylistValidator, playlistController.updatePlaylist)
+  .delete(protect, playlistController.deletePlaylist);
+
+router.get('/user/:ownerId/playlists', playlistController.getPlaylistsByOwner);
+router.get('/me/playlists', protect, playlistController.getMyPlaylists);
+router.post('/playlist/:id/song/:songId', protect, playlistController.addSongToPlaylist);
+router.delete('/playlist/:id/song/:songId', protect, playlistController.removeSongFromPlaylist);
 
 export default router;

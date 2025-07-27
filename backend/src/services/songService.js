@@ -1,8 +1,8 @@
-import { SongDAO } from '../persistence/daos/songDAO.js';
+import AppError from './appError.js';
 
 export class SongService {
-  constructor() {
-    this.songDAO = new SongDAO();
+  constructor(songDAO) {
+    this.songDAO = songDAO;
   }
 
   async getAllSongs() {
@@ -10,18 +10,16 @@ export class SongService {
   }
 
   async getSongById(id) {
-    return this.songDAO.findById(id);
+    const song = await this.songDAO.findById(id);
+    if (!song) {
+      throw new AppError('Song not found', 404);
+    }
+    return song;
   }
-
-  async getSongsByAlbumId(albumId) {
-    return this.songDAO.findByAlbumId(albumId);
-  }
-
+  
   async createSong(songData) {
-    if (!songData.audioUrl || !songData.duration) {
-      const err = new Error('Audio URL and duration are required.');
-      err.statusCode = 400;
-      throw err;
+    if (!songData.title || !songData.artist || !songData.duration || !songData.audioUrl) {
+      throw new AppError('Title, artist, duration, and audioUrl are required.', 400);
     }
     return await this.songDAO.create(songData);
   }
@@ -29,23 +27,24 @@ export class SongService {
   async updateSong(id, updateData) {
     const updatedSong = await this.songDAO.updateById(id, updateData);
     if (!updatedSong) {
-      const err = new Error('Song not found');
-      err.statusCode = 404;
-      throw err;
+      throw new AppError('Song not found', 404);
     }
     return updatedSong;
   }
-
-  async incrementPlayCount(id) {
-    return await this.songDAO.incrementPlayCount(id);
-  }
-
+  
   async deleteSong(id) {
-    const song = await this.songDAO.deleteById(id);
-    if (!song) {
-        const err = new Error('Song not found');
-        err.statusCode = 404;
-        throw err;
+    const deletedSong = await this.songDAO.deleteById(id);
+    if (!deletedSong) {
+      throw new AppError('Song not found', 404);
+    }
+    return deletedSong;
+  }
+  
+  async incrementPlayCount(id) {
+    const song = await this.songDAO.incrementPlayCount(id);
+     if (!song) {
+        console.warn(`Attempted to increment play count for non-existent song ID: ${id}`);
+        return null;
     }
     return song;
 } }
