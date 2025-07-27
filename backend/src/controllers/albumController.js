@@ -1,10 +1,10 @@
 import { IAlbumController } from '../interfaces/controllers/iAlbumController.js';
-import { AlbumDAO_Encap_Mongoose } from '../persistence/daos/albumDAO_Encap_Mongoose.js';
-import { AlbumDTO } from '../persistence/dtos/AlbumDTO.js';
-import { SongDAO_Encap_Mongoose } from '../persistence/daos/songDAO_Encap_Mongoose.js';
+import { AlbumDAO } from '../persistence/daos/albumDAO.js';
+import { AlbumDTO } from '../persistence/dtos/albumDTO.js';
+import { SongDAO } from '../persistence/daos/songDAO.js';
 
-const albumDAO = new AlbumDAO_Encap_Mongoose();
-const songDAO = new SongDAO_Encap_Mongoose();
+const albumDAO = new AlbumDAO();
+const songDAO = new SongDAO();
 
 export class AlbumController extends IAlbumController {
   async getAllAlbums(req, res) {

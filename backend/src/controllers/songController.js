@@ -1,8 +1,8 @@
 import { ISongController } from '../interfaces/controllers/iSongController.js';
-import { SongDAO_Encap_Mongoose } from '../persistence/daos/songDAO_Encap_Mongoose.js';
-import { SongDTO } from '../persistence/dtos/SongDTO.js';
+import { SongDAO } from '../persistence/daos/songDAO.js';
+import { SongDTO } from '../persistence/dtos/songDTO.js';
 
-const songDAO = new SongDAO_Encap_Mongoose();
+const songDAO = new SongDAO();
 
 export class SongController extends ISongController {
   async getAllSongs(req, res) {
