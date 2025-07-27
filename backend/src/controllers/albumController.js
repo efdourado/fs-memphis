@@ -1,93 +1,38 @@
 import { IAlbumController } from '../interfaces/controllers/iAlbumController.js';
-import { AlbumDAO } from '../persistence/daos/albumDAO.js';
-import { AlbumDTO } from '../persistence/dtos/albumDTO.js';
-import { SongDAO } from '../persistence/daos/songDAO.js';
-
-const albumDAO = new AlbumDAO();
-const songDAO = new SongDAO();
+import asyncHandler from '../middlewares/asyncHandler.js';
 
 export class AlbumController extends IAlbumController {
-  async getAllAlbums(req, res) {
-    try {
-      const albums = await albumDAO.findAll();
-      const albumsWithSongs = await Promise.all(
-        albums.map(async (album) => {
-          const songs = await songDAO.findByAlbumId(album._id);
-          return { ...album.toObject(), songs: songs };
-      }) );
-      
-      res.json(albumsWithSongs);
-    } catch (error) {
-      res.status(500).json({ error: error.message });
-  } }
+  constructor(albumService) {
+    super();
+    this.albumService = albumService;
+  }
 
-  async getAlbumById(req, res) {
-    try {
-      const album = await albumDAO.findById(req.params.id);
-      if (!album) {
-        return res.status(404).json({ error: 'Album not found' });
-      }
-      const songs = await songDAO.findByAlbumId(req.params.id);
-      const responseData = { ...album.toObject(), songs: songs };
-      res.json(responseData);
-    } catch (error) {
-      res.status(500).json({ error: error.message });
-  } }
+  getAllAlbums = asyncHandler(async (req, res) => {
+    const albums = await this.albumService.getAllAlbumsWithSongs();
+    res.json(albums);
+  });
 
-  async createAlbum(req, res) {
-    const albumDTO = new AlbumDTO();
-    albumDTO.title = req.body.title;
-    albumDTO.artist = req.body.artist;
-    albumDTO.releaseDate = req.body.releaseDate;
-    albumDTO.coverImage = req.body.coverImage;
-    albumDTO.genre = req.body.genre;
-    albumDTO.type = req.body.type;
+  getAlbumById = asyncHandler(async (req, res) => {
+    const album = await this.albumService.getAlbumWithSongs(req.params.id);
+    res.json(album);
+  });
 
-    try {
-      const newAlbum = await albumDAO.create(albumDTO);
-      res.status(201).json(newAlbum);
-    } catch (error) {
-      res.status(400).json({ error: error.message });
-  } }
+  createAlbum = asyncHandler(async (req, res) => {
+    const newAlbum = await this.albumService.createAlbum(req.body);
+    res.status(201).json(newAlbum);
+  });
 
-  async updateAlbum(req, res) {
-    const albumDTO = new AlbumDTO();
-    albumDTO.id = req.params.id;
-    albumDTO.title = req.body.title;
-    albumDTO.artist = req.body.artist;
-    albumDTO.releaseDate = req.body.releaseDate;
-    albumDTO.coverImage = req.body.coverImage;
-    albumDTO.genre = req.body.genre;
-    albumDTO.type = req.body.type;
+  updateAlbum = asyncHandler(async (req, res) => {
+    const updatedAlbum = await this.albumService.updateAlbum(req.params.id, req.body);
+    res.json(updatedAlbum);
+  });
 
-    try {
-      const updatedAlbum = await albumDAO.updateById(albumDTO);
-      if (!updatedAlbum) {
-        return res.status(404).json({ error: 'Album not found' });
-      }
-      res.json(updatedAlbum);
-    } catch (error) {
-      res.status(400).json({ error: error.message });
-  } }
+  deleteAlbum = asyncHandler(async (req, res) => {
+    await this.albumService.deleteAlbum(req.params.id);
+    res.status(204).send();
+  });
 
-  async deleteAlbum(req, res) {
-    const albumDTO = new AlbumDTO();
-    albumDTO.id = req.params.id;
-
-    try {
-      const deletedAlbum = await albumDAO.deleteById(albumDTO);
-      if (!deletedAlbum) {
-        return res.status(404).json({ error: 'Album not found' });
-      }
-      res.status(204).end();
-    } catch (error) {
-      res.status(500).json({ error: error.message });
-  } }
-
-  async getAlbumsByArtist(req, res) {
-    try {
-      const albums = await albumDAO.findByArtist(req.params.artistId);
-      res.json(albums);
-    } catch (error) {
-      res.status(500).json({ error: error.message });
-} } }
+  getAlbumsByArtist = asyncHandler(async (req, res) => {
+    const albums = await this.albumService.getAlbumsByArtist(req.params.artistId);
+    res.json(albums);
+}); }

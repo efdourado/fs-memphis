@@ -1,24 +1,27 @@
 import jwt from 'jsonwebtoken';
-import { UserDAO } from '../persistence/daos/userDAO.js';
-import Playlist from '../persistence/models/playlistModel.js';
-import User from '../persistence/models/userModel.js';
+import AppError from './appError.js';
 
 export class UserService {
-  constructor() {
-    this.userDAO = new UserDAO();
+  constructor(userDAO, playlistDAO) {
+    this.userDAO = userDAO;
+    this.playlistDAO = playlistDAO;
   }
 
   _generateToken(id) {
     return jwt.sign({ id }, process.env.JWT_SECRET, {
-      expiresIn: process.env.JWT_EXPIRES_IN || '1h',
+      expiresIn: process.env.JWT_EXPIRES_IN || '30d',
   }); }
 
   async getAllUsers() {
-    return this.userDAO.findAll();
+    return this.userDAO.findAll({ isAdmin: false, isArtist: false });
   }
 
   async getUserById(id) {
-    return this.userDAO.findById(id);
+    const user = await this.userDAO.findById(id);
+    if (!user) {
+      throw new AppError("User not found", 404);
+    }
+    return user;
   }
 
   async getAllArtists() {
@@ -26,45 +29,25 @@ export class UserService {
   }
 
   async getArtistProfileById(id) {
-    const artist = await User.findById(id)
+    const artist = await this.userDAO.findById(id)
       .populate('topSongs')
       .populate('albums')
       .lean();
 
     if (!artist || !artist.isArtist) {
-      const err = new Error('Artist not found');
-      err.statusCode = 404;
-      throw err;
+      throw new AppError('Artist not found', 404);
     }
     return artist;
   }
-
-  async updateUser(id, updateData) {
-    if (updateData.password) {
-      const err = new Error("Password cannot be updated through this route.");
-      err.statusCode = 400;
-      throw err;
-    }
-    return this.userDAO.updateById(id, updateData);
-  }
-
-  async deleteUser(id) {
-    await Playlist.deleteMany({ owner: id });
-    return this.userDAO.deleteById(id);
-  }
-
+  
   async registerUser({ name, email, password }) {
     if (!name || !email || !password) {
-      const err = new Error('Please add all fields');
-      err.statusCode = 400;
-      throw err;
+      throw new AppError('Please provide name, email, and password', 400);
     }
     
-    const userExistsByEmail = await this.userDAO.findByEmail(email);
-    if (userExistsByEmail) {
-      const err = new Error('User with this email already exists');
-      err.statusCode = 400;
-      throw err;
+    const userExists = await this.userDAO.findByEmail(email);
+    if (userExists) {
+      throw new AppError('User with this email already exists', 409);
     }
 
     const user = await this.userDAO.create({ name, email, password });
@@ -79,44 +62,40 @@ export class UserService {
 
   async loginUser({ email, password }) {
     if (!email || !password) {
-      const err = new Error('Please provide email and password');
-      err.statusCode = 400;
-      throw err;
+      throw new AppError('Please provide email and password', 400);
     }
     
-    const user = await this.userDAO.findByEmail(email);
+    const user = await this.userDAO.findByEmail(email).select('+password');
 
-    if (user && (await user.comparePassword(password))) {
-      const userObject = user.toObject();
-      delete userObject.password;
+    if (!user || !(await user.comparePassword(password))) {
+      throw new AppError('Invalid email or password', 401);
+    }
+    
+    const userObject = user.toObject();
+    delete userObject.password;
 
-      return {
-        ...userObject,
-        token: this._generateToken(user._id),
-      };
-    } else {
-      const err = new Error('Invalid email or password');
-      err.statusCode = 401;
-      throw err;
-  } }
+    return {
+      ...userObject,
+      token: this._generateToken(user._id),
+  }; }
 
-  async createUser(userData) {
-    if (!userData.name || !userData.email) {
-      const err = new Error('Name and email are required.');
-      err.statusCode = 400;
-      throw err;
+  async updateUser(id, updateData) {
+    if (updateData.password) {
+      throw new AppError("Password cannot be updated through this route.", 400);
+    }
+    const user = await this.userDAO.updateById(id, updateData);
+     if (!user) {
+      throw new AppError("User not found", 404);
+    }
+    return user;
+  }
+
+  async deleteUser(id) {
+    const user = await this.userDAO.findById(id);
+    if (!user) {
+        throw new AppError("User not found", 404);
     }
 
-    const userExists = await this.userDAO.findByEmail(userData.email);
-    if (userExists) {
-      const err = new Error('User with this email already exists.');
-      err.statusCode = 409;
-      throw err;
-    }
-
-    if (!userData.password) {
-      userData.password = "default000";
-    }
-
-    return this.userDAO.create(userData);
+    await this.playlistDAO.model.deleteMany({ owner: id });
+    await this.userDAO.deleteById(id);
 } }
