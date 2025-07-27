@@ -26,23 +26,6 @@ import ArtistsPage from './pages/ArtistsPage';
 
 import AuthCallbackPage from './pages/Auth/AuthCallbackPage';
 
-
-const UserProfilePage = () => {
-  const { currentUser } = useAuth();
-  return (
-    <div style={{ padding: '20px', color: 'var(--text-color)' }}>
-      <h1>User Profile</h1>
-      {currentUser ? (
-        <>
-          <p>Welcome, {currentUser.name}!</p>
-          <p>Email: {currentUser.email}</p>
-        </>
-      ) : (
-        <p>Loading profile...</p>
-      )}
-    </div>
-); };
-
 const App = () => {
   const { currentUser, loadingAuth } = useAuth();
   
@@ -97,8 +80,6 @@ const App = () => {
                 <Route path="/library" element={<ProtectedRoute><LibraryPage /></ProtectedRoute>} />
                 <Route path="/library/songs" element={<ComingSoonPage />} />
                 <Route path="/library/playlists" element={<ComingSoonPage />} />
-
-                <Route path="/profile" element={<ProtectedRoute><UserProfilePage /></ProtectedRoute>} />
 
                 <Route path="/admin" element={<AdminRoute><AdminPage /></AdminRoute>} />
               </Routes>

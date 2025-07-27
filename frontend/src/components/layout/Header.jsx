@@ -241,25 +241,30 @@ const Header = ({ toggleSidebar }) => {
               {showUserMenu && (
                 <div className="user-menu-dropdown">
                   <div className="user-info">
-                    <img
+                     <img
                       src={currentUser.profilePic || fallbackImage}
                       alt=""
                       className="avatar-image large"
                       onError={handleImageError}
                     />
                     <div className="user-details">
-                      <span className="user-name">{currentUser.name || "User"}</span>
+                      <span className="user-name">Hello, {currentUser.name || "User"}!</span>
                       <span className="user-email">{currentUser.email || "No email"}</span>
                     </div>
                   </div>
+          
                   <div className="menu-divider"></div>
-                  <button className="menu-item" onClick={() => { navigate('/profile'); setShowUserMenu(false); }}>
+
+                  <button className="menu-item">
                     <FontAwesomeIcon icon={faUserCircle} className="fa-icon" /> Profile
                   </button>
+                  
                   <div className="menu-divider"></div>
+
                   <button className="menu-item logout" onClick={handleLogout}>
-                    <FontAwesomeIcon icon={faRightFromBracket} className="fa-icon" /> Sign Out
+                    <FontAwesomeIcon icon={faRightFromBracket} className="fa-icon" /> Log Out
                   </button>
+
                 </div>
               )}
             </div>
