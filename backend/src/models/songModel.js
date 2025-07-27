@@ -9,7 +9,6 @@ const songSchema = new mongoose.Schema({
   album: { type: mongoose.Schema.Types.ObjectId, ref: "Album" },
   duration: { type: Number, required: true },
   audioUrl: { type: String },
-  coverImage: { type: String, default: "" },
   releaseDate: { type: Date },
   isExplicit: { type: Boolean, default: false },
   genre: { type: [String], default: [] },
@@ -37,12 +36,12 @@ export class SongModel {
   async findById(id) {
     return await Song.findById(id)
       .populate({ path: 'artist', model: 'User' })
-      .populate('album') // <-- Add this line
+      .populate('album') 
       .lean();
   }
 
   async findByAlbumId(albumId) {
-    return await Song.find({ album: albumId }).populate({ path: 'artist', model: 'User' }).lean();
+    return await Song.find({ album: albumId }).populate({ path: 'artist', model: 'User' }).populate('album').lean();
   }
 
   async findByArtist(artistId) {

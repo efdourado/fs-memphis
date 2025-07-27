@@ -27,9 +27,7 @@ const Footer = ({ companyName = "Memphis", year = new Date().getFullYear() }) =>
   return (
     <footer className={footerClassName}>
       <div className="footer-container">
-        
         <div className="footer-main">
-
           <div className="header-logo">
             <img src={logo} alt={`${companyName} logo`} className="logo-img" />
             <span className="logo-name">

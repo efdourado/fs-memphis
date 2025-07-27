@@ -36,7 +36,7 @@ const HomePage = () => {
         title={isAuthenticated ? "You're home" : "Join Us"}
         subtitle="Music, reimagined — Memphis is a web application designed to provide a seamless, modern music listening experience. Users can build and manage personal playlists, and align new perspectives through sound."
         talents={artists.slice(0, 4)}
-        bgImage="/hero-bg.jpg"
+        bgImage="/fb.jpg"
         songs={songs}
         playlists={playlists}
       />

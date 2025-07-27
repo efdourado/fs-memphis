@@ -54,7 +54,7 @@ const SongItem = ({ song, index, showImage, showNumber, onMenuClick }) => {
         {showImage && (
           <div className="song-item__cover-art-container">
             <img
-              src={song.coverImage || fallbackImage}
+              src={song.album?.coverImage || fallbackImage}
               alt={song.title}
               className="song-item__cover-art"
               onError={(e) => { e.target.src = fallbackImage; }}
@@ -95,7 +95,9 @@ SongItem.propTypes = {
       _id: PropTypes.string,
       name: PropTypes.string,
     }),
-    coverImage: PropTypes.string,
+    album: PropTypes.shape({
+      coverImage: PropTypes.string,
+    }),
     audioUrl: PropTypes.string,
   }).isRequired,
   index: PropTypes.number.isRequired,

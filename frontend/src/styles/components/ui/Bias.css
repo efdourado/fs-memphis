@@ -11,6 +11,7 @@
   width: 98px;
   height: 98px;
   border-radius: var(--border-radius-md);
+  border: 1px solid var(--color-text-secondary);
   overflow: hidden;
   z-index: 2;
 }
@@ -124,7 +125,8 @@
 
 
 .bias-card.is-playing .bias-card__cover {
-  box-shadow: 0 0 0 2px var(--color-primary), 0 3px 8px rgba(29, 185, 84, 0.3);
+  border: 1px solid var(--color-primary);
+  box-shadow: 0 0 0 1px var(--color-primary), 0 2px 6px rgba(29, 185, 84, 0.3);
 }
 
 .bias-card.is-playing .action-btn.play {

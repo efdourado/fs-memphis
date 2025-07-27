@@ -8,7 +8,6 @@ export const songFormConfig = {
     album: '',
     duration: 0,
     audioUrl: '',
-    coverImage: '',
     releaseDate: '',
     lyrics: '',
     isExplicit: false,
@@ -33,7 +32,6 @@ export const songFormConfig = {
     duration: Number(data.duration)
   }),
   fields: [
-    { name: 'coverImage', label: 'Cover Image URL', type: 'url', span: 'span-2' },
     { name: 'title', label: 'Song Title', type: 'text', required: true },
     { name: 'isExplicit', label: 'Explicit?', description: '(Content Warning)', component: 'checkbox' },
     { name: 'artist', label: 'Artist', component: 'select', optionsKey: 'artists', required: true },

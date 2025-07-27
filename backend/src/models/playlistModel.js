@@ -29,10 +29,15 @@ export class PlaylistModel {
       .populate('owner')
       .populate({
         path: 'songs.song',
-        populate: {
-          path: 'artist',
-          model: 'User'
-  } }); }
+        populate: [
+          {
+            path: 'artist',
+            model: 'User'
+          },
+          {
+            path: 'album',
+            model: 'Album'
+  } ] }); }
 
   async findByOwner(ownerId) {
     return await Playlist.find({ owner: ownerId }).populate('owner').lean();
