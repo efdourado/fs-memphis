@@ -1,7 +1,9 @@
 .playlist-selection-list {
   list-style: none;
   max-height: 480px;
+
   overflow-y: auto;
+  
   margin: var(--spacing-lg) 0 0 -12px;
   padding-right: var(--spacing-xs);
 }

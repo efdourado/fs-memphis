@@ -162,7 +162,6 @@
 }
 
 
-
 .verified-icon {
   color: var(--color-success);
   font-size: var(--font-size-lg);
@@ -186,7 +185,6 @@
   background-color: hsla(210, 7%, 20%, 0.5);
   color: var(--color-text-secondary);
 }
-
 
 
 @media (max-width: 768px) {
