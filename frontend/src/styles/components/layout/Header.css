@@ -329,7 +329,7 @@ body.light-mode .search-input {
   text-transform: uppercase;
   transition: all var(--transition-duration-medium) var(--transition-timing-function-ease);
 }
-.login-btn:hover {
+.login-btn:hover, .login-btn.always-hover {
   background: var(--color-primary);
   color: var(--color-white);
 }

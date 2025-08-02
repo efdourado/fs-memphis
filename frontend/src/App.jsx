@@ -72,7 +72,7 @@ const App = () => {
 
                 <Route path="/artists" element={<ArtistsPage />} />
                 <Route path="/discover" element={<ComingSoonPage />} />
-                <Route path="/archived" element={<ComingSoonPage />} />
+                <Route path="/archives" element={<ComingSoonPage />} />
                 <Route path="/help" element={<ComingSoonPage />} />
                 <Route path="/settings" element={<ComingSoonPage />} />
                 <Route path="/feedback" element={<ComingSoonPage />} />

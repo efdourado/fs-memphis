@@ -29,7 +29,6 @@
 
 .modal-body {
   margin-top: var(--spacing-md);
-  overflow-y: auto;
 
   -ms-overflow-style: none;
   scrollbar-width: none;
@@ -50,22 +49,8 @@
 
 .modal-title {
   font-size: var(--font-size-lg);
-  font-weight: var(--font-weight-black);
+  font-weight: var(--font-weight-bold);
 }
-
-.modal-close-btn {
-  color: var(--color-text-secondary);
-  font-size: var(--font-size-2xl);
-  cursor: pointer;
-  display: flex;
-  justify-content: center;
-  transition: all 0.2s ease-out;
-}
-
-.modal-close-btn:hover {
-  color: var(--color-primary);
-}
-
 
 @keyframes fadeIn {
   from { opacity: 0; } to { opacity: 1; }

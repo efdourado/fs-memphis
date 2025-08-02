@@ -27,10 +27,11 @@ const Modal = ({ isOpen, onClose, title, children }) => {
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
         <div className="modal-header">
-          <h2 className="modal-title">{title}</h2>
-          <button type="button" onClick={onClose} className="modal-close-btn" style={{fontSize: '23px'}}>
-            <FontAwesomeIcon icon={faCircleXmark} />
-          </button>
+          <h2 className="modal-title">
+            <button type="button" onClick={onClose} className="login-btn always-hover">
+              {title}
+            </button>
+          </h2>
         </div>
         <div className="modal-body">{children}</div>
       </div>

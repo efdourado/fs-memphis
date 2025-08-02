@@ -64,7 +64,7 @@ const PlaylistForm = ({ playlist, onSaved, isSaving, onDelete }) => {
         </button>
 
         {onDelete && (
-           <button type="button" onClick={onDelete} className="admin-action-button delete" disabled={isSaving}>
+          <button type="button" onClick={onDelete} className="admin-action-button delete" disabled={isSaving}>
             <FontAwesomeIcon icon={faTrashCan} />
           </button>
         )}

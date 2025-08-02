@@ -21,7 +21,7 @@ const userLibraryLinks = [
 ];
 
 const otherLinks = [
-  { to: '/archived', label: 'Archived', icon: faTrashCan, end: true },
+  { to: '/archives', label: 'Archives', icon: faTrashCan, end: true },
   { to: '/help', label: 'Help', icon: faCircleQuestion, end: true },
   { to: '/settings', label: 'Settings', icon: faCog },
 ];

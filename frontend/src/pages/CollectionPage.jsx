@@ -12,9 +12,8 @@ import { usePlayer } from "../hooks/usePlayer";
 import { normalizeDataForPage } from "../utils/syncer";
 
 import Carousel from "../components/ui/Carousel";
-import SongList from "../components/songs/SongList";
+import List from "../components/ui/List";
 import PlaylistModal from "../components/playlists/PlaylistModal";
-import Card from "../components/ui/Card";
 import LoadingSpinner from "../components/ui/LoadingSpinner";
 import ErrorMessage from "../components/ui/ErrorMessage";
 import fallbackImage from "/fb.jpg";
@@ -161,12 +160,13 @@ const CollectionPage = ({ type }) => {
           </div>
           
           {mainContent?.items?.length > 0 ? (
-            <section className="entity-content-section song-list-container">
+            <section className="entity-content-section list-container">
               <div className="carousel__header">
                 <h2 className="carousel__title">{mainContent.title}</h2>
               </div>
-              <SongList
-                songs={mainContent.items}
+              <List
+                items={mainContent.items}
+                type={mainContent.type}
                 showHeader={false}
                 displayAll={true}
                 showNumber={true}
