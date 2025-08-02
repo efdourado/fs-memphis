@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from "react";
-
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHeadphones, faCheckCircle, faPlus, faTrashCan } from "@fortawesome/free-solid-svg-icons";
-
+import { faCheckCircle, faPlus } from "@fortawesome/free-solid-svg-icons";
 import ErrorMessage from "../ui/ErrorMessage";
 import Modal from "../ui/Modal";
 import LoadingSpinner from "../ui/LoadingSpinner";

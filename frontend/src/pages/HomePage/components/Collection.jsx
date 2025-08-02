@@ -72,8 +72,7 @@ const Collection = ({ collectionId, type = "album" }) => {
       togglePlayPause();
     } else if (songs?.length > 0) {
       startPlayback(songs, { type, id: collectionId });
-    }
-  };
+  } };
 
   const handleMenuClick = (e, song = null) => {
     e.stopPropagation();
@@ -81,8 +80,7 @@ const Collection = ({ collectionId, type = "album" }) => {
       setEditModalOpen(true);
     } else if (song) {
       openMenu(song);
-    }
-  };
+  } };
   
   const handleCloseEditModal = () => setEditModalOpen(false);
 
@@ -100,9 +98,7 @@ const Collection = ({ collectionId, type = "album" }) => {
       } catch (err) {
         console.error('Failed to delete playlist:', err);
         alert('Failed to delete playlist.');
-      }
-    }
-  };
+  } } };
 
   if (loading) return <LoadingSpinner />;
   if (!collection) return <div className="collection-view error">Failed to load collection.</div>;
@@ -188,8 +184,7 @@ const Collection = ({ collectionId, type = "album" }) => {
         />
       )}
     </>
-  );
-};
+); };
 
 Collection.propTypes = {
   collectionId: PropTypes.string.isRequired,
