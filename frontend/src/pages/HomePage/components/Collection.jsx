@@ -6,7 +6,7 @@ import { faPlay, faPause, faEllipsis } from '@fortawesome/free-solid-svg-icons';
 import { fetchAlbumById, fetchPlaylistById } from '../../../services/collectionService';
 import { deletePlaylist } from '../../../services/userService';
 import { formatTotalDuration } from '../../../utils/formatters';
-import SongList from '../../../components/songs/SongList';
+import List from '../../../components/ui/List';
 import LoadingSpinner from '../../../components/ui/LoadingSpinner';
 import SoundWave from '../../../components/ui/SoundWave';
 import PlaylistModal from '../../../components/playlists/PlaylistModal';
@@ -166,8 +166,9 @@ const Collection = ({ collectionId, type = "album" }) => {
             </div>
           </div>
           <div className="collection-view__tracks-panel">
-            <SongList
-              songs={songs}
+            <List
+              items={songs}
+              type="song"
               showHeader={false}
               displayAll={true}
               showNumber={true}

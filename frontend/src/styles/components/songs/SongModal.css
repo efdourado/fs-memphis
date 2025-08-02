@@ -1,9 +1,9 @@
 .playlist-selection-list {
   list-style: none;
-  max-height: 300px;
+  max-height: 480px;
   overflow-y: auto;
-  margin: 0 -16px;
-  padding: 0 var(--spacing-sm);
+  margin: var(--spacing-lg) 0 0 -12px;
+  padding-right: var(--spacing-xs);
 }
 
 .playlist-selection-list li button {

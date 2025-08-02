@@ -98,6 +98,7 @@
   margin-left: var(--spacing-lg);
   overflow-y: auto;
   -ms-overflow-style: none;
+  padding-right: var(--spacing-xs);
 }
 
 .collection-view__actions {

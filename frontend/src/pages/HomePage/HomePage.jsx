@@ -17,7 +17,7 @@ const HomePage = () => {
     if (loading || error) return { featuredPlaylistId: null, featuredAlbumId: null };
     
     const featuredPlaylistId = playlists[8]?._id || null;
-    const featuredAlbumId = albums.length > 3 ? albums[2]._id : albums[1]?._id || null;
+    const featuredAlbumId = albums.length > 3 ? albums[1]._id : albums[1]?._id || null;
 
     return { featuredPlaylistId, featuredAlbumId };
   }, [playlists, albums, loading, error]);

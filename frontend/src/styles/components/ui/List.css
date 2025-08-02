@@ -1,24 +1,24 @@
-.song-list {
+.list {
   width: 100%;
 }
 
-.song-list__header {
+.list__header {
   padding: 0 var(--spacing-sm);
   margin-bottom: var(--spacing-lg);
 }
 
-.song-list__title {
+.list__title {
   font-size: var(--font-size-2xl);
   font-weight: var(--font-weight-black);
   color: var(--color-text-primary);
 }
 
-.song-list__footer {
+.list__footer {
   text-align: center;
   margin-top: var(--spacing-md);
 }
 
-.song-list__toggle-btn {
+.list__toggle-btn {
   background: transparent;
   border: 1px solid var(--color-border);
   color: var(--color-text-secondary);
@@ -27,7 +27,7 @@
   font-weight: var(--font-weight-semibold);
   transition: all 0.2s ease-out;
 }
-.song-list__toggle-btn:hover {
+.list__toggle-btn:hover {
   border-color: var(--color-text-primary);
   color: var(--color-text-primary);
   background-color: var(--color-surface);

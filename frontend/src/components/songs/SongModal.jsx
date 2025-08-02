@@ -6,8 +6,9 @@ import { faHeadphones, faCheckCircle, faPlus, faTrashCan } from "@fortawesome/fr
 import ErrorMessage from "../ui/ErrorMessage";
 import Modal from "../ui/Modal";
 import LoadingSpinner from "../ui/LoadingSpinner";
+import List from "../ui/List";
 import { useSongModal } from "../../context/SongModalContext";
-import { getMyPlaylists, addSongToPlaylist, createPlaylist } from "../../services/userService";
+import { getMyPlaylists, addSongToPlaylist, removeSongFromPlaylist, createPlaylist } from "../../services/userService";
 
 const CreatePlaylistView = ({ song, onPlaylistCreated, onCancel }) => {
   const [name, setName] = useState("");
@@ -76,7 +77,7 @@ const SongModal = () => {
   const [loading, setLoading] = useState(true);
   const [feedback, setFeedback] = useState({ message: "", isError: false });
 
-  useEffect(() => {
+  const fetchPlaylists = () => {
     if (isMenuOpen && view === "list") {
       setLoading(true);
       setFeedback({ message: "", isError: false });
@@ -84,7 +85,10 @@ const SongModal = () => {
         .then((response) => setPlaylists(response.data))
         .catch(() => setFeedback({ message: "Could not load your playlists", isError: true }))
         .finally(() => setLoading(false));
-    }
+  } };
+
+  useEffect(() => {
+    fetchPlaylists();
   }, [isMenuOpen, view]);
 
   useEffect(() => {
@@ -94,14 +98,26 @@ const SongModal = () => {
     }
   }, [isMenuOpen, song]);
 
-  const handleAddToPlaylist = async (playlistId) => {
+  const isSongInPlaylist = (playlist) => {
+    if (!playlist.songs || !song?._id) return false;
+    return playlist.songs.some(s => s.song?._id === song._id);
+  };
+
+  const handlePlaylistClick = async (playlist) => {
+    const isAdded = isSongInPlaylist(playlist);
     try {
-      await addSongToPlaylist(playlistId, song._id);
-      const playlist = playlists.find((p) => p._id === playlistId);
-      setFeedback({ message: `Added to "${playlist.name}"!` });
-      setTimeout(closeMenu, 1500);
+      if (isAdded) {
+        await removeSongFromPlaylist(playlist._id, song._id);
+        setFeedback({ message: `Removed from "${playlist.name}"!` });
+      } else {
+        await addSongToPlaylist(playlist._id, song._id);
+        setFeedback({ message: `Added to "${playlist.name}"!` });
+      }
+      fetchPlaylists();
+      setTimeout(() => setFeedback({ message: "", isError: false }), 1500);
+
     } catch (err) {
-      const message = err.response?.data?.message || "Failed to add song";
+      const message = err.response?.data?.message || `Failed to ${isAdded ? 'remove' : 'add'} song`;
       setFeedback({ message, isError: true });
   } };
 
@@ -109,13 +125,6 @@ const SongModal = () => {
     setFeedback({ message: `Added to "${newPlaylist.name}"!` });
     setTimeout(closeMenu, 1500);
   };
-
-  const handleRemoveClick = () => {
-    if (menuContext?.onRemove) {
-      menuContext.onRemove();
-      setFeedback({ message: "Song removed!" });
-      setTimeout(closeMenu, 1500);
-  } };
   
   const renderFeedback = () => (
     <div
@@ -128,30 +137,25 @@ const SongModal = () => {
   );
 
   const renderListView = () => (
-    <ul className="playlist-selection-list">
-      {menuContext?.source === "playlist" && (
-        <li>
-          <button onClick={handleRemoveClick} className="delete-option">
-            <FontAwesomeIcon icon={faTrashCan} className="playlist-icon" />
-            <span>Remove from this Playlist</span>
-          </button>
-        </li>
-      )}
-      <li>
-        <button onClick={() => setView("create")}>
-          <FontAwesomeIcon icon={faPlus} className="playlist-icon" />
-          <span>Add to new playlist</span>
+    <>
+      <div className="static-options">
+        <button onClick={() => setView("create")} className="login-btn create-btn">
+          <FontAwesomeIcon icon={faPlus} />
+          <span>New playlist</span>
         </button>
-      </li>
-      {playlists.map((playlist) => (
-        <li key={playlist._id}>
-          <button onClick={() => handleAddToPlaylist(playlist._id)}>
-            <FontAwesomeIcon icon={faHeadphones} className="playlist-icon" />
-            <span>{playlist.name}</span>
-          </button>
-        </li>
-      ))}
-    </ul>
+      </div>
+
+      <div className="playlist-selection-list">
+        <List 
+          items={playlists}
+          type="playlist"
+          onMenuClick={(playlist) => handlePlaylistClick(playlist)}
+          checkAdded={isSongInPlaylist}
+          showHeader={false}
+          displayAll={true}
+        />
+      </div>
+    </>
   );
 
   if (!isMenuOpen || !song) {
@@ -161,7 +165,7 @@ const SongModal = () => {
   const getTitle = () => {
     if (feedback.message) return "";
     if (view === 'create') return "Create Playlist & Add Song";
-    return song.title;
+    return `Add '${song.title}' to...`;
   }
 
   return (
