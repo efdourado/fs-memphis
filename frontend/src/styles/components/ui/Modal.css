@@ -29,12 +29,15 @@
 
 .modal-body {
   margin-top: var(--spacing-md);
+}
 
+.modal-body:has(.form-container) {
+  overflow-y: auto;
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
 
-.modal-body::-webkit-scrollbar {
+.modal-body:has(.form-container)::-webkit-scrollbar {
   display: none;
 }
 
