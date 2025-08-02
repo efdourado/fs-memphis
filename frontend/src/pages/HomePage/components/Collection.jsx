@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlay, faPause, faEllipsis } from '@fortawesome/free-solid-svg-icons';
@@ -47,7 +47,6 @@ const Collection = ({ collectionId, type = "album" }) => {
     }
   }, [collectionId, type]);
 
-
   useEffect(() => {
     if (collectionId) {
       loadCollectionData();
@@ -60,28 +59,30 @@ const Collection = ({ collectionId, type = "album" }) => {
   }, [songs]);
 
   const isCollectionCurrentlyPlaying = playContext?.type === type && playContext?.id === collectionId && isPlaying;
-
   const isOwner = currentUser && collection && type === "playlist" && currentUser._id === collection.owner?._id;
+  const detailPath = `/${type}/${collection?._id}`;
 
+  const handleNavigate = () => {
+    navigate(detailPath);
+  };
+  
   const handlePlayCollection = (e) => {
-    e.preventDefault();
     e.stopPropagation();
-
     if (playContext?.type === type && playContext?.id === collectionId) {
       togglePlayPause();
-    } else if (songs && songs.length > 0) {
+    } else if (songs?.length > 0) {
       startPlayback(songs, { type, id: collectionId });
-  } };
+    }
+  };
 
   const handleMenuClick = (e, song = null) => {
-    e.preventDefault();
     e.stopPropagation();
-
     if (type === 'playlist' && isOwner) {
       setEditModalOpen(true);
     } else if (song) {
       openMenu(song);
-  } };
+    }
+  };
   
   const handleCloseEditModal = () => setEditModalOpen(false);
 
@@ -99,85 +100,83 @@ const Collection = ({ collectionId, type = "album" }) => {
       } catch (err) {
         console.error('Failed to delete playlist:', err);
         alert('Failed to delete playlist.');
-  } } };
+      }
+    }
+  };
 
   if (loading) return <LoadingSpinner />;
   if (!collection) return <div className="collection-view error">Failed to load collection.</div>;
 
   const collectionName = type === "artist" ? collection.name : (collection.name || collection.title);
   const ownerName = type === "artist" ? "Artist" : (collection.owner?.name || collection.artist?.name);
-  
   const coverImageUrl = type === "artist" ? collection.profilePic : collection.coverImage || fallbackImage;
-  const detailPath = `/${type}/${collection._id}`;
 
   return (
     <>
-      <Link to={detailPath} style={{ textDecoration: "none", color: "inherit" }}>
-        <div
-          className={`collection-view__content ${isCollectionCurrentlyPlaying ? "is-playing" : ""}`}
-          onMouseEnter={() => setIsHovered(true)}
-          onMouseLeave={() => setIsHovered(false)}
-        >
-          <div className="collection-view__info-panel">
-            <div className="collection-view__cover-art">
-              <img src={coverImageUrl} alt={collectionName} />
-            </div>
-            <div className="collection-view__details">
-              <h1 className="collection-view__title">
-                {collectionName}
-                {isCollectionCurrentlyPlaying && <SoundWave />}
-              </h1>
-              <p className="collection-view__owner">By {ownerName}</p>
-              <div className="collection-view__meta">
-                {type === "album" && collection.releaseDate && (
-                  <>
-                    <span>{new Date(collection.releaseDate).getFullYear()}</span>
-                    <span className="meta-divider">•</span>
-                  </>
-                )}
-                {songs.length > 0 && (
-                  <span>
-                    {`${songs.length} songs`}
-                    {totalDuration > 0 && `, ${formatTotalDuration(totalDuration)}`}
-                  </span>
-                )}
-              </div>
-              {collection.description && (
-                <p className="collection-view__description">
-                  {collection.description}
-                </p>
-              )}
-              <div className={`collection-view__actions ${isHovered || isCollectionCurrentlyPlaying ? "visible" : ""}`}>
-                <button
-                  className="action-btn menu"
-                  onClick={handleMenuClick}
-                  aria-label="More options"
-                >
-                  <FontAwesomeIcon icon={faEllipsis} />
-                </button>
-                <button
-                  className="action-btn play"
-                  onClick={handlePlayCollection}
-                  aria-label={`Play ${collectionName}`}
-                >
-                  <FontAwesomeIcon icon={isCollectionCurrentlyPlaying ? faPause : faPlay} />
-                </button>
-              </div>
-            </div>
+      <div
+        className={`collection-view__content ${isCollectionCurrentlyPlaying ? "is-playing" : ""}`}
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+      >
+        <div className="collection-view__info-panel" onClick={handleNavigate} style={{ cursor: 'pointer' }}>
+          <div className="collection-view__cover-art">
+            <img src={coverImageUrl} alt={collectionName} />
           </div>
-          <div className="collection-view__tracks-panel">
-            <List
-              items={songs}
-              type="song"
-              showHeader={false}
-              displayAll={true}
-              showNumber={true}
-              showImage={false}
-              onMenuClick={(song) => handleMenuClick(null, song)}
-            />
+          <div className="collection-view__details">
+            <h1 className="collection-view__title">
+              {collectionName}
+              {isCollectionCurrentlyPlaying && <SoundWave />}
+            </h1>
+            <p className="collection-view__owner">By {ownerName}</p>
+            <div className="collection-view__meta">
+              {type === "album" && collection.releaseDate && (
+                <>
+                  <span>{new Date(collection.releaseDate).getFullYear()}</span>
+                  <span className="meta-divider">•</span>
+                </>
+              )}
+              {songs.length > 0 && (
+                <span>
+                  {`${songs.length} songs`}
+                  {totalDuration > 0 && `, ${formatTotalDuration(totalDuration)}`}
+                </span>
+              )}
+            </div>
+            {collection.description && (
+              <p className="collection-view__description">
+                {collection.description}
+              </p>
+            )}
+            <div className={`collection-view__actions ${isHovered || isCollectionCurrentlyPlaying ? "visible" : ""}`}>
+              <button
+                className="action-btn menu"
+                onClick={(e) => handleMenuClick(e, null)}
+                aria-label="More options"
+              >
+                <FontAwesomeIcon icon={faEllipsis} />
+              </button>
+              <button
+                className="action-btn play"
+                onClick={handlePlayCollection}
+                aria-label={`Play ${collectionName}`}
+              >
+                <FontAwesomeIcon icon={isCollectionCurrentlyPlaying ? faPause : faPlay} />
+              </button>
+            </div>
           </div>
         </div>
-      </Link>
+        <div className="collection-view__tracks-panel">
+          <List
+            items={songs}
+            type="song"
+            showHeader={false}
+            displayAll={true}
+            showNumber={true}
+            showImage={false}
+            onMenuClick={(song) => handleMenuClick(event, song)}
+          />
+        </div>
+      </div>
 
       {type === 'playlist' && isOwner && collection && (
         <PlaylistModal
@@ -189,7 +188,8 @@ const Collection = ({ collectionId, type = "album" }) => {
         />
       )}
     </>
-); };
+  );
+};
 
 Collection.propTypes = {
   collectionId: PropTypes.string.isRequired,

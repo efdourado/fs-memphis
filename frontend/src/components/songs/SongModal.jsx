@@ -149,7 +149,7 @@ const SongModal = () => {
         <List 
           items={playlists}
           type="playlist"
-          onMenuClick={(playlist) => handlePlaylistClick(playlist)}
+          onItemClick={(playlist) => handlePlaylistClick(playlist)}
           checkAdded={isSongInPlaylist}
           showHeader={false}
           displayAll={true}
