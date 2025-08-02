@@ -8,7 +8,7 @@ import { usePlayer } from '../../hooks/usePlayer';
 import { useSongModal } from '../../context/SongModalContext';
 import fallbackImage from '/fb.jpg';
 
-const Item = ({ item, type, index, showImage, showNumber, onMenuClick, isAdded }) => {
+const Item = ({ item, type, index, showImage, showNumber, onMenuClick, isAdded, onClick }) => {
   const player = usePlayer();
   const { openMenu } = useSongModal();
 
@@ -19,12 +19,10 @@ const Item = ({ item, type, index, showImage, showNumber, onMenuClick, isAdded }
   const hasAudio = !!item.audioUrl;
 
   const handlePlayClick = (e) => {
-    e.preventDefault();
     e.stopPropagation();
     if (hasAudio) {
       isCurrent ? player.togglePlayPause() : player.playTrack(item);
-    }
-  };
+  } };
 
   const handleMenuClick = (e) => {
     e.stopPropagation();
@@ -32,20 +30,17 @@ const Item = ({ item, type, index, showImage, showNumber, onMenuClick, isAdded }
       onMenuClick(item);
     } else {
       openMenu(item);
-    }
-  };
+  } };
   
   const handleItemClick = () => {
-    if (type === 'playlist' && onMenuClick) {
-      onMenuClick(item);
-    }
-  };
+    if (onClick) {
+      onClick(item);
+  } };
   
   const handleItemDoubleClick = () => {
     if (hasAudio && type === 'song') {
       player.playTrack(item);
-    }
-  };
+  } };
 
   const title = item.title || item.name;
   const subtitle = type === 'song' ? item.artist?.name : `Playlist by ${item.owner?.name}`;
@@ -109,8 +104,7 @@ const Item = ({ item, type, index, showImage, showNumber, onMenuClick, isAdded }
         ) : null}
       </div>
     </div>
-  );
-};
+); };
 
 Item.propTypes = {
   item: PropTypes.shape({
@@ -134,6 +128,7 @@ Item.propTypes = {
   index: PropTypes.number,
   showImage: PropTypes.bool,
   showNumber: PropTypes.bool,
+  onClick: PropTypes.func,
   onMenuClick: PropTypes.func,
   isAdded: PropTypes.bool,
 };
