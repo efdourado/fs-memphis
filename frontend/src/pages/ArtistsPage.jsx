@@ -27,7 +27,7 @@ const ArtistsPage = () => {
   return (
     <div className="library-page">
       <div className="carousel__header">
-        <h1 className="carousel__title">Selected Artists</h1>
+        <h1 className="carousel__title">Artists</h1>
       </div>
 
       {loading ? (

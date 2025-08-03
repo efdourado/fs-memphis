@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import Card from './Card';
 
-const Carousel = ({ title, items, type }) => {
+const Carousel = ({ title, items, type, displayArtistName }) => {
   const [showFade, setShowFade] = useState(true);
   const scrollContainerRef = useRef(null);
 
@@ -44,7 +44,12 @@ const Carousel = ({ title, items, type }) => {
           className="carousel__items"
         >
           {items.map((item) => (
-            <Card key={item._id} item={item} type={type} />
+            <Card 
+              key={item._id} 
+              item={item} 
+              type={type} 
+              displayArtistName={displayArtistName}
+            />
           ))}
         </div>
       </div>
@@ -55,6 +60,12 @@ Carousel.propTypes = {
   title: PropTypes.string.isRequired,
   items: PropTypes.array.isRequired,
   type: PropTypes.oneOf(['artist', 'album', 'playlist', 'song']).isRequired,
+  displayArtistName: PropTypes.bool,
 };
+
+Carousel.defaultProps = {
+  displayArtistName: true,
+};
+
 
 export default Carousel;

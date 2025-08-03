@@ -19,6 +19,7 @@ import AdminPage from './pages/AdminPage/AdminPage';
 import LoginPage from './pages/Auth/LoginPage';
 import RegisterPage from './pages/Auth/RegisterPage';
 import HomePage from './pages/HomePage/HomePage';
+import SearchPage from './pages/SearchPage';
 import CollectionPage from './pages/CollectionPage';
 import ComingSoonPage from './pages/ComingSoonPage';
 import LibraryPage from './pages/LibraryPage';
@@ -63,6 +64,7 @@ const App = () => {
                 <Route path="/" element={<HomePage />} />
                 <Route path="/login" element={<LoginPage />} />
                 <Route path="/register" element={<RegisterPage />} />
+                <Route path="/search" element={<SearchPage />} />
 
                 <Route path="/auth/callback" element={<AuthCallbackPage />} />
 

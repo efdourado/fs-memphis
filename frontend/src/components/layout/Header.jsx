@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faBell, faBars, faPlus, faSearch, faTimes, faChevronDown, faRightFromBracket, faUserCircle, faMoon, faSnowflake,
+  faBell, faBars, faPlus, faSearch, faEraser, faChevronDown, faRightFromBracket, faUserCircle, faMoon, faSnowflake,
 } from "@fortawesome/free-solid-svg-icons";
 import { useAuth } from "../../context/AuthContext";
 import fallbackImage from '/fb.jpg';
@@ -97,11 +97,6 @@ const Header = ({ toggleSidebar }) => {
       setSearchActive(false);
   } };
 
-  const handleClearSearch = () => {
-    setSearchQuery("");
-    searchInputRef.current?.focus();
-  };
-
   const handleLogout = () => {
     logout();
     setShowUserMenu(false);
@@ -174,7 +169,7 @@ const Header = ({ toggleSidebar }) => {
               onClick={handleSearchToggle}
               aria-label={searchActive ? "Close search" : "Open search"}
             >
-              <FontAwesomeIcon icon={searchActive ? faTimes : faSearch} />
+              {!searchActive && <FontAwesomeIcon icon={faSearch} />}
             </button>
             <input
               ref={searchInputRef}
@@ -185,16 +180,6 @@ const Header = ({ toggleSidebar }) => {
               onChange={(e) => setSearchQuery(e.target.value)}
               aria-label="Search input"
             />
-            {searchQuery && (
-              <button
-                type="button"
-                className="clear-search-btn"
-                onClick={handleClearSearch}
-                aria-label="Clear search query"
-              >
-                <FontAwesomeIcon icon={faTimes} />
-              </button>
-            )}
           </form>
 
           {isAuthenticated && currentUser && (

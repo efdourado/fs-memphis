@@ -14,6 +14,9 @@ const List = ({
   showNumber = false,
   showImage = true,
   checkAdded,
+  showAlbum = false,
+  showDuration = false,
+  showPlays = false,
 }) => {
   const [showAll, setShowAll] = useState(false);
 
@@ -49,6 +52,9 @@ const List = ({
             showNumber={showNumber}
             onClick={onItemClick}
             isAdded={checkAdded ? checkAdded(item) : false}
+            showAlbum={showAlbum}
+            showDuration={showDuration}
+            showPlays={showPlays}
           />
         ))}
       </div>
@@ -78,6 +84,9 @@ List.propTypes = {
   showNumber: PropTypes.bool,
   showImage: PropTypes.bool,
   checkAdded: PropTypes.func,
+  showAlbum: PropTypes.bool,
+  showDuration: PropTypes.bool,
+  showPlays: PropTypes.bool,
 };
 
 List.defaultProps = {

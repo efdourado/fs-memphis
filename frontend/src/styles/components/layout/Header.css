@@ -109,29 +109,6 @@ body.light-mode .search-input {
   padding: 0 var(--spacing-md) 0 var(--spacing-lg);
 }
 
-.clear-search-btn {
-  position: absolute;
-  right: var(--spacing-xs);
-  top: 50%;
-  transform: translateY(-50%);
-  background: transparent;
-  border: none;
-  color: var(--color-text-tertiary);
-  cursor: pointer;
-  font-size: var(--font-size-xs);
-  padding: var(--spacing-xxs);
-  transition: color var(--transition-duration-short) var(--transition-timing-function-ease);
-  display: none;
-}
-
-.search-form.active.has-query .clear-search-btn {
-  display: block;
-}
-
-.clear-search-btn:hover {
-  color: var(--color-error);
-}
-
 .user-menu-container {
   position: relative;
 }

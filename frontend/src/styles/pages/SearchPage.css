@@ -1,0 +1,14 @@
+.search-page {
+  font-weight: var(--font-weight-light);
+}
+
+.search-results-section {
+  margin-bottom: var(--spacing-3xl);
+  margin-left: -12px;
+}
+
+.results-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: var(--spacing-sm);
+}

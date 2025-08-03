@@ -17,16 +17,16 @@ const {
   songController, 
   albumController, 
   playlistController, 
+  searchController,
   authRouter 
 } = container;
 
 router.use('/auth', authRouter);
-
+router.get('/search', searchController.search);
 
 router.get('/artists', userController.getAllArtists);
 router.get('/artist/:id', userController.getArtistProfileById);
 router.get('/artist/:artistId/albums', albumController.getAlbumsByArtist);
-
 
 router.route('/users')
     .get(protect, admin, userController.getAllUsers)
@@ -37,7 +37,6 @@ router.route('/user/:id')
     .put(protect, admin, updateUserValidator, userController.updateUser)
     .delete(protect, admin, userController.deleteUser);
 
-
 router.route('/albums')
     .get(albumController.getAllAlbums)
     .post(protect, admin, createAlbumValidator, albumController.createAlbum);
@@ -46,7 +45,6 @@ router.route('/album/:id')
     .get(albumController.getAlbumById)
     .put(protect, admin, updateAlbumValidator, albumController.updateAlbum)
     .delete(protect, admin, albumController.deleteAlbum);
-
 
 router.route('/songs')
     .get(songController.getAllSongs)
@@ -58,7 +56,6 @@ router.route('/song/:id')
     .delete(protect, admin, songController.deleteSong);
 
 router.post('/song/:id/play', songController.incrementPlay);
-
 
 router.route('/playlists')
   .get(playlistController.getAllPlaylists)

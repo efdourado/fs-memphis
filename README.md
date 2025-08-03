@@ -1,6 +1,4 @@
-# Memphis
-
-**Overview**
+# Memphis — Listen. Feel. Create.
 
 Music, reimagined — Memphis is a web application designed to provide a seamless, modern music listening experience. Users can build and manage personal playlists, and align new perspectives through sound.
 
@@ -72,7 +70,7 @@ npm run build --prefix frontend
 
 Here is a roadmap of features planned for future versions of Memphis:
 
-- **Search**: Implement a search to find songs and artists, including contextual search (e.g., search by lyrics within a specific playlist);
+- **Search**: Implement a contextual search (e.g., search by lyrics within a specific playlist);
 - **Filtering & Recommendations**: Introduce filters and a recommendation system based on play counts and user activity.
 
 - **Interactions**: Implement features like liking and following artists;
