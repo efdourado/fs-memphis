@@ -163,23 +163,23 @@ const Header = ({ toggleSidebar }) => {
             onSubmit={handleSearchSubmit}
             className={`search-form ${searchActive ? "active" : ""} ${searchQuery ? "has-query" : ""}`}
           >
-            <button
-              type="button"
-              className="search-trigger-btn"
-              onClick={handleSearchToggle}
-              aria-label={searchActive ? "Close search" : "Open search"}
-            >
-              {!searchActive && <FontAwesomeIcon icon={faSearch} />}
-            </button>
             <input
               ref={searchInputRef}
               type="text"
               className="search-input"
-              placeholder="Search..."
+              placeholder="Search songs, artists..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               aria-label="Search input"
             />
+            <button
+              type="button"
+              className="search-trigger-btn"
+              onClick={handleSearchToggle}
+              aria-label="Toggle search"
+            >
+              <FontAwesomeIcon icon={faSearch} />
+            </button>
           </form>
 
           {isAuthenticated && currentUser && (

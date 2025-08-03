@@ -81,7 +81,7 @@ export class UserService {
     const user = await this.userDAO.findByEmailForAuth(email);
 
     if (!user || !(await user.comparePassword(password))) {
-      throw new AppError('Invalid email or password', 401);
+      throw new AppError("Oops! Something's off. Try again?", 401);
     }
     
     const userObject = user.toObject();
