@@ -168,10 +168,11 @@ const CollectionPage = ({ type }) => {
                 items={mainContent.items}
                 type={mainContent.type}
                 showHeader={false}
-                displayAll={true}
                 showNumber={true}
                 showImage={type !== 'artist'}
                 onMenuClick={handleOpenMenuForSong}
+                initialItems={3}
+                {...(type !== 'artist' ? { displayAll: true } : {})}
               />
             </section>
           ) : (

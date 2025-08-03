@@ -22,9 +22,10 @@
   background: transparent;
   border: 1px solid var(--color-border);
   color: var(--color-text-secondary);
-  padding: var(--spacing-sm) var(--spacing-lg);
+  padding: var(--spacing-xs) var(--spacing-xl);
   border-radius: var(--border-radius-full);
-  font-weight: var(--font-weight-semibold);
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-light);
   transition: all 0.2s ease-out;
 }
 .list__toggle-btn:hover {

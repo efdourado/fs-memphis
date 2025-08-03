@@ -4,6 +4,8 @@ import * as searchService from '../services/searchService';
 import LoadingSpinner from '../components/ui/LoadingSpinner';
 import ErrorMessage from '../components/ui/ErrorMessage';
 import List from '../components/ui/List';
+import Carousel from '../components/ui/Carousel';
+
 import Card from '../components/ui/Card';
 import ComingSoonPage from './ComingSoonPage';
 
@@ -29,7 +31,7 @@ const SearchPage = () => {
         const { data } = await searchService.search(query);
         setResults(data);
       } catch (err) {
-        setError('Failed to perform search. Please try again.');
+        setError('Failed to perform search.');
         console.error(err);
       } finally {
         setLoading(false);
@@ -66,40 +68,32 @@ const SearchPage = () => {
               items={results.songs}
               type="song"
               showImage={true}
-              displayAll={true}
               showAlbum={true}
               showDuration={true}
+              initialItems={3}
             />
           </section>
         </>
       )}
 
       {results?.albums?.length > 0 && (
-        <>
-          <div className="carousel__header">
-            <h1 className="carousel__title">Albums</h1>
-          </div>
-          
-          <section className="search-results-section">
-            <div className="results-grid">
-              {results.albums.map(item => <Card key={item._id} item={item} type="album" />)}
-            </div>
-          </section>
-        </>
+        <section className="search-results-section">
+          <Carousel
+            title="Albums"
+            items={results.albums}
+            type="album"
+          />
+        </section>
       )}
 
       {results?.artists?.length > 0 && (
-        <>
-          <div className="carousel__header">
-            <h1 className="carousel__title">Artists</h1>
-          </div>
-          
-          <section className="search-results-section">
-            <div className="results-grid">
-              {results.artists.map(item => <Card key={item._id} item={item} type="artist" />)}
-            </div>
-          </section>
-        </>
+        <section className="search-results-section">
+          <Carousel
+            title="Artists"
+            items={results.artists}
+            type="artist"
+          />
+        </section>
       )}
     </div>
 ); };

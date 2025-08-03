@@ -65,7 +65,7 @@ const List = ({
             className="list__toggle-btn"
             onClick={() => setShowAll(!showAll)}
           >
-            {showAll ? 'Show Less' : `Show All ${safeItems.length} Items`}
+            {showAll ? 'See less' : `See all ${safeItems.length} Items`}
           </button>
         </div>
       )}
