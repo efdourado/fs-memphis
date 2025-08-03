@@ -17,22 +17,26 @@ import { AlbumService } from './services/albumService.js';
 import { PlaylistService } from './services/playlistService.js';
 import { SongService } from './services/songService.js';
 import { UserService } from './services/userService.js';
+import { SearchService } from './services/searchService.js';
 
 const albumService = new AlbumService(albumDAO, songDAO);
 const playlistService = new PlaylistService(playlistDAO, songDAO);
 const songService = new SongService(songDAO);
 const userService = new UserService(userDAO, playlistDAO);
+const searchService = new SearchService();
 
 import { AlbumController } from './controllers/albumController.js';
 import { PlaylistController } from './controllers/playlistController.js';
 import { SongController } from './controllers/songController.js';
 import { UserController } from './controllers/userController.js';
+import { SearchController } from './controllers/searchController.js';
 import { createAuthRouter } from './routes/authRoutes.js';
 
 const albumController = new AlbumController(albumService);
 const playlistController = new PlaylistController(playlistService);
 const songController = new SongController(songService);
 const userController = new UserController(userService);
+const searchController = new SearchController(searchService);
 
 const authRouter = createAuthRouter(userController);
 
@@ -41,5 +45,6 @@ export default {
   playlistController,
   songController,
   userController,
+  searchController,
   authRouter
 };

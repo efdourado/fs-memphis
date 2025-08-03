@@ -86,10 +86,10 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
           <a 
             href="mailto:ed320819@gmail.com?subject=Feedback%20for%20Echo%20App&body=hi%20there@20👋%0A%0Athis%20is%20my%20feedback%20about%20the%20app:%0A%0A" 
             className="nav-link nav-link--logout" 
-            aria-label="Give us Feedback"
+            aria-label="Give me Feedback"
           >
             <FontAwesomeIcon icon={faCommentDots} className="nav-icon" />
-            <span>Give us Feedback</span>
+            <span>Give me Feedback</span>
           </a>
         )}
       </div>

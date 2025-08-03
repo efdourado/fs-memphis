@@ -3,12 +3,25 @@ import PropTypes from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlay, faPause, faEllipsis, faCheckCircle } from '@fortawesome/free-solid-svg-icons';
 import { faCircle } from '@fortawesome/free-regular-svg-icons';
+import { formatDuration } from '../../utils/duration'; // Importado
 
 import { usePlayer } from '../../hooks/usePlayer';
 import { useSongModal } from '../../context/SongModalContext';
 import fallbackImage from '/fb.jpg';
 
-const Item = ({ item, type, index, showImage, showNumber, onMenuClick, isAdded, onClick }) => {
+const Item = ({ 
+  item, 
+  type, 
+  index, 
+  showImage, 
+  showNumber, 
+  onMenuClick, 
+  isAdded, 
+  onClick,
+  showAlbum, // Adicionado
+  showDuration, // Adicionado
+  showPlays, // Adicionado
+}) => {
   const player = usePlayer();
   const { openMenu } = useSongModal();
 
@@ -81,10 +94,26 @@ const Item = ({ item, type, index, showImage, showNumber, onMenuClick, isAdded, 
         )}
         <div className="item__info">
           <p className="item__title">{title}</p>
-          <p className="item__artist">{subtitle}</p>
+          <p className="item__artist">
+            {subtitle}
+            {showAlbum && type === 'song' && (
+              <div>
+                <span className="stat-separator"> • </span>
+                {item.album?.title}
+              </div>
+            )}
+          </p>
         </div>
       </div>
+
+      {showPlays && type === 'song' && (
+        <div className="item__meta item__plays">{item.plays?.toLocaleString() || 0}</div>
+      )}
       
+      {showDuration && type === 'song' && (
+        <div className="item__meta item__duration">{formatDuration(item.duration)}</div>
+      )}
+
       <div className="item__actions">
         {type === 'song' ? (
           <button
