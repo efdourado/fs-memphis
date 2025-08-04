@@ -1,6 +1,6 @@
 # Memphis — Listen. Feel. Create.
 
-Music, reimagined — Memphis is a web application designed to provide a seamless, modern music listening experience. Users can build and manage personal playlists, and align new perspectives through sound.
+Music, reimagined. Memphis is a web application designed to provide a seamless, modern music listening experience. Users can build and manage personal playlists, and align new perspectives through sound.
 
 ---
 
