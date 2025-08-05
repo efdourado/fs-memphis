@@ -1,9 +1,7 @@
-import { IAlbumController } from './interfaces/iAlbumController.js';
 import asyncHandler from '../middlewares/asyncHandler.js';
 
-export class AlbumController extends IAlbumController {
+export class AlbumController {
   constructor(albumService) {
-    super();
     this.albumService = albumService;
   }
 

@@ -80,11 +80,13 @@ export const spotifyCallback = async (req, res) => {
 
     const appToken = generateToken(user._id);
 
-    res.redirect(`http://localhost:5173/auth/callback?token=${appToken}`);
+    const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:5173';
+    res.redirect(`${frontendUrl}/auth/callback?token=${appToken}`);
   } catch (error) {
     console.error(
       "Error during Spotify callback:",
       error.response ? error.response.data : error.message
     );
-    res.redirect("/login?error=spotify_auth_failed");
+    const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:5173';
+    res.redirect(`${frontendUrl}/login?error=spotify_auth_failed`);
 } };

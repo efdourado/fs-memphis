@@ -152,7 +152,6 @@ const Bias = ({ item, type }) => {
 
           onPlaylistUpdated={() => {
             setEditModalOpen(false);
-            window.location.reload(); 
           }}
           onDelete={handleDeletePlaylist}
         />

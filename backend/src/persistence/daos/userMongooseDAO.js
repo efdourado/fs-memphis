@@ -1,8 +1,5 @@
-import { IUserDAO } from './interfaces/iUserDAO.js';
-
-export class UserMongooseDAO extends IUserDAO {
+export class UserMongooseDAO {
   constructor(userModel) {
-    super();
     this.model = userModel;
   }
 
