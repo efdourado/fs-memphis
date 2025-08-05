@@ -1,9 +1,7 @@
-import { IUserController } from './interfaces/iUserController.js';
 import asyncHandler from '../middlewares/asyncHandler.js';
 
-export class UserController extends IUserController {
+export class UserController {
   constructor(userService) {
-    super();
     this.userService = userService;
   }
 

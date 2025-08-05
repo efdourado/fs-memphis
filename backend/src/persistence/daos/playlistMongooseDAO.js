@@ -1,8 +1,5 @@
-import { IPlaylistDAO } from './interfaces/iPlaylistDAO.js';
-
-export class PlaylistMongooseDAO extends IPlaylistDAO {
+export class PlaylistMongooseDAO {
   constructor(playlistModel) {
-    super();
     this.model = playlistModel;
   }
 

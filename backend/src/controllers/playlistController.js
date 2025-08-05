@@ -1,9 +1,7 @@
-import { IPlaylistController } from './interfaces/iPlaylistController.js';
 import asyncHandler from '../middlewares/asyncHandler.js';
 
-export class PlaylistController extends IPlaylistController {
+export class PlaylistController {
   constructor(playlistService) {
-    super();
     this.playlistService = playlistService;
   }
 
@@ -15,6 +13,11 @@ export class PlaylistController extends IPlaylistController {
   getPlaylistById = asyncHandler(async (req, res) => {
     const playlist = await this.playlistService.getPlaylistById(req.params.id);
     res.json(playlist);
+  });
+
+  getPlaylistsByOwner = asyncHandler(async (req, res) => {
+    const playlists = await this.playlistService.getPlaylistsByOwner(req.params.ownerId);
+    res.json(playlists);
   });
 
   getMyPlaylists = asyncHandler(async (req, res) => {

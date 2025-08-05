@@ -1,9 +1,7 @@
-import { ISongController } from './interfaces/iSongController.js';
 import asyncHandler from '../middlewares/asyncHandler.js';
 
-export class SongController extends ISongController {
+export class SongController {
   constructor(songService) {
-    super();
     this.songService = songService;
   }
 

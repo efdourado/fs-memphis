@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from "react";
 
 export const useAudio = ({
   src,
-  volume,
   isPlaying,
   onPlay,
   onPause,
@@ -13,10 +12,12 @@ export const useAudio = ({
   const [duration, setDuration] = useState(0);
   const [currentTime, setCurrentTime] = useState(0);
 
-  // Handle source changes
   useEffect(() => {
     const audio = audioRef.current;
-    if (!src) return;
+    if (!src) {
+      audio.src = '';
+      return;
+    }
 
     setIsReady(false);
     audio.src = src;
@@ -34,7 +35,6 @@ export const useAudio = ({
     };
   }, [src]);
 
-  // Handle play/pause changes
   useEffect(() => {
     if (!isReady) return;
     
@@ -49,12 +49,6 @@ export const useAudio = ({
     }
   }, [isPlaying, isReady]);
 
-  // Handle volume changes
-  useEffect(() => {
-    audioRef.current.volume = volume;
-  }, [volume]);
-
-  // Setup event listeners
   useEffect(() => {
     const audio = audioRef.current;
 
@@ -82,8 +76,7 @@ export const useAudio = ({
   const seek = (time) => {
     if (isReady && audioRef.current) {
       audioRef.current.currentTime = time;
-    }
-  };
+  } };
 
   return {
     audioRef,
@@ -91,5 +84,4 @@ export const useAudio = ({
     duration,
     currentTime,
     seek
-  };
-};
+}; };

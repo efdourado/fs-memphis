@@ -1,8 +1,5 @@
-import { IAlbumDAO } from './interfaces/iAlbumDAO.js';
-
-export class AlbumMongooseDAO extends IAlbumDAO {
+export class AlbumMongooseDAO {
   constructor(albumModel) {
-    super();
     this.model = albumModel;
   }
 

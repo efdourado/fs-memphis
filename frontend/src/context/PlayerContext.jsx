@@ -1,111 +1,76 @@
 import React, { createContext, useCallback, useEffect, useMemo, useState } from 'react';
-import { useAudio } from '../hooks/useAudio';
 import PropTypes from 'prop-types';
+import { useAudio } from '../hooks/useAudio';
 import apiClient from '../services/apiClient';
 
 export const PlayerContext = createContext();
 
 export const PlayerProvider = ({ children }) => {
-  const [songs, setSongs] = useState([]);
   const [state, setState] = useState({
     currentTrack: null,
     isPlaying: false,
-    volume: 0.7,
-    isMuted: false,
     playContext: null,
   });
 
-  const handlePlayCount = (trackId) => {
+  const handlePlayCount = useCallback((trackId) => {
+    if (!trackId) return;
     apiClient.post(`/song/${trackId}/play`)
       .catch(err => console.error("Failed to update play count", err));
-  };
+  }, []);
+
+  const playTrack = useCallback((track, context) => {
+    if (!track?.audioUrl) return;
+    setState(prev => ({
+      ...prev,
+      currentTrack: track,
+      playContext: context,
+      isPlaying: true,
+    }));
+    handlePlayCount(track._id);
+  }, [handlePlayCount]);
 
   const startPlayback = useCallback((newSongs, newContext) => {
     if (newSongs && newSongs.length > 0) {
-      const firstTrack = newSongs[0];
-      setSongs(newSongs);
-      setState(prev => ({
-        ...prev,
-        currentTrack: firstTrack,
-        playContext: newContext,
-        isPlaying: true,
-      })); 
-      handlePlayCount(firstTrack._id);
-  } }, []);
-
-  const skipTrack = useCallback((direction) => {
-    if (!state.currentTrack || !songs.length) return;
-    
-    const currentIndex = songs.findIndex(song => song._id === state.currentTrack._id);
-    if (currentIndex === -1) return;
-
-    let nextIndex;
-    if (direction === 'forward') {
-      nextIndex = (currentIndex + 1) % songs.length;
-    } else {
-      nextIndex = (currentIndex - 1 + songs.length) % songs.length;
+      playTrack(newSongs[0], newContext);
     }
-
-    setState(prev => ({
-      ...prev,
-      currentTrack: songs[nextIndex],
-      isPlaying: true
-    }));
-  }, [state.currentTrack, songs]);
-
-  const playTrack = useCallback((track) => {
-    if (!track?.audioUrl) return;
-    startPlayback([track], { type: 'song', id: track._id });
-  }, [startPlayback]);
+  }, [playTrack]);
 
   const togglePlayPause = useCallback(() => {
     if (!state.currentTrack) return;
     setState(prev => ({ ...prev, isPlaying: !prev.isPlaying }));
   }, [state.currentTrack]);
 
-  const toggleMute = useCallback(() => {
-    setState(prev => ({ ...prev, isMuted: !prev.isMuted }));
-  }, []);
-
-  const setVolume = useCallback((volume) => {
-    setState(prev => ({ ...prev, volume: Math.max(0, Math.min(1, volume)) }));
-  }, []);
+  const stopPlayback = useCallback(() => {
+    setState(prev => ({
+      ...prev,
+      currentTrack: null,
+      isPlaying: false,
+      playContext: null,
+  })); }, []);
 
   const audio = useAudio({
     src: state.currentTrack?.audioUrl || '',
-    volume: state.isMuted ? 0 : state.volume,
     isPlaying: state.isPlaying,
     onPlay: () => setState(prev => ({ ...prev, isPlaying: true })),
     onPause: () => setState(prev => ({ ...prev, isPlaying: false })),
-    onEnded: () => skipTrack('forward')
+    onEnded: stopPlayback,
   });
-  
-  useEffect(() => {
-    if (!state.isPlaying && !state.currentTrack) {
-      setState(prev => ({ ...prev, playContext: null }));
-    }
-  }, [state.isPlaying, state.currentTrack]);
-
-  const value = useMemo(() => ({
-    ...state,
-    songs,
-    currentTime: audio.currentTime,
-    duration: audio.duration,
-    playTrack,
-    startPlayback,
-    togglePlayPause,
-    toggleMute,
-    setVolume,
-    skipTrack,
-    seek: audio.seek,
-    setSongs,
-  }), [state, audio, playTrack, startPlayback, togglePlayPause, toggleMute, setVolume, skipTrack, songs]);
 
   useEffect(() => {
     if (state.isPlaying && state.currentTrack) {
       handlePlayCount(state.currentTrack._id);
     }
-  }, [state.currentTrack?._id, state.isPlaying]);
+  }, [state.currentTrack?._id, state.isPlaying, handlePlayCount]);
+
+  const value = useMemo(() => ({
+    ...state,
+    currentTime: audio.currentTime,
+    duration: audio.duration,
+    playTrack,
+    startPlayback,
+    togglePlayPause,
+    seek: audio.seek,
+  }), [state, audio, playTrack, startPlayback, togglePlayPause]);
 
   return (
     <PlayerContext.Provider value={value}>

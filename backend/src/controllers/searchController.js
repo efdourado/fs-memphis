@@ -1,9 +1,7 @@
-import { ISearchController } from './interfaces/iSearchController.js';
 import asyncHandler from '../middlewares/asyncHandler.js';
 
-export class SearchController extends ISearchController {
+export class SearchController {
   constructor(searchService) {
-    super();
     this.searchService = searchService;
   }
 
