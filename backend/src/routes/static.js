@@ -7,7 +7,7 @@ const __dirname = path.dirname(__filename);
 
 const router = express.Router();
 
-const staticPath = path.join(__dirname, '../../../frontend/dist');
+const staticPath = path.join(__dirname, '../../frontend/dist');
 
 router.use(express.static(staticPath));
 
