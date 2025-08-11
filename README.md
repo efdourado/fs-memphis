@@ -31,7 +31,7 @@ Music, reimagined. Memphis is a web application built to deliver a seamless, mod
 
 ---
 
-### Getting Started with Docker
+### Docker
 
 The project is fully containerized with Docker, ensuring a consistent environment for both development and production.
 
@@ -75,7 +75,7 @@ docker compose down
 
 ---
 
-**Roadmap**
+### Roadmap
 
 Planned features for future Memphis versions:
 
