@@ -1,0 +1,14 @@
+**/node_modules
+
+frontend/dist
+frontend/.vite
+
+.env
+**/.env
+frontend/.env*.local
+
+.DS_Store
+Thumbs.db
+
+.vscode/
+.idea/

@@ -1,86 +1,92 @@
 # Memphis — Listen. Feel. Create.
 
-Music, reimagined. Memphis is a web application designed to provide a seamless, modern music listening experience. Users can build and manage personal playlists, and align new perspectives through sound.
+Music, reimagined. Memphis is a web application built to deliver a seamless, modern music listening experience. Users can create and manage personal playlists, explore fresh perspectives, and connect through sound.
 
 ---
 
-**Features**
+### Features
 
-- **Player**: A persistent site-wide player that maintains playback across navigation and highlights the current album or playlist playing.
-- **Secure auth**: Users can register and log in securely, with sessions managed by JSON Web Tokens (JWT).
-- **Personal library**: Logged-in users have a private library page to view and manage their created playlists.
-
-- **Protected admin dashboard**: A secure, role-protected admin area for complete site management.
+* **Player**: A persistent, site-wide player that keeps playback running across navigation and highlights the current album or playlist.
+* **Secure auth**: User registration and login with sessions managed through JSON Web Tokens (JWT).
+* **Personal library**: A private page where logged-in users can view and manage their own playlists.
+* **Protected admin dashboard**: Role-based, secure admin area for complete site management.
 
 ---
 
 **Stack & Structure**
 
-- **Backend (Routes, Controllers, Models, Middlewares):** Node.js, Express, MongoDB, Mongoose, Dotenv, CORS, JWT, Bcryptjs;
-- **Frontend (React app with Components, Contexts, Hooks, Pages):** React, Vite, React Router DOM, Axios, FontAwesome.
+* **Backend (Routes, Controllers, Models, Middlewares):** Node.js, Express, MongoDB, Mongoose, Dotenv, CORS, JWT, Bcryptjs.
+* **Frontend (React app with Components, Contexts, Hooks, Pages):** React, Vite, React Router DOM, Axios, FontAwesome.
 
 ---
 
 **Code Style & Conventions**
 
-- **JSX (React) and CSS Files:** Use `PascalCase`. This ensures the file name matches the component's name and its associated style file.
-  - *e.g.:* `HomePage.jsx`, `Collection.jsx`, `HomePage.css`, `Collection.css`
+* **JSX (React) & CSS Files:** Use `PascalCase` so the file name matches the component and its style file.
 
-- **JS Files:** Use `camelCase`. This applies to hooks, services, utils, and backend files.
-  - *e.g.:* `usePlayer.js`, `collectionService.js`, `songController.js`
+  * *Example:* `HomePage.jsx`, `Collection.jsx`, `HomePage.css`, `Collection.css`
+* **JS Files:** Use `camelCase` for hooks, services, utils, and backend files.
+
+  * *Example:* `usePlayer.js`, `collectionService.js`, `songController.js`
 
 ---
 
-**Run**
+### Getting Started with Docker
 
-After cloning the repo:
+The project is fully containerized with Docker, ensuring a consistent environment for both development and production.
 
-1. **Install dependencies:**
+**Prerequisites**
+
+* [Docker](https://www.docker.com/products/docker-desktop/) installed and running.
+
+**1. Environment Variables**
+Create a local environment file by copying the example:
 
 ```bash
-npm install
+cp .env.example .env
 ```
 
-2. **Set up backend environment variables:**
+Open `.env` and fill in your secrets (e.g., `JWT_SECRET`, Spotify credentials).
 
-MONGODB_URI=
-DB_NAME=
-JWT_SECRET=
-
-JWT_EXPIRES_IN=
-PORT=
-
-3. **Start front and backend server:**
+**2. Running in Development Mode**
+Hot-reloading for both frontend and backend:
 
 ```bash
-npm run dev --prefix frontend
-  
-npm start --prefix backend
+docker compose up --build
 ```
 
-4. **Build for production:**
+* Available at `http://localhost:5173`.
+* Changes in `frontend` or `backend` trigger an automatic reload.
+
+**3. Simulating Production Mode**
+Build the optimized production image and run it locally:
 
 ```bash
-npm run build --prefix frontend
+docker compose -f docker-compose.yml up --build
+```
+
+* Available at `http://localhost:3000`.
+
+**4. Stopping the Application**
+
+```bash
+docker compose down
 ```
 
 ---
 
 **Roadmap**
 
-Here is a roadmap of features planned for future versions of Memphis:
+Planned features for future Memphis versions:
 
-- **Search**: Implement a contextual search (e.g., search by lyrics within a specific playlist);
-- **Filtering & Recommendations**: Introduce filters and a recommendation system based on play counts and user activity.
-
-- **Interactions**: Implement features like liking and following artists;
-- **Shuffle modes**: Create a differential shuffle experience with transparency and multiple user-configurable options;
-- **Library**: Overhaul the user's library for better organization and functionality;
-- **Sharing**: Allow users to easily share their favorite songs, playlists, and etc.
-
-- **Page designs**: Further customize key pages like Artist and Song;
-- **Seamless auth flow**: Unify the Login and Register pages into a single, elegant component with a smooth transition;
-- **Theme customization**: Enhance the existing light and dark modes and offer users more color palettes;
-- **Responsiveness & Performance**: Continuously refine the app's responsiveness and optimize data loading.
-
-- **Content**: Expand to include content like behind-the-scenes, artist interviews, events, and diaries.
+* **Search**: Contextual search, including searching by lyrics within a specific playlist.
+* **Filtering & Recommendations**: Filters and a recommendation system based on play counts and user activity.
+* **Interactions**: Liking songs, following artists.
+* **Shuffle modes**: More transparent shuffle logic with multiple user-configurable modes.
+* **Library**: A reworked library for better organization and usability.
+* **Sharing**: Easy sharing of songs, playlists, and more.
+* **Page designs**: More personalized designs for Artist and Song pages.
+* **Seamless auth flow**: Merge Login and Register into a single component with smooth transitions.
+* **Theme customization**: Expanded light/dark modes and additional color palettes.
+* **Responsiveness & Performance**: Ongoing improvements in responsiveness and loading speed.
+* **Content**: Behind-the-scenes material, artist interviews, event coverage, and diaries.
