@@ -13,8 +13,6 @@ Music, reimagined. My goal is simple: turn passive listening into active discove
 
 ## Docker
 
-The project is fully containerized with Docker, ensuring a consistent environment for both development and production.
-
 **Prerequisites**
 
 * [Docker](https://www.docker.com/products/docker-desktop/) installed and running.
@@ -71,3 +69,4 @@ Planned features for future Memphis versions:
 * **Responsiveness & Performance**: Ongoing improvements in responsiveness and loading speed.
 
 * **Content**: Behind-the-scenes material, artist interviews, event coverage, and diaries.
+
