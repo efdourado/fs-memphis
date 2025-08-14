@@ -1,37 +1,17 @@
 # Memphis — Listen. Feel. Create.
 
-Music, reimagined. Memphis is a web application built to deliver a seamless, modern music listening experience. Users can create and manage personal playlists, explore fresh perspectives, and connect through sound.
+Music, reimagined. My goal is simple: turn passive listening into active discovery and make musical knowledge accessible to all. The approach combines clear musical mapping (instruments, keys, structure) with insights into streaming algorithms, alongside tools and guidance for anyone to create with intention and purpose.
 
 ---
 
-### Features
-
-* **Player**: A persistent, site-wide player that keeps playback running across navigation and highlights the current album or playlist.
-* **Secure auth**: User registration and login with sessions managed through JSON Web Tokens (JWT).
-* **Personal library**: A private page where logged-in users can view and manage their own playlists.
-* **Protected admin dashboard**: Role-based, secure admin area for complete site management.
-
----
-
-**Stack & Structure**
+## Stack & Structure
 
 * **Backend (Routes, Controllers, Models, Middlewares):** Node.js, Express, MongoDB, Mongoose, Dotenv, CORS, JWT, Bcryptjs.
 * **Frontend (React app with Components, Contexts, Hooks, Pages):** React, Vite, React Router DOM, Axios, FontAwesome.
 
 ---
 
-**Code Style & Conventions**
-
-* **JSX (React) & CSS Files:** Use `PascalCase` so the file name matches the component and its style file.
-
-  * *Example:* `HomePage.jsx`, `Collection.jsx`, `HomePage.css`, `Collection.css`
-* **JS Files:** Use `camelCase` for hooks, services, utils, and backend files.
-
-  * *Example:* `usePlayer.js`, `collectionService.js`, `songController.js`
-
----
-
-### Docker
+## Docker
 
 The project is fully containerized with Docker, ensuring a consistent environment for both development and production.
 
@@ -75,7 +55,7 @@ docker compose down
 
 ---
 
-### Roadmap
+## Roadmap
 
 Planned features for future Memphis versions:
 
