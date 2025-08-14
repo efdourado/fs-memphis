@@ -13,8 +13,7 @@ Music, reimagined. My goal is simple: turn passive listening into active discove
 
 ## Run
 
-**1. Environment Variables**
-Create a local environment file by copying the example:
+**1. Create a local environment file by copying the example:
 
 ```bash
 cp .env.example .env
@@ -65,5 +64,6 @@ Planned features for future Memphis versions:
 * **Responsiveness & Performance**: Ongoing improvements in responsiveness and loading speed.
 
 * **Content**: Behind-the-scenes material, artist interviews, event coverage, and diaries.
+
 
 
