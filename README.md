@@ -11,11 +11,7 @@ Music, reimagined. My goal is simple: turn passive listening into active discove
 
 ---
 
-## Docker
-
-**Prerequisites**
-
-* [Docker](https://www.docker.com/products/docker-desktop/) installed and running.
+## Run
 
 **1. Environment Variables**
 Create a local environment file by copying the example:
@@ -69,4 +65,5 @@ Planned features for future Memphis versions:
 * **Responsiveness & Performance**: Ongoing improvements in responsiveness and loading speed.
 
 * **Content**: Behind-the-scenes material, artist interviews, event coverage, and diaries.
+
 
