@@ -1,4 +1,4 @@
-# Memphis — Listen. Feel. Create.
+# Memphis - Listen. Feel. Create.
 
 Music, reimagined. My goal is simple: turn passive listening into active discovery and make musical knowledge accessible to all. The approach combines clear musical mapping (instruments, keys, structure) with insights into streaming algorithms, alongside tools and guidance for anyone to create with intention and purpose.
 
@@ -69,4 +69,5 @@ Planned features for future Memphis versions:
 * **Seamless auth flow**: Merge Login and Register into a single component with smooth transitions.
 * **Theme customization**: Expanded light/dark modes and additional color palettes.
 * **Responsiveness & Performance**: Ongoing improvements in responsiveness and loading speed.
+
 * **Content**: Behind-the-scenes material, artist interviews, event coverage, and diaries.
