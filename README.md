@@ -12,7 +12,7 @@ Music, reimagined. My goal is simple: turn passive listening into active discove
 
 ---
 
-### Overview
+## Overview
 
 * **`/`**: Displays featured playlists, albums, and recommended artists
 * **`/login`**: Allows existing users to sign in
@@ -52,21 +52,3 @@ docker compose -f docker-compose.yml up --build
 ```bash
 docker compose down
 ```
-
----
-
-## Roadmap
-
-Planned features for future Memphis versions:
-
-* **Search**: Contextual search, including searching by lyrics within a specific playlist
-* **Filtering & Recommendations**: Filters and a recommendation system based on play counts and user activity
-* **Interactions**: Liking songs, following artists
-* **Shuffle modes**: More transparent shuffle logic with multiple user-configurable modes
-* **Library**: A reworked library for better organization and usability
-* **Sharing**: Easy sharing of songs, playlists, and more
-* **Page designs**: More personalized designs for Artist and Song pages
-* **Seamless auth flow**: Merge Login and Register into a single component with smooth transitions
-* **Theme customization**: Expanded light/dark modes and additional color palettes
-* **Responsiveness & Performance**: Ongoing improvements in responsiveness and loading speed
-* **Content**: Behind-the-scenes material, artist interviews, event coverage, and diaries
