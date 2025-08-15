@@ -29,13 +29,13 @@ Music, reimagined. My goal is simple: turn passive listening into active discove
 
 ## Run
 
-1.  **Set up environment variables** by copying the example (and fill in your secrets (e.g., `JWT_SECRET`, Spotify credentials)):
+**1.  Set up environment variables** by copying the example (and fill in your secrets (e.g., `JWT_SECRET`, Spotify credentials)):
 
 ```bash
 cp .env.example .env
 ```
 
-**2. Running in Development Mode** (at `http://localhost:5173`. Changes in `frontend` or `backend` trigger an automatic reload):
+**2. Running in Development Mode** (at `http://localhost:5173`. Changes trigger an automatic reload):
 
 ```bash
 docker compose up --build
