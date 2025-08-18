@@ -2,7 +2,7 @@
 
 Music, reimagined. My goal is simple: turn passive listening into active discovery and make musical knowledge accessible to all. The approach combines clear musical mapping (instruments, keys, structure) with insights into streaming algorithms, alongside tools and guidance for anyone to create with intention and purpose
 
----
+-----
 
 ## Stack & Structure
 
@@ -10,7 +10,7 @@ Music, reimagined. My goal is simple: turn passive listening into active discove
 
 * **Frontend (React app with Components, Contexts, Hooks, Pages):** React, Vite, React Router DOM, Axios, FontAwesome
 
----
+-----
 
 ## Overview
 
@@ -25,7 +25,7 @@ Music, reimagined. My goal is simple: turn passive listening into active discove
 * **`/album/:id`**: Lists all the songs within a specific album
 * **`/playlist/:id`**: Lists all the songs within a specific playlist
 
----
+-----
 
 ## Run
 
@@ -35,19 +35,19 @@ Music, reimagined. My goal is simple: turn passive listening into active discove
 cp .env.example .env
 ```
 
-**2. Running in Development Mode** (at `http://localhost:5173`. Changes trigger an automatic reload):
+**2. Running in development mode** (at `http://localhost:5173`. Changes trigger an automatic reload):
 
 ```bash
 docker compose up --build
 ```
 
-**3. Simulating Production Mode** (at `http://localhost:3000`):
+**3. Simulating production mode** (at `http://localhost:3000`):
 
 ```bash
 docker compose -f docker-compose.yml up --build
 ```
 
-**4. Stopping the Application:**
+**4. Stopping the application:**
 
 ```bash
 docker compose down
