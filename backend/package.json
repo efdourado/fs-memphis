@@ -4,8 +4,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node src/server.js",
-    "dev": "nodemon src/server.js",
-    "migrate:songs": "node scripts/migrate-songs.js"
+    "dev": "nodemon src/server.js"
   },
   "keywords": [],
   "author": "",

@@ -19,9 +19,9 @@ const AdminForm = ({ id, config, onSaved, onCancel }) => {
       setLoading(true);
       try {
         const promises = [];
-
         if (isEditing) {
-          promises.push(config.api.fetchById(id));
+          const fetcherId = config.api.update ? id : formData.slug; 
+          promises.push(config.api.fetchById(fetcherId));
         }
 
         if (config.relations) {
@@ -33,8 +33,8 @@ const AdminForm = ({ id, config, onSaved, onCancel }) => {
         let currentFormData = config.initialState;
 
         if (isEditing) {
-          const { data: itemData } = responses.shift();
-          currentFormData = config.processDataForForm(itemData);
+          const itemData = responses.shift().data;
+          currentFormData = config.processDataForForm ? config.processDataForForm(itemData) : itemData;
         }
         
         setFormData(currentFormData);
@@ -65,8 +65,7 @@ const AdminForm = ({ id, config, onSaved, onCancel }) => {
             [outerKey]: {
                 ...prev[outerKey],
                 [innerKey]: type === 'checkbox' ? checked : value
-            }
-        }));
+        } }));
     } else if (type === 'select-multiple') {
       const values = Array.from(selectedOptions, option => option.value);
       setFormData(prev => ({ ...prev, [name]: values }));
@@ -79,11 +78,12 @@ const AdminForm = ({ id, config, onSaved, onCancel }) => {
     setSaving(true);
     setError('');
 
-    const submissionData = config.processDataForSubmit(formData);
+    const submissionData = config.processDataForSubmit ? config.processDataForSubmit(formData) : formData;
 
     try {
       if (isEditing) {
-        await config.api.update(id, submissionData);
+        const updateId = config.api.update.toString().includes('slug') ? formData.slug : id;
+        await config.api.update(updateId, submissionData);
       } else {
         await config.api.create(submissionData);
       }
@@ -103,6 +103,10 @@ const AdminForm = ({ id, config, onSaved, onCancel }) => {
       <ErrorMessage message={error} />
       <div className="form-grid">
         {config.fields.map(field => {
+          if (field.component === 'divider') {
+            return <div key={field.label} className="form-divider span-2">{field.label}</div>;
+          }
+
           if (field.condition && !field.condition(formData)) {
             return null;
           }
@@ -137,7 +141,7 @@ const AdminForm = ({ id, config, onSaved, onCancel }) => {
                 <select id={name} name={name} value={value || (rest.multiple ? [] : '')} onChange={handleChange} {...rest}>
                   {!rest.multiple && <option value="" disabled>Select {label}</option>}
                   {options.map(option => (
-                    <option key={option._id} value={option._id}>{option.name || option.name || option.title}</option>
+                    <option key={option._id} value={option._id}>{option.name || option.title}</option>
                   ))}
                 </select>
               </div>
