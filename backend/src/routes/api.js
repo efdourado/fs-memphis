@@ -71,4 +71,18 @@ router.get('/me/playlists', protect, playlistController.getMyPlaylists);
 router.post('/playlist/:id/song/:songId', protect, playlistController.addSongToPlaylist);
 router.delete('/playlist/:id/song/:songId', protect, playlistController.removeSongFromPlaylist);
 
+router.route('/posts')
+    .get(postController.getAllPosts)
+    .post(protect, admin, postController.createPost);
+router.route('/post/:slug')
+    .get(postController.getPostBySlug)
+    .put(protect, admin, postController.updatePost)
+    .delete(protect, admin, postController.deletePost);
+
+router.route('/tags')
+    .get(tagController.getAllTags)
+    .post(protect, admin, tagController.createTag);
+router.route('/tag/:slug')
+    .get(tagController.getContentByTag);
+
 export default router;

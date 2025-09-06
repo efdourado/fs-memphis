@@ -14,6 +14,10 @@ const albumSchema = new mongoose.Schema({
   totalPlays: { type: Number, default: 0 },
   isExplicit: { type: Boolean, default: false },
   copyright: { type: String, default: '' },
+
+  concept: { type: String, default: '' },
+  tags: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Tag' }],
+
   label: { type: String, default: '' }
 }, { timestamps: true });
 
