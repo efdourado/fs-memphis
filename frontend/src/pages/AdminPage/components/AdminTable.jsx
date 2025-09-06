@@ -29,7 +29,8 @@ const renderers = {
       </span>
   ); },
   
-  duration: (item) => formatDuration(item.duration),
+  duration: (item) => formatDuration(item.durationMs / 1000),
+
   timestamps: (item) => (
     <>
       <td data-label="Created At" className="date-cell-background">
@@ -43,22 +44,12 @@ const renderers = {
 
 const tableConfig = {
   users: {
-    columns: [
-      "User",
-      "Description",
-      "Admin?",
-      "Verified?",
-      "Created At",
-      "Updated At",
-      "Actions",
-    ],
+    columns: ["User", "Description", "Admin?", "Verified?", "Created At", "Updated At", "Actions"],
     renderRow: (item) => (
       <>
         <td
           className="item-cell-background"
-          style={{
-            backgroundImage: `url(${fallbackImage})`,
-          }}
+          style={{ backgroundImage: `url(${item.profilePic || fallbackImage})` }}
         >
           <div className="item-cell">
             <img src={item.profilePic || fallbackImage} alt={item.name} className="admin-table-image artist" />
@@ -71,7 +62,7 @@ const tableConfig = {
           </div>
         </td>
         <td data-label="Description">
-          <div className="artist-description">{item.artistProfile?.description || "No description yet."}</div>
+          <div className="artist-description">{item.artistProfile?.description || "No description."}</div>
         </td>
         <td data-label="Admin" style={{ textAlign: 'center' }}>
             <span className={`verified-badge ${item.isAdmin ? "verified" : "not-verified"}`}>
@@ -89,9 +80,7 @@ const tableConfig = {
       <>
         <td
           className="item-cell-background"
-          style={{
-            backgroundImage: `url(${fallbackImage})`,
-          }}
+          style={{ backgroundImage: `url(${item.coverImage || fallbackImage})` }}
         >
            <div className="item-cell">
               <img src={item.coverImage || fallbackImage} alt={item.title} className="admin-table-image" />
@@ -110,14 +99,12 @@ const tableConfig = {
   ), },
 
   songs: {
-    columns: ["Song", "Lyrics", "Duration", "Created At", "Updated At", "Actions"],
+    columns: ["Song", "Editorial Story", "Duration", "Created At", "Updated At", "Actions"],
     renderRow: (item) => (
       <>
         <td
           className="item-cell-background"
-          style={{
-            backgroundImage: `url(${fallbackImage})`,
-          }}
+          style={{ backgroundImage: `url(${item.album?.coverImage || fallbackImage})` }}
         >
           <div className="item-cell">
             <img src={item.album?.coverImage || fallbackImage} alt={item.title} className="admin-table-image" />
@@ -130,13 +117,71 @@ const tableConfig = {
             </div>
           </div>
         </td>
-        <td data-label="Lyrics">
-          <div className="artist-description">{item.lyrics || "No lyrics yet."}</div>
+        <td data-label="Editorial Story">
+          <div className="artist-description">{item.editorial?.story || "No story yet."}</div>
         </td>
         <td data-label="Duration" style={{ textAlign: 'center' }}>{renderers.duration(item)}</td>
         {renderers.timestamps(item)}
       </>
-), }, };
+  ), },
+
+  posts: {
+    columns: ["Post Title", "Author", "Status", "Created At", "Updated At", "Actions"],
+    renderRow: (item) => (
+      <>
+        <td
+          className="item-cell-background"
+          style={{ backgroundImage: `url(${item.coverImage?.url || fallbackImage})` }}
+        >
+          <div className="item-cell">
+            <img src={item.coverImage || fallbackImage} alt={item.title} className="admin-table-image" />
+            <div>
+              <div style={{ fontWeight: 'var(--font-weight-semibold)' }}>{item.title}</div>
+              <div style={{ fontSize: 'var(--font-size-sm)', color: 'var(--color-text-secondary)' }}>
+                /{item.slug}
+              </div>
+            </div>
+          </div>
+        </td>
+        <td data-label="Author">{item.author?.name || "N/A"}</td>
+        <td data-label="Status" style={{ textAlign: 'center' }}>
+            <span className={`verified-badge ${item.status === 'published' ? "verified" : "not-verified"}`}>
+              {item.status}
+            </span>
+        </td>
+        {renderers.timestamps(item)}
+      </>
+  ), },
+
+  tags: {
+    columns: ["Tag Name", "Category", "Slug", "Actions"],
+    renderRow: (item) => (
+      <>
+        <td>{item.name}</td>
+        <td>{item.category}</td>
+        <td>/{item.slug}</td>
+      </>
+  ), },
+  
+  podcasts: {
+      columns: ["Episode Title", "Podcast", "Created At", "Updated At", "Actions"],
+      renderRow: (item) => (
+        <>
+            <td className="item-cell-background" style={{ backgroundImage: `url(${item.coverImage?.url || fallbackImage})`}}>
+                <div className="item-cell">
+                    <img src={item.coverImage?.url || fallbackImage} alt={item.title} className="admin-table-image" />
+                    <div>
+                        <div style={{ fontWeight: 'var(--font-weight-semibold)' }}>{item.episodeTitle || "N/A"}</div>
+                        <div style={{ fontSize: 'var(--font-size-sm)', color: 'var(--color-text-secondary)' }}>
+                            {item.title}
+                        </div>
+                    </div>
+                </div>
+            </td>
+            <td>{item.title}</td>
+            {renderers.timestamps(item)}
+        </>
+), } };
 
 const AdminTable = ({ type, data, handleDelete, handleEdit }) => {
   const config = tableConfig[type];

@@ -16,3 +16,16 @@ export const fetchUsers = () => apiClient.get('/users');
 export const deleteUser = (id) => apiClient.delete(`/user/${id}`);
 
 export const createUser = (formData) => apiClient.post('/users', formData);
+
+export const fetchPosts = () => apiClient.get('/posts');
+export const createPost = (formData) => apiClient.post('/posts', formData);
+export const updatePost = (slug, formData) => apiClient.put(`/post/${slug}`, formData);
+export const deletePost = (slug) => apiClient.delete(`/post/${slug}`);
+
+export const fetchTags = () => apiClient.get('/tags');
+export const createTag = (formData) => apiClient.post('/tags', formData);
+
+export const fetchPodcasts = () => apiClient.get('/podcasts');
+export const createPodcast = (formData) => apiClient.post('/podcasts', formData);
+export const updatePodcast = (id, formData) => apiClient.put(`/podcast/${id}`, formData);
+export const deletePodcast = (id) => apiClient.delete(`/podcast/${id}`);

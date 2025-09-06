@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useCallback } from 'react';
-
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faSyncAlt } from "@fortawesome/free-solid-svg-icons";
 
@@ -9,16 +8,22 @@ import * as collectionService from '../../services/collectionService';
 import AdminForm from './components/AdminForm';
 import AdminModal from './components/AdminModal';
 import AdminTable from './components/AdminTable';
-
-import { albumFormConfig } from './components/formConfigs/albumFormConfig';
-import { songFormConfig } from './components/formConfigs/songFormConfig';
-import { userFormConfig } from './components/formConfigs/userFormConfig';
 import LoadingSpinner from '../../components/ui/LoadingSpinner';
+
+import { userFormConfig } from './components/formConfigs/userFormConfig';
+import { songFormConfig } from './components/formConfigs/songFormConfig';
+import { albumFormConfig } from './components/formConfigs/albumFormConfig';
+import { postFormConfig } from './components/formConfigs/postFormConfig';
+import { tagFormConfig } from './components/formConfigs/tagFormConfig';
+import { podcastFormConfig } from './components/formConfigs/podcastFormConfig';
 
 const TABS = {
   users: { label: 'Users', fetch: adminService.fetchUsers, delete: adminService.deleteUser, config: userFormConfig },
-  albums: { label: 'Albums', fetch: collectionService.fetchAlbums, delete: adminService.deleteAlbum, config: albumFormConfig },
   songs: { label: 'Songs', fetch: collectionService.fetchSongs, delete: adminService.deleteSong, config: songFormConfig },
+  albums: { label: 'Albums', fetch: collectionService.fetchAlbums, delete: adminService.deleteAlbum, config: albumFormConfig },
+  posts: { label: 'Posts', fetch: adminService.fetchPosts, delete: adminService.deletePost, config: postFormConfig },
+  tags: { label: 'Tags', fetch: adminService.fetchTags, delete: null, config: tagFormConfig },
+  podcasts: { label: 'Podcasts', fetch: adminService.fetchPodcasts, delete: adminService.deletePodcast, config: podcastFormConfig },
 };
 
 const AdminPage = () => {
@@ -63,10 +68,13 @@ const AdminPage = () => {
   };
 
   const handleDelete = async (id) => {
+    const currentTab = TABS[activeTab];
+    if (!currentTab.delete) return;
+
     const currentTypeName = activeTab.slice(0, -1);
     if (window.confirm(`Are you sure you want to delete this ${currentTypeName}? This action cannot be undone.`)) {
       try {
-        await TABS[activeTab].delete(id);
+        await currentTab.delete(id);
         loadData();
       } catch (err) {
         setError(`Failed to delete ${currentTypeName}.`);
@@ -81,8 +89,9 @@ const AdminPage = () => {
   };
 
   const currentTabConfig = TABS[activeTab];
-  const currentTypeName = activeTab.slice(0, -1);
-  const modalTitle = `${editingItem ? 'Update' : 'Create'} ${ currentTypeName }`;
+  // Ajuste para plural/singular
+  const singularName = activeTab.endsWith('s') ? activeTab.slice(0, -1) : activeTab;
+  const modalTitle = `${editingItem ? 'Update' : 'Create'} ${singularName}`;
 
   return (
     <div className="admin-page-unified">
@@ -94,7 +103,7 @@ const AdminPage = () => {
 
         <button onClick={() => handleOpenModal()} className="login-btn create-btn">
           <FontAwesomeIcon icon={faPlus} className="btn-icon-graphic" />
-          <span className="btn-label"> Add New {currentTypeName}</span>
+          <span className="btn-label"> Add New {singularName}</span>
         </button>
       </div>
 
