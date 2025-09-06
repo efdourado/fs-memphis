@@ -18,8 +18,8 @@ export class SongService {
   }
   
   async createSong(songData) {
-    if (!songData.title || !songData.artist || !songData.duration) {
-      throw new AppError('Title, artist, and duration are required.', 400);
+    if (!songData.title || !songData.artist || !songData.durationMs) {
+      throw new AppError('Title, artist, and duration (ms) are required.', 400);
     }
     return await this.songDAO.create(songData);
   }

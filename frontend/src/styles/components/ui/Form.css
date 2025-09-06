@@ -44,7 +44,6 @@
   color: var(--color-text-primary);
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-light);
-
   transition: border-color 0.2s, box-shadow 0.2s;
   -webkit-appearance: none;
   -moz-appearance: none;
@@ -70,13 +69,12 @@
 }
 
 .form-group:focus-within .checkbox-container,
-.form-group input:focus, 
-.form-group textarea:focus, 
+.form-group input:focus,
+.form-group textarea:focus,
 .form-group select:focus {
   outline: none;
   border-color: var(--color-primary);
 }
-
 
 .admin-form__multiselect select[multiple] {
   padding: var(--spacing-sm);
@@ -86,7 +84,7 @@
 }
 
 .admin-form__multiselect select[multiple] option {
-  padding: var(--spacing-sm);
+  padding: var(--spacing-xs) var(--spacing-sm);
   border-radius: var(--border-radius-sm);
   transition: all 0.2s ease-out;
 }
@@ -95,7 +93,6 @@
   background: var(--color-primary);
   color: var(--color-white);
 }
-
 
 .form-group textarea {
   resize: vertical;
@@ -107,7 +104,6 @@
   display: none;
 }
 
-
 .checkbox-container {
   display: flex;
   align-items: center;
@@ -118,7 +114,7 @@
   border-radius: var(--border-radius-md);
   cursor: pointer;
   transition: border-color 0.2s, box-shadow 0.2s;
-  height: 47px;
+  min-height: 49px;
 }
 
 .form-group:focus-within .checkbox-container {
@@ -158,17 +154,6 @@
   user-select: none;
 }
 
-.form-group > input:focus + label,
-.form-group > input:not(:placeholder-shown) + label,
-.form-group > textarea:focus + label,
-.form-group > textarea:not(:placeholder-shown) + label,
-.form-group > select:valid + label {
-  top: 0;
-  transform: translateY(-50%) scale(0.85);
-  font-weight: var(--font-weight-semibold);
-  color: var(--color-primary);
-}
-
 .form-group > textarea {
   min-height: 80px;
   padding-top: var(--spacing-md);
@@ -181,7 +166,6 @@
   justify-content: flex-end;
   align-items: center;
   color: var(--color-primary);
-  align-items: center;
   gap: var(--spacing-md);
   margin-top: var(--spacing-md);
   padding-top: var(--spacing-lg);
@@ -189,6 +173,7 @@
 }
 
 .form-divider {
+  grid-column: 1 / -1;
   display: flex;
   align-items: center;
   text-align: center;
@@ -197,7 +182,7 @@
   font-weight: var(--font-weight-semibold);
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  margin: var(--spacing-2xl) 0 var(--spacing-xl);
+  margin: var(--spacing-lg) 0 var(--spacing-sm);
 }
 
 .form-divider::before, .form-divider::after {
@@ -213,3 +198,12 @@
 .form-divider:not(:empty)::after {
   margin-left: var(--spacing-md);
 }
+
+@media (max-width: 768px) {
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .form-group.span-2 {
+    grid-column: span 1;
+} }

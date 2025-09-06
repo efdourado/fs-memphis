@@ -55,7 +55,7 @@ const Collection = ({ collectionId, type = "album" }) => {
 
   const totalDuration = useMemo(() => {
     if (!songs || songs.length === 0) return 0;
-    return songs.reduce((acc, song) => acc + (song?.duration || 0), 0);
+    return songs.reduce((acc, song) => acc + (song?.durationMs / 1000 || 0), 0);
   }, [songs]);
 
   const isCollectionCurrentlyPlaying = playContext?.type === type && playContext?.id === collectionId && isPlaying;

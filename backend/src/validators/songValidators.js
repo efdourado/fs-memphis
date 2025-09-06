@@ -18,9 +18,9 @@ const commonSongValidations = [
     body('album')
         .optional({ checkFalsy: true })
         .isMongoId().withMessage('Invalid Album ID format.'),
-    body('duration')
+    body('durationMs')
         .notEmpty().withMessage('Duration is required.')
-        .isNumeric().withMessage('Duration must be a number (in seconds).'),
+        .isNumeric().withMessage('Duration must be a number (in milliseconds).'),
     body('audioUrl')
         .optional({ checkFalsy: true })
         .isURL().withMessage('Audio URL must be a valid URL.'),
