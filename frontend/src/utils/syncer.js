@@ -8,7 +8,7 @@ const formatNumber = (num) => {
 
 const calculateTotalDuration = (songs) => {
   if (!songs || songs.length === 0) return 0;
-  return songs.reduce((acc, song) => acc + (song?.duration || 0), 0);
+  return songs.reduce((acc, song) => acc + (song?.durationMs / 1000 || 0), 0);
 };
 
 export const normalizeDataForPage = (type, data) => {

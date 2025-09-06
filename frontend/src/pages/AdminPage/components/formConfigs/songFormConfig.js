@@ -91,44 +91,38 @@ export const songFormConfig = {
   } }; },
 
   fields: [
-    // Seção 1: Informações Básicas
     { component: 'divider', label: 'Basic Information' },
     { name: 'title', label: 'Song Title', type: 'text', required: true, span: 'span-2' },
     { name: 'artist', label: 'Artist', component: 'select', optionsKey: 'artists', required: true },
     { name: 'album', label: 'Album', component: 'select', optionsKey: 'albums' },
     { name: 'releaseDate', label: 'Release Date', type: 'date' },
     { name: 'durationMs', label: 'Duration (milliseconds)', type: 'number', required: true },
-    { name: 'audioUrl', label: 'Audio (URL)', type: 'url', span: 'span-2' },
+    { name: 'audioUrl', label: 'Audio (URL)', type: 'url' },
     { name: 'isExplicit', label: 'Explicit?', description: '(Content Warning)', component: 'checkbox' },
 
-    // Seção 2: Classificação e Taxonomia
     { component: 'divider', label: 'Classification' },
-    { name: 'genres', label: 'Genres (Comma-Separated)', type: 'text', span: 'span-2' },
-    { name: 'emotions', label: 'Emotions (Comma-Separated)', type: 'text', span: 'span-2' },
+    { name: 'genres', label: 'Genres (Comma-Separated)', type: 'text' },
+    { name: 'emotions', label: 'Emotions (Comma-Separated)', type: 'text' },
     { name: 'instruments', label: 'Instruments (Comma-Separated)', type: 'text', span: 'span-2' },
     { name: 'tags', label: 'Editorial Tags', component: 'select', optionsKey: 'tags', multiple: true, className: 'admin-form__multiselect', span: 'span-2' },
 
-    // Seção 3: Análise Técnica
     { component: 'divider', label: 'Technical Analysis' },
-    { name: 'analysis.bpm', label: 'BPM', type: 'number' },
+    { name: 'analysis.bpm', label: 'BPM', type: 'number', span: 'span-2' },
     { name: 'analysis.key', label: 'Key (e.g., C#m, F)', type: 'text' },
     { name: 'analysis.energy', label: 'Energy (0.0-1.0)', type: 'number', step: '0.01' },
     { name: 'analysis.danceability', label: 'Danceability (0.0-1.0)', type: 'number', step: '0.01' },
     { name: 'analysis.valence', label: 'Valence (Positivity, 0.0-1.0)', type: 'number', step: '0.01' },
     
-    // Seção 4: Conteúdo Editorial e Créditos
     { component: 'divider', label: 'Editorial & Credits' },
-    { name: 'editorial.story', label: 'Creative Story', component: 'textarea', rows: '5', span: 'span-2' },
-    { name: 'editorial.productionNotes', label: 'Production Notes', component: 'textarea', rows: '3', span: 'span-2' },
-    { name: 'credits.writers', label: 'Writers (Comma-Separated)', type: 'text', span: 'span-2' },
-    { name: 'credits.producers', label: 'Producers (Comma-Separated)', type: 'text', span: 'span-2' },
+    { name: 'editorial.story', label: 'Creative Story', component: 'textarea', rows: '3' },
+    { name: 'editorial.productionNotes', label: 'Production Notes', component: 'textarea', rows: '3' },
+    { name: 'credits.writers', label: 'Writers (Comma-Separated)', type: 'text' },
+    { name: 'credits.producers', label: 'Producers (Comma-Separated)', type: 'text' },
     
-    // Seção 5: Links Externos
     { component: 'divider', label: 'External Links' },
     { name: 'externalLinks.spotify', label: 'Spotify URL', type: 'url' },
     { name: 'externalLinks.youtube', label: 'YouTube URL', type: 'url' },
 
-    // Seção 6: Letra
     { component: 'divider', label: 'Lyrics' },
     { name: 'lyrics', label: 'Lyrics', component: 'textarea', rows: '10', span: 'span-2' },
 ], };

@@ -18,7 +18,7 @@ const Player = () => {
   const [isHovered, setIsHovered] = useState(false);
   const circleRef = useRef(null);
   
-  const effectiveDuration = duration || currentTrack?.duration || 0;
+  const effectiveDuration = duration || (currentTrack?.durationMs / 1000 || 0);
   
   if (!currentTrack) return null;
 
