@@ -5,12 +5,16 @@ const artistSchema = new mongoose.Schema({
   description: { type: String, default: '' },
   verified: { type: Boolean, default: false },
   genres: { type: [String], default: [] },
+
+  country: { type: String },
   socials: {
+    spotify: { type: String, default: "" },
+    youtube: { type: String, default: "" },
     instagram: { type: String, default: "" },
     x: { type: String, default: "" },
-    youtube: { type: String, default: "" },
     tiktok: { type: String, default: "" },
   },
+  curatedNotes: { type: String },
 }, { _id: false });
 
 const userSchema = new mongoose.Schema({
