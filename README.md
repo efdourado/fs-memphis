@@ -1,29 +1,27 @@
-# Memphis - Listen. Feel. Create.
+# Listen. Feel. Create.
 
-Music, reimagined. My goal is simple: turn passive listening into active discovery and make musical knowledge accessible to all. The approach combines clear musical mapping (instruments, keys, structure) with insights into streaming algorithms, alongside tools and guidance for anyone to create with intention and purpose
-
------
-
-## Stack & Structure
-
-* **Backend (Routes, Controllers, Models, Middlewares):** Node.js, Express, MongoDB, Mongoose, Dotenv, CORS, JWT, Bcryptjs
-
-* **Frontend (React app with Components, Contexts, Hooks, Pages):** React, Vite, React Router DOM, Axios, FontAwesome
+My goal: turn passive listening into active discovery and make musical knowledge accessible to all. The approach combines clear musical mapping (instruments, keys, structure) with insights into streaming algorithms, alongside tools and guidance for anyone to create with intention and purpose
 
 -----
 
-## Overview
+## Tech
 
-* **`/`**: Displays featured playlists, albums, and recommended artists
-* **`/login`**: Allows existing users to sign in
-* **`/register`**: Allows new users to create an account
-* **`/search?q=`**: Shows results for songs, artists, and albums based on a query
-* **`/library`**: (Protected) Shows the current user's personal playlists
-* **`/admin`**: (Admin-only) A dashboard for managing users, songs, and albums
+Node.js, Express, MongoDB, Mongoose, Dotenv, CORS, JWT, Bcryptjs, React, React Router DOM, FontAwesome
 
-* **`/artist/:id`**: Displays an artist's profile, top songs, and albums
-* **`/album/:id`**: Lists all the songs within a specific album
-* **`/playlist/:id`**: Lists all the songs within a specific playlist
+-----
+
+## Endpoints
+
+* `/`
+* `/login`
+* `/register`
+* `/search?q=`
+* `/library`
+* `/admin`
+
+* `/artist/:id`
+* `/album/:id`
+* `/playlist/:id`
 
 -----
 
