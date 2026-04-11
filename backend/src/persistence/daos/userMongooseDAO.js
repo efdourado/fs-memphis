@@ -15,6 +15,20 @@ export class UserMongooseDAO {
     return await this.model.findById(id).select('-password');
   }
 
+  async findByIdWithLikedSongsPopulated(id) {
+    return await this.model
+      .findById(id)
+      .select('-password')
+      .populate({
+        path: 'likedSongs',
+        populate: [
+          { path: 'artist', model: 'User', select: 'name profilePic' },
+          { path: 'album', model: 'Album', select: 'title coverImage' },
+        ],
+      })
+      .lean();
+  }
+
   async findByEmail(email) {
     return await this.model.findOne({ email });
   }

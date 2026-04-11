@@ -16,8 +16,8 @@ const menuLinks = [
 ];
 
 const userLibraryLinks = [
+  { to: '/library/playlists', label: 'Playlists' },
   { to: '/library/songs', label: 'Liked Songs' },
-  { to: '/library/playlists',label: 'Playlists' },
 ];
 
 const otherLinks = [

@@ -1,6 +1,7 @@
 import apiClient from './apiClient';
 
 export const getMyPlaylists = () => apiClient.get('/me/playlists');
+export const getMyLikedSongs = () => apiClient.get('/me/liked-songs');
 export const createPlaylist = (playlistData) => apiClient.post('/playlists', playlistData);
 export const updatePlaylist = (id, playlistData) => apiClient.put(`/playlist/${id}`, playlistData);
 export const deletePlaylist = (id) => apiClient.delete(`/playlist/${id}`);

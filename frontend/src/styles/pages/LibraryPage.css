@@ -1,6 +1,183 @@
 .library-page {
   padding: var(--spacing-xl) var(--container-padding-x);
   min-height: calc(100vh - var(--header-height) - 150px);
+  max-width: var(--container-max-width);
+  margin: 0 auto;
+}
+
+.library-layout__header {
+  margin-bottom: var(--spacing-xl);
+}
+
+.library-layout__title {
+  margin-bottom: var(--spacing-xs);
+}
+
+.library-layout__subtitle {
+  margin: 0 0 var(--spacing-lg);
+  max-width: 36rem;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-md);
+  line-height: var(--line-height-relaxed);
+}
+
+.library-subnav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-xxs);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-full);
+  width: fit-content;
+  max-width: 100%;
+}
+
+.library-subnav__link {
+  display: inline-flex;
+  align-items: center;
+  padding: var(--spacing-xs) var(--spacing-md);
+  border-radius: var(--border-radius-full);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-secondary);
+  text-decoration: none;
+  transition: var(--transition-default);
+  border: 1px solid transparent;
+}
+
+.library-subnav__link:hover {
+  color: var(--color-text-primary);
+  background: var(--color-surface-hover);
+}
+
+.library-subnav__link.active {
+  color: var(--color-text-primary);
+  background: var(--color-surface-hover);
+  border-color: var(--color-border);
+}
+
+.library-overview__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-lg);
+}
+
+.library-stat-card {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-md);
+  padding: var(--spacing-lg);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-lg);
+  text-decoration: none;
+  color: inherit;
+  transition: var(--transition-default);
+}
+
+.library-stat-card:hover {
+  border-color: var(--color-primary);
+  box-shadow: var(--shadow-md);
+}
+
+.library-stat-card__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: var(--border-radius-md);
+  background: var(--color-surface-hover);
+  color: var(--color-primary);
+  font-size: var(--font-size-xl);
+}
+
+.library-stat-card__text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xxs);
+  min-width: 0;
+}
+
+.library-stat-card__label {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--color-text-tertiary);
+}
+
+.library-stat-card__value {
+  font-size: var(--font-size-3xl);
+  font-weight: var(--font-weight-black);
+  line-height: 1;
+  color: var(--color-text-primary);
+}
+
+.library-stat-card__hint {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+}
+
+.library-overview__footer-note {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-tertiary);
+  margin-bottom: 0;
+}
+
+.library-section__toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-lg);
+}
+
+.library-section__heading {
+  font-size: var(--font-size-2xl);
+  margin: 0;
+}
+
+.library-section__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+.library-empty {
+  padding: var(--spacing-2xl) var(--spacing-md);
+  text-align: center;
+  background: var(--color-surface);
+  border: 1px dashed var(--color-border);
+  border-radius: var(--border-radius-lg);
+}
+
+.library-empty p {
+  margin-bottom: var(--spacing-md);
+  color: var(--color-text-secondary);
+}
+
+.library-empty__text {
+  margin-bottom: var(--spacing-lg);
+  max-width: 28rem;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.library-create-form .form-group textarea {
+  resize: vertical;
+  min-height: 4.5rem;
+}
+
+.library-create-form__actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: var(--spacing-sm);
+  margin-top: var(--spacing-md);
 }
 
 .playlists-grid {
@@ -14,4 +191,5 @@
   .playlists-grid {
     grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
     gap: var(--spacing-xs);
-} }
+  }
+}

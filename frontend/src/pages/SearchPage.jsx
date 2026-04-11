@@ -44,7 +44,12 @@ const SearchPage = () => {
   if (loading) return <LoadingSpinner fullScreen />;
   if (error) return <ErrorMessage message={error} />;
 
-  const noResults = results && !results.songs?.length && !results.artists?.length && !results.albums?.length;
+  const noResults =
+    results &&
+    !results.songs?.length &&
+    !results.artists?.length &&
+    !results.albums?.length &&
+    !results.playlists?.length;
 
   return (
     <div className="library-page">
@@ -74,6 +79,12 @@ const SearchPage = () => {
             />
           </section>
         </>
+      )}
+
+      {results?.playlists?.length > 0 && (
+        <section className="search-results-section">
+          <Carousel title="Playlists" items={results.playlists} type="playlist" />
+        </section>
       )}
 
       {results?.albums?.length > 0 && (

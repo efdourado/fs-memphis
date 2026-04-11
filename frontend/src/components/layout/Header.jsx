@@ -2,24 +2,14 @@ import { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faBell, faBars, faPlus, faSearch, faEraser, faChevronDown, faRightFromBracket, faUserCircle, faMoon, faSnowflake,
+  faBell, faBars, faPlus, faSearch, faChevronDown, faRightFromBracket, faUserCircle,
 } from "@fortawesome/free-solid-svg-icons";
 import { useAuth } from "../../context/AuthContext";
+import ThemePicker from "./ThemePicker";
 import fallbackImage from '/fb.jpg';
-
-const themes = [
-  { name: 'dark', icon: faMoon, className: 'theme-dark' },
-  { name: 'ocean', icon: faSnowflake, className: 'theme-ocean' },
-];
 
 const Header = ({ toggleSidebar }) => {
   const [isScrolled, setIsScrolled] = useState(false);
-  
-  const [themeIndex, setThemeIndex] = useState(() => {
-    const savedThemeName = localStorage.getItem("themeName") || 'dark';
-    const savedIndex = themes.findIndex(t => t.name === savedThemeName);
-    return savedIndex !== -1 ? savedIndex : 0;
-  });
 
   const [searchQuery, setSearchQuery] = useState("");
   const [searchActive, setSearchActive] = useState(false);
@@ -31,14 +21,6 @@ const Header = ({ toggleSidebar }) => {
 
   const navigate = useNavigate();
   const { isAuthenticated, currentUser, logout, loadingAuth } = useAuth();
-
-  useEffect(() => {
-    const currentTheme = themes[themeIndex];
-
-    document.body.className = '';
-    document.body.classList.add(currentTheme.className);
-    localStorage.setItem("themeName", currentTheme.name);
-  }, [themeIndex]);
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 10);
@@ -77,10 +59,6 @@ const Header = ({ toggleSidebar }) => {
     return () => document.removeEventListener("mousedown", handleClickOutsideSearch);
   }, [searchActive]);
 
-  const cycleTheme = () => {
-    setThemeIndex(prevIndex => (prevIndex + 1) % themes.length);
-  };
-
   const handleSearchToggle = () => {
     setSearchActive(prev => {
       if (!prev) {
@@ -100,7 +78,6 @@ const Header = ({ toggleSidebar }) => {
   const handleLogout = () => {
     logout();
     setShowUserMenu(false);
-    navigate('/login');
   };
 
   const handleImageError = (e) => {
@@ -122,13 +99,7 @@ const Header = ({ toggleSidebar }) => {
           </div>
 
           <div className="header-right">
-            <button
-              className="btn-icon-only btn-ghost theme-toggle"
-              onClick={cycleTheme}
-              aria-label="Change theme"
-            >
-              <FontAwesomeIcon icon={themes[themeIndex].icon} className="btn-icon-graphic" />
-            </button>
+            <ThemePicker />
           </div>
         </div>
       </header>
@@ -198,13 +169,7 @@ const Header = ({ toggleSidebar }) => {
             </button>
           )}
 
-          <button
-            className="btn-icon-only btn-ghost theme-toggle"
-            onClick={cycleTheme}
-            aria-label="Change theme"
-          >
-            <FontAwesomeIcon icon={themes[themeIndex].icon} className="btn-icon-graphic" />
-          </button>
+          <ThemePicker />
 
           {isAuthenticated && currentUser ? (
             <div className="user-menu-container" ref={userMenuRef}>
@@ -255,7 +220,7 @@ const Header = ({ toggleSidebar }) => {
             </div>
           ) : (
             <>
-              <Link to="/login" className="login-btn">
+              <Link to="/auth" className="login-btn">
                 <span className="btn-label">Log In</span>
               </Link>
             </>

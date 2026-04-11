@@ -20,6 +20,11 @@ export class UserController {
     res.json(user);
   });
 
+  getMyLikedSongs = asyncHandler(async (req, res) => {
+    const songs = await this.userService.getMyLikedSongs(req.user._id);
+    res.json(songs);
+  });
+
   getAllUsers = asyncHandler(async (req, res) => {
     const users = await this.userService.getAllUsers();
     res.json(users);

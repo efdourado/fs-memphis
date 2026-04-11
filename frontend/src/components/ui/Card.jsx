@@ -22,9 +22,17 @@ const Card = ({ item, type, displayArtistName = true }) => {
       const albumType = item.type ? item.type.charAt(0).toUpperCase() + item.type.slice(1) : 'Album';
       subtitle = displayArtistName ? `${albumType} • ${artistName}` : albumType;
       break;
-    case 'playlist':
-      subtitle = `Playlist • ${item.owner?.name || 'Unknown'}`;
+    case 'playlist': {
+      const owner = item.owner?.name || 'Unknown';
+      const matchHint =
+        item.searchMatch?.kind === 'lyrics'
+          ? 'Lyrics in a track'
+          : item.searchMatch?.kind === 'song'
+            ? 'Matching song'
+            : null;
+      subtitle = matchHint ? `Playlist • ${owner} · ${matchHint}` : `Playlist • ${owner}`;
       break;
+    }
     case 'song':
        subtitle = displayArtistName ? `Single • ${item.artist?.name || 'Unknown'}` : 'Single';
       break;
