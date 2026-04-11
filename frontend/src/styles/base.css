@@ -129,6 +129,101 @@
   --hero-gradient-end: hsla(210, 30%, 12%, 0.6);
 }
 
+.theme-ember {
+  --color-primary-accent: #c45c3e;
+  --color-primary-accent-hover: #e07855;
+  --color-primary-accent-h: 12;
+  --color-primary-accent-s: 55%;
+  --color-primary-accent-l: 52%;
+  --color-primary: var(--color-primary-accent);
+  --color-primary-hover: var(--color-primary-accent-hover);
+
+  --color-background: hsl(15, 18%, 8%);
+  --color-background-header: hsla(15, 20%, 11%, 0.88);
+  --color-surface: hsl(15, 16%, 11%);
+  --color-surface-hover: hsl(15, 14%, 16%);
+  --color-border: hsl(15, 12%, 20%);
+  --color-border-subtle: hsl(15, 14%, 14%);
+  --color-carousel-fade: hsla(15, 18%, 8%, 0.65);
+
+  --hero-gradient-start: hsla(15, 18%, 8%, 0.9);
+  --hero-gradient-end: hsla(15, 18%, 8%, 0.7);
+}
+
+.theme-forest {
+  --color-primary-accent: #3d8f6e;
+  --color-primary-accent-hover: #52b08a;
+  --color-primary-accent-h: 158;
+  --color-primary-accent-s: 42%;
+  --color-primary-accent-l: 40%;
+  --color-primary: var(--color-primary-accent);
+  --color-primary-hover: var(--color-primary-accent-hover);
+
+  --color-background: hsl(155, 22%, 8%);
+  --color-background-header: hsla(155, 24%, 12%, 0.88);
+  --color-surface: hsl(155, 20%, 11%);
+  --color-surface-hover: hsl(155, 18%, 16%);
+  --color-border: hsl(155, 14%, 20%);
+  --color-border-subtle: hsl(155, 18%, 14%);
+  --color-carousel-fade: hsla(155, 22%, 8%, 0.65);
+
+  --hero-gradient-start: hsla(155, 22%, 8%, 0.9);
+  --hero-gradient-end: hsla(155, 22%, 8%, 0.7);
+}
+
+.theme-dusk {
+  --color-primary-accent: #9b7ec4;
+  --color-primary-accent-hover: #b49ad8;
+  --color-primary-accent-h: 265;
+  --color-primary-accent-s: 38%;
+  --color-primary-accent-l: 57%;
+  --color-primary: var(--color-primary-accent);
+  --color-primary-hover: var(--color-primary-accent-hover);
+
+  --color-background: hsl(265, 22%, 9%);
+  --color-background-header: hsla(265, 24%, 13%, 0.88);
+  --color-surface: hsl(265, 20%, 12%);
+  --color-surface-hover: hsl(265, 18%, 17%);
+  --color-border: hsl(265, 14%, 22%);
+  --color-border-subtle: hsl(265, 18%, 15%);
+  --color-carousel-fade: hsla(265, 22%, 9%, 0.65);
+
+  --hero-gradient-start: hsla(265, 22%, 9%, 0.9);
+  --hero-gradient-end: hsla(265, 22%, 9%, 0.7);
+}
+
+.theme-light {
+  --color-primary-accent: #5c4cce;
+  --color-primary-accent-hover: #4338a8;
+  --color-primary-accent-h: 248;
+  --color-primary-accent-s: 58%;
+  --color-primary-accent-l: 55%;
+  --color-primary: var(--color-primary-accent);
+  --color-primary-hover: var(--color-primary-accent-hover);
+
+  --color-background: #e8eaef;
+  --color-background-header: hsla(230, 18%, 94%, 0.92);
+  --color-surface: #ffffff;
+  --color-surface-hover: #e4e7f0;
+  --color-almost-black: #f0f2f7;
+  --color-dark-grey: #b8c0d0;
+  --color-deep-black: #e8eaef;
+  --color-text-primary: #141820;
+  --color-text-secondary: #4a5568;
+  --color-text-tertiary: #64728a;
+  --color-text-disabled: #8b95a8;
+  --color-border: #d1d5e0;
+  --color-border-subtle: #e6e9f2;
+  --color-carousel-fade: hsla(230, 16%, 94%, 0.78);
+
+  --hero-gradient-start: hsla(230, 20%, 94%, 0.96);
+  --hero-gradient-end: hsla(230, 18%, 90%, 0.88);
+}
+
+body.theme-light .logo-name {
+  color: var(--color-text-primary);
+}
+
 
 *, *::before, *::after {
   box-sizing: border-box;
@@ -266,14 +361,14 @@ input[type="number"] {
   background: var(--color-greyple);
 }
 
-body.light-mode ::-webkit-scrollbar-track {
-  background: hsl(220, 25%, 92%);
+body.theme-light ::-webkit-scrollbar-track {
+  background: var(--color-almost-black);
 }
-body.light-mode ::-webkit-scrollbar-thumb {
-  background: var(--color-greyple);
-}
-body.light-mode ::-webkit-scrollbar-thumb:hover {
+body.theme-light ::-webkit-scrollbar-thumb {
   background: var(--color-dark-grey);
+}
+body.theme-light ::-webkit-scrollbar-thumb:hover {
+  background: var(--color-greyple);
 }
 
 .app-container {

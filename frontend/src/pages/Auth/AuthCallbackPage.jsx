@@ -20,7 +20,7 @@ const AuthCallbackPage = () => {
       navigate('/', { replace: true });
     } else {
 
-        navigate('/login?error=auth_failed', { replace: true });
+        navigate('/auth?error=auth_failed', { replace: true });
     }
   }, [loginWithToken, navigate, location]);
 

@@ -24,6 +24,14 @@ export class UserService {
     return user;
   }
 
+  async getMyLikedSongs(userId) {
+    const user = await this.userDAO.findByIdWithLikedSongsPopulated(userId);
+    if (!user) {
+      throw new AppError('User not found', 404);
+    }
+    return Array.isArray(user.likedSongs) ? user.likedSongs : [];
+  }
+
   async getAllArtists() {
     return this.userDAO.findAll({ isArtist: true });
   }

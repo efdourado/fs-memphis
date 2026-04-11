@@ -16,13 +16,18 @@ import { useAuth } from './context/AuthContext';
 
 import AdminPage from './pages/AdminPage/AdminPage';
 
-import LoginPage from './pages/Auth/LoginPage';
-import RegisterPage from './pages/Auth/RegisterPage';
+import UnifiedAuthPage, {
+  AuthLoginRedirect,
+  AuthRegisterRedirect,
+} from './pages/Auth/UnifiedAuthPage';
 import HomePage from './pages/HomePage/HomePage';
 import SearchPage from './pages/SearchPage';
 import CollectionPage from './pages/CollectionPage';
 import ComingSoonPage from './pages/ComingSoonPage';
-import LibraryPage from './pages/LibraryPage';
+import LibraryLayout from './pages/library/LibraryLayout';
+import LibraryHomePage from './pages/library/LibraryHomePage';
+import LibraryPlaylistsPage from './pages/library/LibraryPlaylistsPage';
+import LibrarySongsPage from './pages/library/LibrarySongsPage';
 import ArtistsPage from './pages/ArtistsPage';
 
 import AuthCallbackPage from './pages/Auth/AuthCallbackPage';
@@ -62,8 +67,9 @@ const App = () => {
             <main style={{ flex: 1 }}>
               <Routes>
                 <Route path="/" element={<HomePage />} />
-                <Route path="/login" element={<LoginPage />} />
-                <Route path="/register" element={<RegisterPage />} />
+                <Route path="/auth" element={<UnifiedAuthPage />} />
+                <Route path="/login" element={<AuthLoginRedirect />} />
+                <Route path="/register" element={<AuthRegisterRedirect />} />
                 <Route path="/search" element={<SearchPage />} />
 
                 <Route path="/auth/callback" element={<AuthCallbackPage />} />
@@ -79,9 +85,11 @@ const App = () => {
                 <Route path="/settings" element={<ComingSoonPage />} />
                 <Route path="/feedback" element={<ComingSoonPage />} />
 
-                <Route path="/library" element={<ProtectedRoute><LibraryPage /></ProtectedRoute>} />
-                <Route path="/library/songs" element={<ComingSoonPage />} />
-                <Route path="/library/playlists" element={<ComingSoonPage />} />
+                <Route path="/library" element={<ProtectedRoute><LibraryLayout /></ProtectedRoute>}>
+                  <Route index element={<LibraryHomePage />} />
+                  <Route path="playlists" element={<LibraryPlaylistsPage />} />
+                  <Route path="songs" element={<LibrarySongsPage />} />
+                </Route>
 
                 <Route path="/admin" element={<AdminRoute><AdminPage /></AdminRoute>} />
               </Routes>

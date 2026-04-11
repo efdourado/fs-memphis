@@ -83,6 +83,7 @@ router
 
 router.get("/user/:ownerId/playlists", playlistController.getPlaylistsByOwner);
 router.get("/me/playlists", protect, playlistController.getMyPlaylists);
+router.get("/me/liked-songs", protect, userController.getMyLikedSongs);
 router.post(
   "/playlist/:id/song/:songId",
   protect,
