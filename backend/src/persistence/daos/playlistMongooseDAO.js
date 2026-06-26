@@ -4,18 +4,21 @@ export class PlaylistMongooseDAO {
   }
 
   async findAll() {
-    return await this.model.find().populate('owner');
+    return await this.model.find().populate('owner', 'name profilePic');
   }
 
   async findById(id) {
-    return await this.model.findById(id).populate('owner').populate({
+    return await this.model.findById(id).populate('owner', 'name profilePic').populate({
       path: 'songs.song',
-      populate: [{ path: 'artist', model: 'User' }, { path: 'album', model: 'Album' }]
+      populate: [
+        { path: 'artist', model: 'User', select: 'name profilePic isArtist artistProfile' },
+        { path: 'album', model: 'Album' }
+      ]
     });
   }
   
   async findByOwner(ownerId) {
-    return await this.model.find({ owner: ownerId }).populate('owner').lean();
+    return await this.model.find({ owner: ownerId }).populate('owner', 'name profilePic').lean();
   }
 
   async create(playlistDTO) {

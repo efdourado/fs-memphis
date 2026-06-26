@@ -169,7 +169,9 @@ const Collection = ({ collectionId, type = "album" }) => {
             displayAll={true}
             showNumber={true}
             showImage={false}
-            onMenuClick={(song) => handleMenuClick(event, song)}
+            onMenuClick={(song) => {
+              if (song) openMenu(song);
+            }}
           />
         </div>
       </div>

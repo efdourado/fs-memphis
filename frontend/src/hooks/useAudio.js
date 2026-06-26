@@ -5,6 +5,7 @@ export const useAudio = ({
   isPlaying,
   onPlay,
   onPause,
+  onStarted,
   onEnded,
 }) => {
   const audioRef = useRef(new Audio());
@@ -15,11 +16,18 @@ export const useAudio = ({
   useEffect(() => {
     const audio = audioRef.current;
     if (!src) {
+      audio.pause();
       audio.src = '';
+      setCurrentTime(0);
+      setDuration(0);
+      setIsReady(false);
       return;
     }
 
     setIsReady(false);
+    setCurrentTime(0);
+    setDuration(0);
+    audio.preload = 'auto';
     audio.src = src;
     audio.load();
 
@@ -36,8 +44,8 @@ export const useAudio = ({
   }, [src]);
 
   useEffect(() => {
-    if (!isReady) return;
-    
+    if (!src) return;
+
     const audio = audioRef.current;
     
     if (isPlaying) {
@@ -47,7 +55,7 @@ export const useAudio = ({
     } else {
       audio.pause();
     }
-  }, [isPlaying, isReady]);
+  }, [isPlaying, src]);
 
   useEffect(() => {
     const audio = audioRef.current;
@@ -56,12 +64,14 @@ export const useAudio = ({
     const handleTimeUpdate = () => setCurrentTime(audio.currentTime);
     const handlePlay = () => onPlay?.();
     const handlePause = () => onPause?.();
+    const handlePlaying = () => onStarted?.();
     const handleEnded = () => onEnded?.();
 
     audio.addEventListener('loadedmetadata', handleLoadedMetadata);
     audio.addEventListener('timeupdate', handleTimeUpdate);
     audio.addEventListener('play', handlePlay);
     audio.addEventListener('pause', handlePause);
+    audio.addEventListener('playing', handlePlaying);
     audio.addEventListener('ended', handleEnded);
 
     return () => {
@@ -69,9 +79,10 @@ export const useAudio = ({
       audio.removeEventListener('timeupdate', handleTimeUpdate);
       audio.removeEventListener('play', handlePlay);
       audio.removeEventListener('pause', handlePause);
+      audio.removeEventListener('playing', handlePlaying);
       audio.removeEventListener('ended', handleEnded);
     };
-  }, [onPlay, onPause, onEnded]);
+  }, [onPlay, onPause, onStarted, onEnded]);
 
   const seek = (time) => {
     if (isReady && audioRef.current) {

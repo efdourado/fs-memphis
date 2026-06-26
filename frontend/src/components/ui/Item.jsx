@@ -111,7 +111,7 @@ const Item = ({
       )}
       
       {showDuration && type === 'song' && (
-        <div className="item__meta item__duration">{formatDuration(item.duration)}</div>
+        <div className="item__meta item__duration">{formatDuration((item.durationMs || 0) / 1000)}</div>
       )}
 
       <div className="item__actions">

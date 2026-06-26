@@ -66,7 +66,7 @@ const UnifiedAuthPage = () => {
     setError("");
     setLoading(true);
     try {
-      await login(loginEmail, loginPassword);
+      await login(loginEmail, loginPassword, { remember: rememberMe });
     } catch (err) {
       setError(err.message || "Failed to login. Please check your credentials.");
     } finally {

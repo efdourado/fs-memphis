@@ -1,5 +1,5 @@
 import express from "express";
-import { protect, admin } from "../middlewares/authMiddleware.js";
+import { protect, optionalProtect, admin } from "../middlewares/authMiddleware.js";
 import container from "../container.js";
 
 import {
@@ -35,9 +35,13 @@ const {
 
 router.use("/auth", authRouter);
 router.get("/search", searchController.search);
+router.get("/recommendations", optionalProtect, songController.getRecommendations);
+router.get("/shuffle/songs", optionalProtect, songController.getExplainableShuffle);
 
 router.get("/artists", userController.getAllArtists);
 router.get("/artist/:id", userController.getArtistProfileById);
+router.post("/artist/:artistId/follow", protect, userController.followArtist);
+router.delete("/artist/:artistId/follow", protect, userController.unfollowArtist);
 router.get("/artist/:artistId/albums", albumController.getAlbumsByArtist);
 
 router
@@ -59,7 +63,9 @@ router
   .get(songController.getSongById)
   .put(protect, admin, updateSongValidator, songController.updateSong)
   .delete(protect, admin, songController.deleteSong);
-router.post("/song/:id/play", songController.incrementPlay);
+router.post("/song/:id/play", optionalProtect, songController.incrementPlay);
+router.post("/song/:id/share", songController.trackShare);
+router.post("/song/:songId/like", protect, userController.toggleLikeSong);
 
 router
   .route("/playlists")
@@ -83,6 +89,7 @@ router
 
 router.get("/user/:ownerId/playlists", playlistController.getPlaylistsByOwner);
 router.get("/me/playlists", protect, playlistController.getMyPlaylists);
+router.get("/me/music-profile", protect, userController.getMyMusicProfile);
 router.get("/me/liked-songs", protect, userController.getMyLikedSongs);
 router.post(
   "/playlist/:id/song/:songId",

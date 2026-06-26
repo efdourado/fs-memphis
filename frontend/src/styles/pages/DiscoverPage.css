@@ -1,0 +1,111 @@
+.discover-page {
+  min-height: calc(100vh - var(--header-height));
+  padding: clamp(20px, 4vw, 56px);
+  background: var(--color-background);
+}
+
+.discover-page__toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-md);
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--spacing-xl);
+}
+
+.discover-segment {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 2px;
+  padding: 3px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-md);
+  background: var(--color-surface);
+}
+
+.discover-segment button {
+  min-height: 34px;
+  padding: 0 var(--spacing-md);
+  border: 0;
+  border-radius: var(--border-radius-sm);
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+  text-transform: uppercase;
+}
+
+.discover-segment button.is-active {
+  background: var(--color-primary);
+  color: var(--color-white);
+}
+
+.discover-page__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(280px, 360px);
+  gap: clamp(24px, 4vw, 56px);
+  align-items: start;
+}
+
+.discover-section-heading,
+.discover-math-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-md);
+}
+
+.discover-section-heading h1,
+.discover-math-heading h2,
+.discover-factor-list h3 {
+  margin: 0;
+}
+
+.discover-section-heading h1 {
+  font-size: clamp(1.8rem, 4vw, 3.2rem);
+}
+
+.discover-page__math {
+  position: sticky;
+  top: calc(var(--header-height) + var(--spacing-lg));
+  border-left: 1px solid var(--color-border);
+  padding-left: var(--spacing-xl);
+}
+
+.discover-formula {
+  color: var(--color-text-secondary);
+  font-family: var(--font-family-mono, monospace);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-relaxed);
+}
+
+.discover-factor-list {
+  margin-top: var(--spacing-xl);
+}
+
+.discover-factor-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: var(--spacing-md);
+  padding: var(--spacing-sm) 0;
+  border-bottom: 1px solid var(--color-border);
+  color: var(--color-text-secondary);
+}
+
+.discover-factor-row strong {
+  color: var(--color-text-primary);
+  font-variant-numeric: tabular-nums;
+}
+
+@media (max-width: 980px) {
+  .discover-page__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .discover-page__math {
+    position: static;
+    border-left: 0;
+    border-top: 1px solid var(--color-border);
+    padding: var(--spacing-xl) 0 0;
+  }
+}

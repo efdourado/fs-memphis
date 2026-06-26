@@ -23,6 +23,8 @@ import UnifiedAuthPage, {
 import HomePage from './pages/HomePage/HomePage';
 import SearchPage from './pages/SearchPage';
 import CollectionPage from './pages/CollectionPage';
+import SongPage from './pages/SongPage';
+import DiscoverPage from './pages/DiscoverPage';
 import ComingSoonPage from './pages/ComingSoonPage';
 import LibraryLayout from './pages/library/LibraryLayout';
 import LibraryHomePage from './pages/library/LibraryHomePage';
@@ -77,9 +79,10 @@ const App = () => {
                 <Route path="/artist/:id" element={<CollectionPage type="artist" />} />
                 <Route path="/playlist/:id" element={<CollectionPage type="playlist" />} />
                 <Route path="/album/:id" element={<CollectionPage type="album" />} />
+                <Route path="/song/:id" element={<SongPage />} />
 
                 <Route path="/artists" element={<ArtistsPage />} />
-                <Route path="/discover" element={<ComingSoonPage />} />
+                <Route path="/discover" element={<DiscoverPage />} />
                 <Route path="/archives" element={<ComingSoonPage />} />
                 <Route path="/help" element={<ComingSoonPage />} />
                 <Route path="/settings" element={<ComingSoonPage />} />

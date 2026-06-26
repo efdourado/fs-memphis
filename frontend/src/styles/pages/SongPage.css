@@ -1,0 +1,105 @@
+.song-page {
+  min-height: calc(100vh - var(--header-height));
+  padding: clamp(24px, 5vw, 72px);
+  background: var(--color-background);
+}
+
+.song-page__hero {
+  display: grid;
+  grid-template-columns: minmax(220px, 360px) minmax(0, 1fr);
+  align-items: end;
+  gap: clamp(24px, 5vw, 64px);
+}
+
+.song-page__art {
+  aspect-ratio: 1;
+  width: 100%;
+  max-width: 360px;
+  overflow: hidden;
+  border-radius: var(--border-radius-md);
+  background-color: var(--color-surface);
+}
+
+.song-page__art img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.song-page__body {
+  min-width: 0;
+}
+
+.song-page__eyebrow,
+.song-page__artist,
+.song-page__feedback {
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+}
+
+.song-page__title {
+  margin: var(--spacing-xs) 0;
+  color: var(--color-text-primary);
+  font-size: clamp(2.5rem, 7vw, 6rem);
+  line-height: 0.95;
+}
+
+.song-page__subtitle {
+  max-width: 720px;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-lg);
+}
+
+.song-page__artist {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-sm);
+  align-items: center;
+  margin-top: var(--spacing-md);
+}
+
+.song-page__artist a {
+  color: var(--color-text-primary);
+}
+
+.song-page__actions {
+  display: flex;
+  gap: var(--spacing-sm);
+  margin-top: var(--spacing-xl);
+}
+
+.song-page__details {
+  max-width: 960px;
+  margin-top: clamp(32px, 6vw, 80px);
+}
+
+.song-page__description,
+.song-page__notes {
+  color: var(--color-text-secondary);
+  line-height: var(--line-height-relaxed);
+}
+
+.song-page__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-xs);
+  margin: var(--spacing-lg) 0;
+}
+
+.song-page__tags span {
+  padding: 0.35rem 0.65rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-sm);
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-xs);
+}
+
+@media (max-width: 760px) {
+  .song-page__hero {
+    grid-template-columns: 1fr;
+  }
+
+  .song-page__art {
+    max-width: none;
+  }
+}

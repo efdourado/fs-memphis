@@ -6,6 +6,7 @@ import UserModel from './persistence/models/userModel.js';
 import PostModel from './persistence/models/postModel.js';
 import TagModel from './persistence/models/tagModel.js';
 import PodcastModel from './persistence/models/podcastModel.js';
+import PlayEventModel from './persistence/models/playEventModel.js';
 
 // DAOs
 import { AlbumMongooseDAO } from './persistence/daos/albumMongooseDAO.js';
@@ -15,6 +16,7 @@ import { UserMongooseDAO } from './persistence/daos/userMongooseDAO.js';
 import { PostMongooseDAO } from './persistence/daos/postMongooseDAO.js';
 import { TagMongooseDAO } from './persistence/daos/tagMongooseDAO.js';
 import { PodcastMongooseDAO } from './persistence/daos/podcastMongooseDAO.js';
+import { PlayEventMongooseDAO } from './persistence/daos/playEventMongooseDAO.js';
 
 const albumDAO = new AlbumMongooseDAO(AlbumModel);
 const playlistDAO = new PlaylistMongooseDAO(PlaylistModel);
@@ -23,6 +25,7 @@ const userDAO = new UserMongooseDAO(UserModel);
 const postDAO = new PostMongooseDAO();
 const tagDAO = new TagMongooseDAO();
 const podcastDAO = new PodcastMongooseDAO();
+const playEventDAO = new PlayEventMongooseDAO(PlayEventModel);
 
 // Services
 import { AlbumService } from './services/albumService.js';
@@ -36,8 +39,8 @@ import { PodcastService } from './services/podcastService.js';
 
 const albumService = new AlbumService(albumDAO, songDAO);
 const playlistService = new PlaylistService(playlistDAO, songDAO);
-const songService = new SongService(songDAO);
-const userService = new UserService(userDAO, playlistDAO);
+const songService = new SongService(songDAO, userDAO, playEventDAO);
+const userService = new UserService(userDAO, playlistDAO, songDAO);
 const searchService = new SearchService();
 const postService = new PostService(postDAO);
 const tagService = new TagService(tagDAO);

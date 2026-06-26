@@ -25,6 +25,26 @@ export class UserController {
     res.json(songs);
   });
 
+  getMyMusicProfile = asyncHandler(async (req, res) => {
+    const profile = await this.userService.getMyMusicProfile(req.user._id);
+    res.json(profile);
+  });
+
+  toggleLikeSong = asyncHandler(async (req, res) => {
+    const result = await this.userService.toggleLikeSong(req.user._id, req.params.songId);
+    res.json(result);
+  });
+
+  followArtist = asyncHandler(async (req, res) => {
+    const result = await this.userService.followArtist(req.user._id, req.params.artistId);
+    res.json(result);
+  });
+
+  unfollowArtist = asyncHandler(async (req, res) => {
+    const result = await this.userService.unfollowArtist(req.user._id, req.params.artistId);
+    res.json(result);
+  });
+
   getAllUsers = asyncHandler(async (req, res) => {
     const users = await this.userService.getAllUsers();
     res.json(users);

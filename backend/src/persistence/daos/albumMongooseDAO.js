@@ -4,15 +4,15 @@ export class AlbumMongooseDAO {
   }
 
   async findAll() {
-    return await this.model.find().populate('artist');
+    return await this.model.find().populate('artist', 'name profilePic isArtist artistProfile');
   }
 
   async findById(id) {
-    return await this.model.findById(id).populate('artist');
+    return await this.model.findById(id).populate('artist', 'name profilePic isArtist artistProfile');
   }
 
   async findByArtist(artistId) {
-    return await this.model.find({ artist: artistId }).populate('artist');
+    return await this.model.find({ artist: artistId }).populate('artist', 'name profilePic isArtist artistProfile');
   }
 
   async create(albumDTO) {

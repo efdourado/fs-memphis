@@ -1,12 +1,20 @@
 import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCheckCircle, faPlus } from "@fortawesome/free-solid-svg-icons";
+import { faCheckCircle, faHeart, faPlus, faShareNodes } from "@fortawesome/free-solid-svg-icons";
 import ErrorMessage from "../ui/ErrorMessage";
 import Modal from "../ui/Modal";
 import LoadingSpinner from "../ui/LoadingSpinner";
 import List from "../ui/List";
 import { useSongModal } from "../../context/SongModalContext";
-import { getMyPlaylists, addSongToPlaylist, removeSongFromPlaylist, createPlaylist } from "../../services/userService";
+import { useAuth } from "../../context/AuthContext";
+import { shareSong } from "../../services/collectionService";
+import {
+  getMyPlaylists,
+  addSongToPlaylist,
+  removeSongFromPlaylist,
+  createPlaylist,
+  toggleLikeSong,
+} from "../../services/userService";
 
 const CreatePlaylistView = ({ song, onPlaylistCreated, onCancel }) => {
   const [name, setName] = useState("");
@@ -70,6 +78,7 @@ const CreatePlaylistView = ({ song, onPlaylistCreated, onCancel }) => {
 
 const SongModal = () => {
   const { isMenuOpen, song, closeMenu, menuContext } = useSongModal();
+  const { isAuthenticated } = useAuth();
   const [view, setView] = useState("list");
   const [playlists, setPlaylists] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -123,6 +132,40 @@ const SongModal = () => {
     setFeedback({ message: `Added to "${newPlaylist.name}"!` });
     setTimeout(closeMenu, 1500);
   };
+
+  const handleLikeSong = async () => {
+    if (!isAuthenticated) {
+      setFeedback({ message: "Sign in to like songs.", isError: true });
+      setTimeout(() => setFeedback({ message: "", isError: false }), 1800);
+      return;
+    }
+
+    try {
+      const { data } = await toggleLikeSong(song._id);
+      setFeedback({ message: data.liked ? "Added to liked songs." : "Removed from liked songs." });
+      setTimeout(() => setFeedback({ message: "", isError: false }), 1500);
+    } catch (err) {
+      setFeedback({ message: err.response?.data?.message || "Could not update liked songs.", isError: true });
+    }
+  };
+
+  const handleShareSong = async () => {
+    try {
+      const { data } = await shareSong(song._id);
+      const shareUrl = data.shareUrl?.startsWith("http")
+        ? data.shareUrl
+        : `${window.location.origin}${data.shareUrl || `/song/${song._id}`}`;
+
+      if (navigator.clipboard?.writeText) {
+        await navigator.clipboard.writeText(shareUrl);
+      }
+
+      setFeedback({ message: "Share link copied." });
+      setTimeout(() => setFeedback({ message: "", isError: false }), 1500);
+    } catch (err) {
+      setFeedback({ message: err.response?.data?.message || "Could not create share link.", isError: true });
+    }
+  };
   
   const renderFeedback = () => (
     <div
@@ -136,7 +179,15 @@ const SongModal = () => {
 
   const renderListView = () => (
     <>
-      <div className="static-options">
+      <div className="static-options song-modal-actions">
+        <button onClick={handleLikeSong} className="login-btn create-btn">
+          <FontAwesomeIcon icon={faHeart} />
+          <span>Like song</span>
+        </button>
+        <button onClick={handleShareSong} className="login-btn create-btn">
+          <FontAwesomeIcon icon={faShareNodes} />
+          <span>Share song</span>
+        </button>
         <button onClick={() => setView("create")} className="login-btn create-btn">
           <FontAwesomeIcon icon={faPlus} />
           <span>New playlist</span>
