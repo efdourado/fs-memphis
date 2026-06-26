@@ -21,11 +21,27 @@ export class SearchService {
 
     const [artists, albums, songs, playlists] = await Promise.all([
       UserModel.find({ name: searchRegex, isArtist: true }).limit(10).lean(),
-      AlbumModel.find({ title: searchRegex }).populate('artist').limit(10).lean(),
+      AlbumModel.find({ title: searchRegex })
+        .populate('artist', 'name profilePic isArtist artistProfile')
+        .limit(10)
+        .lean(),
       SongModel.find({
-        $or: [{ title: searchRegex }, { lyrics: searchRegex }],
+        $or: [
+          { title: searchRegex },
+          { subtitle: searchRegex },
+          { description: searchRegex },
+          { lyrics: searchRegex },
+          { genre: searchRegex },
+          { genres: searchRegex },
+          { emotions: searchRegex },
+          { instruments: searchRegex },
+          { 'editorial.story': searchRegex },
+          { 'education.theoryNotes': searchRegex },
+          { 'education.productionBreakdown': searchRegex },
+        ],
       })
-        .populate('artist album')
+        .populate('artist', 'name profilePic isArtist artistProfile')
+        .populate('album')
         .limit(10)
         .lean(),
       this.searchPlaylists(searchRegex),
@@ -54,7 +70,7 @@ export class SearchService {
     }
 
     const raw = await PlaylistModel.find({ isPublic: true, $or: playlistOr })
-      .populate('owner')
+      .populate('owner', 'name profilePic')
       .limit(10)
       .lean();
 

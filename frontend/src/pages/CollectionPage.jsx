@@ -2,10 +2,10 @@ import React, { useEffect, useState, useCallback, memo } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlay, faPause, faEllipsis } from "@fortawesome/free-solid-svg-icons";
+import { faPlay, faPause, faEllipsis, faUserCheck, faUserPlus } from "@fortawesome/free-solid-svg-icons";
 
 import * as collectionService from "../services/collectionService";
-import { deletePlaylist, removeSongFromPlaylist } from "../services/userService";
+import { deletePlaylist, followArtist, removeSongFromPlaylist, unfollowArtist } from "../services/userService";
 import { useAuth } from "../context/AuthContext";
 import { useSongModal } from "../context/SongModalContext";
 import { usePlayer } from "../hooks/usePlayer";
@@ -27,7 +27,7 @@ const fetchers = {
 const CollectionPage = ({ type }) => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { currentUser } = useAuth();
+  const { currentUser, updateCurrentUser } = useAuth();
   const { openMenu } = useSongModal();
   const { startPlayback, playContext, isPlaying, togglePlayPause } = usePlayer();
 
@@ -38,6 +38,10 @@ const CollectionPage = ({ type }) => {
   const [isEditModalOpen, setEditModalOpen] = useState(false);
 
   const isOwner = currentUser && rawData && type === "playlist" && currentUser._id === rawData.owner?._id;
+  const isFollowingArtist = type === "artist" && currentUser?.following?.some((artistId) => {
+    const normalizedId = artistId?._id || artistId;
+    return normalizedId?.toString() === id;
+  });
 
   const loadPageData = useCallback(async () => {
     setLoading(true);
@@ -103,6 +107,30 @@ const CollectionPage = ({ type }) => {
     }
   }, [playContext, id, type, normalizedData, startPlayback, togglePlayPause]);
 
+  const handleToggleFollowArtist = useCallback(async () => {
+    if (type !== "artist") return;
+    if (!currentUser) {
+      navigate("/auth");
+      return;
+    }
+
+    if (isFollowingArtist) {
+      await unfollowArtist(id);
+      updateCurrentUser({
+        following: (currentUser.following || []).filter((artistId) => {
+          const normalizedId = artistId?._id || artistId;
+          return normalizedId?.toString() !== id;
+        }),
+      });
+      return;
+    }
+
+    await followArtist(id);
+    updateCurrentUser({
+      following: [...(currentUser.following || []), id],
+    });
+  }, [currentUser, id, isFollowingArtist, navigate, type, updateCurrentUser]);
+
   if (loading) return <LoadingSpinner fullScreen />;
   if (error) return <ErrorMessage message={error} />;
   if (!normalizedData) return null;
@@ -147,6 +175,13 @@ const CollectionPage = ({ type }) => {
             </div>
 
             <div className="actions-right">
+              {type === "artist" && (
+                <button className="login-btn always-hover create-btn" onClick={handleToggleFollowArtist}>
+                  <FontAwesomeIcon icon={isFollowingArtist ? faUserCheck : faUserPlus} />
+                  <span>{isFollowingArtist ? "Following" : "Follow"}</span>
+                </button>
+              )}
+
               {isOwner && (
                 <button className="action-btn menu" onClick={() => setEditModalOpen(true)}>
                   <FontAwesomeIcon icon={faEllipsis} />

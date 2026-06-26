@@ -6,6 +6,18 @@
   padding-right: var(--spacing-xs);
 }
 
+.song-modal-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-sm);
+}
+
+.song-modal-actions .login-btn {
+  width: auto;
+  min-height: 40px;
+  padding-inline: var(--spacing-md);
+}
+
 .playlist-selection-list li button {
   width: 100%;
   display: flex;

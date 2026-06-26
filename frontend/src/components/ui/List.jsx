@@ -7,6 +7,7 @@ const List = ({
   items = [],
   type,
   onItemClick,
+  onMenuClick,
   loading = false,
   initialItems = 10,
   showHeader = true,
@@ -51,6 +52,7 @@ const List = ({
             showImage={showImage}
             showNumber={showNumber}
             onClick={onItemClick}
+            onMenuClick={onMenuClick}
             isAdded={checkAdded ? checkAdded(item) : false}
             showAlbum={showAlbum}
             showDuration={showDuration}
@@ -77,6 +79,7 @@ List.propTypes = {
   items: PropTypes.array,
   type: PropTypes.oneOf(['song', 'playlist', 'album']).isRequired,
   onItemClick: PropTypes.func,
+  onMenuClick: PropTypes.func,
   loading: PropTypes.bool,
   initialItems: PropTypes.number,
   showHeader: PropTypes.bool,

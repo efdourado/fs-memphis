@@ -57,6 +57,11 @@ userSchema.virtual('topSongs', {
   options: { sort: { plays: -1 }, limit: 10 }
 });
 
+userSchema.index({ followers: 1 });
+userSchema.index({ following: 1 });
+userSchema.index({ likedSongs: 1 });
+userSchema.index({ 'recentlyPlayed.playedAt': -1 });
+
 userSchema.pre('save', async function (next) {
   if (!this.isModified('password') || this.password.startsWith('spotify:')) {
     return next();

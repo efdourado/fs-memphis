@@ -9,7 +9,7 @@ const protect = async (req, res, next) => {
 
   if (
     req.headers.authorization &&
-    req.headers.authorization.startsWith('bearer')
+    req.headers.authorization.toLowerCase().startsWith('bearer ')
   ) {
     try {
       token = req.headers.authorization.split(' ')[1];
@@ -32,6 +32,25 @@ const protect = async (req, res, next) => {
     return res.status(401).json({ message: 'not authorized, no token' });
 } };
 
+const optionalProtect = async (req, res, next) => {
+  if (
+    !req.headers.authorization ||
+    !req.headers.authorization.toLowerCase().startsWith('bearer ')
+  ) {
+    return next();
+  }
+
+  try {
+    const token = req.headers.authorization.split(' ')[1];
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    req.user = await User.findById(decoded.id).select('-password').lean();
+    return next();
+  } catch (error) {
+    console.error('Optional token verification failed:', error.message);
+    return res.status(401).json({ message: 'not authorized, token failed' });
+  }
+};
+
 const admin = (req, res, next) => {
   if (req.user && req.user.isAdmin) {
     next();
@@ -39,4 +58,4 @@ const admin = (req, res, next) => {
     res.status(401).json({ message: 'not authorized as an admin' });
 } };
 
-export { protect, admin };
+export { protect, optionalProtect, admin };

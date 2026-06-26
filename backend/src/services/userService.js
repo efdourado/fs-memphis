@@ -2,9 +2,10 @@ import jwt from 'jsonwebtoken';
 import AppError from './appError.js';
 
 export class UserService {
-  constructor(userDAO, playlistDAO) {
+  constructor(userDAO, playlistDAO, songDAO) {
     this.userDAO = userDAO;
     this.playlistDAO = playlistDAO;
+    this.songDAO = songDAO;
   }
 
   _generateToken(id) {
@@ -30,6 +31,76 @@ export class UserService {
       throw new AppError('User not found', 404);
     }
     return Array.isArray(user.likedSongs) ? user.likedSongs : [];
+  }
+
+  async getMyMusicProfile(userId) {
+    const user = await this.userDAO.findByIdWithTasteData(userId);
+    if (!user) {
+      throw new AppError('User not found', 404);
+    }
+    return {
+      likedSongs: user.likedSongs || [],
+      recentlyPlayed: user.recentlyPlayed || [],
+      following: user.following || [],
+    };
+  }
+
+  async toggleLikeSong(userId, songId) {
+    const [user, song] = await Promise.all([
+      this.userDAO.findById(userId),
+      this.songDAO.findById(songId),
+    ]);
+
+    if (!user) {
+      throw new AppError('User not found', 404);
+    }
+    if (!song) {
+      throw new AppError('Song not found', 404);
+    }
+
+    const isLiked = user.likedSongs?.some(id => id.toString() === songId.toString());
+
+    if (isLiked) {
+      await this.userDAO.removeLikedSong(userId, songId);
+      const updatedSong = await this.songDAO.incrementLikeCount(songId, -1);
+      return { liked: false, song: updatedSong };
+    }
+
+    await this.userDAO.addLikedSong(userId, songId);
+    const updatedSong = await this.songDAO.incrementLikeCount(songId, 1);
+    return { liked: true, song: updatedSong };
+  }
+
+  async followArtist(userId, artistId) {
+    if (userId.toString() === artistId.toString()) {
+      throw new AppError('You cannot follow yourself', 400);
+    }
+
+    const artist = await this.userDAO.findById(artistId);
+    if (!artist || !artist.isArtist) {
+      throw new AppError('Artist not found', 404);
+    }
+
+    await Promise.all([
+      this.userDAO.addFollowing(userId, artistId),
+      this.userDAO.addFollower(artistId, userId),
+    ]);
+
+    return { following: true, artistId };
+  }
+
+  async unfollowArtist(userId, artistId) {
+    const artist = await this.userDAO.findById(artistId);
+    if (!artist || !artist.isArtist) {
+      throw new AppError('Artist not found', 404);
+    }
+
+    await Promise.all([
+      this.userDAO.removeFollowing(userId, artistId),
+      this.userDAO.removeFollower(artistId, userId),
+    ]);
+
+    return { following: false, artistId };
   }
 
   async getAllArtists() {
