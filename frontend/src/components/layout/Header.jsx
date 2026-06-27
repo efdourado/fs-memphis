@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faBell, faBars, faPlus, faSearch, faChevronDown, faRightFromBracket, faUserCircle,
+  faBell, faBars, faPlus, faSearch, faChevronDown, faRightFromBracket, faUserCircle, faGaugeHigh,
 } from "@fortawesome/free-solid-svg-icons";
 import { useAuth } from "../../context/AuthContext";
 import ThemePicker from "./ThemePicker";
@@ -208,7 +208,13 @@ const Header = ({ toggleSidebar }) => {
                   <button className="menu-item">
                     <FontAwesomeIcon icon={faUserCircle} className="fa-icon" /> Profile
                   </button>
-                  
+
+                  {currentUser.isAdmin && (
+                    <Link className="menu-item" to="/admin" onClick={() => setShowUserMenu(false)}>
+                      <FontAwesomeIcon icon={faGaugeHigh} className="fa-icon" /> Admin Studio
+                    </Link>
+                  )}
+
                   <div className="menu-divider"></div>
 
                   <button className="menu-item logout" onClick={handleLogout}>

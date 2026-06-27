@@ -123,7 +123,7 @@ const AdminPage = () => {
           title={modalTitle}
           FormComponent={AdminForm}
           formProps={{
-            id: editingItem ? editingItem._id : null,
+            id: editingItem ? (activeTab === 'posts' ? editingItem.slug : editingItem._id) : null,
             config: currentTabConfig.config,
             onSaved: handleSaveAndReload,
             onCancel: handleCloseModal,

@@ -17,8 +17,20 @@ export class PostService {
     return this.postDAO.findAll();
   }
 
+  async getAllPostsForAdmin() {
+    return this.postDAO.findAllForAdmin();
+  }
+
   async getPostBySlug(slug) {
     const post = await this.postDAO.findBySlug(slug);
+    if (!post) {
+      throw new AppError("Post not found", 404);
+    }
+    return post;
+  }
+
+  async getPostBySlugForAdmin(slug) {
+    const post = await this.postDAO.findBySlugForAdmin(slug);
     if (!post) {
       throw new AppError("Post not found", 404);
     }

@@ -25,6 +25,9 @@ import SearchPage from './pages/SearchPage';
 import CollectionPage from './pages/CollectionPage';
 import SongPage from './pages/SongPage';
 import DiscoverPage from './pages/DiscoverPage';
+import SpotifyPlaygroundPage from './pages/SpotifyPlaygroundPage';
+import MemphisArchivePage from './pages/MemphisArchivePage';
+import PostPage from './pages/PostPage';
 import ComingSoonPage from './pages/ComingSoonPage';
 import LibraryLayout from './pages/library/LibraryLayout';
 import LibraryHomePage from './pages/library/LibraryHomePage';
@@ -83,7 +86,9 @@ const App = () => {
 
                 <Route path="/artists" element={<ArtistsPage />} />
                 <Route path="/discover" element={<DiscoverPage />} />
-                <Route path="/archives" element={<ComingSoonPage />} />
+                <Route path="/spotify" element={<SpotifyPlaygroundPage />} />
+                <Route path="/archives" element={<MemphisArchivePage />} />
+                <Route path="/post/:slug" element={<PostPage />} />
                 <Route path="/help" element={<ComingSoonPage />} />
                 <Route path="/settings" element={<ComingSoonPage />} />
                 <Route path="/feedback" element={<ComingSoonPage />} />

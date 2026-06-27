@@ -126,12 +126,12 @@ const tableConfig = {
   ), },
 
   posts: {
-    columns: ["Post Title", "Author", "Status", "Created At", "Updated At", "Actions"],
+    columns: ["Post Title", "Author", "Type", "Status", "Created At", "Updated At", "Actions"],
     renderRow: (item) => (
       <>
         <td
           className="item-cell-background"
-          style={{ backgroundImage: `url(${item.coverImage?.url || fallbackImage})` }}
+          style={{ backgroundImage: `url(${item.coverImage || fallbackImage})` }}
         >
           <div className="item-cell">
             <img src={item.coverImage || fallbackImage} alt={item.title} className="admin-table-image" />
@@ -144,6 +144,7 @@ const tableConfig = {
           </div>
         </td>
         <td data-label="Author">{item.author?.name || "N/A"}</td>
+        <td data-label="Type" style={{ textAlign: 'center' }}>{item.type || "story"}</td>
         <td data-label="Status" style={{ textAlign: 'center' }}>
             <span className={`verified-badge ${item.status === 'published' ? "verified" : "not-verified"}`}>
               {item.status}
@@ -218,7 +219,7 @@ const AdminTable = ({ type, data, handleDelete, handleEdit }) => {
                 </button>
                 {handleDelete && (
                   <button
-                    onClick={() => handleDelete(item._id)}
+                  onClick={() => handleDelete(type === 'posts' ? item.slug : item._id)}
                     className="admin-action-button delete"
                     aria-label="Delete"
                   >

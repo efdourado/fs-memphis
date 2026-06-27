@@ -14,3 +14,6 @@ export const fetchAlbumById = (id) => apiClient.get(`/album/${id}`);
 
 export const fetchPlaylists = () => apiClient.get('/playlists');
 export const fetchPlaylistById = (id) => apiClient.get(`/playlist/${id}`);
+
+export const fetchPosts = () => apiClient.get('/posts');
+export const fetchPostBySlug = (slug) => apiClient.get(`/post/${slug}`);

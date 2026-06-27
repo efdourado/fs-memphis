@@ -10,8 +10,18 @@ export class PostController {
     res.json(posts);
   });
 
+  getAllPostsForAdmin = asyncHandler(async (req, res) => {
+    const posts = await this.postService.getAllPostsForAdmin();
+    res.json(posts);
+  });
+
   getPostBySlug = asyncHandler(async (req, res) => {
     const post = await this.postService.getPostBySlug(req.params.slug);
+    res.json(post);
+  });
+
+  getPostBySlugForAdmin = asyncHandler(async (req, res) => {
+    const post = await this.postService.getPostBySlugForAdmin(req.params.slug);
     res.json(post);
   });
   

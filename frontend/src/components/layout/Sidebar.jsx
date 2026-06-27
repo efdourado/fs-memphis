@@ -3,14 +3,16 @@ import { NavLink } from 'react-router-dom';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-  faHome, faFolder, faCompass, faChevronRight, faUsers, faCog, faSignOutAlt, faCircleQuestion, faTrashCan, faCommentDots
+  faHome, faFolder, faCompass, faChevronRight, faUsers, faCog, faSignOutAlt, faCircleQuestion, faTrashCan, faCommentDots, faGaugeHigh
 } from '@fortawesome/free-solid-svg-icons';
+import { faSpotify } from '@fortawesome/free-brands-svg-icons';
 
 import { useAuth } from '../../context/AuthContext';
 
 const menuLinks = [
   { to: '/', label: 'Home', icon: faHome, end: true },
   { to: '/discover', label: 'Discover', icon: faCompass },
+  { to: '/spotify', label: 'Spotify', icon: faSpotify },
   { to: '/artists', label: 'Artists', icon: faUsers },
   { to: '/library', label: 'Library', icon: faFolder },
 ];
@@ -18,6 +20,10 @@ const menuLinks = [
 const userLibraryLinks = [
   { to: '/library/playlists', label: 'Playlists' },
   { to: '/library/songs', label: 'Liked Songs' },
+];
+
+const adminLinks = [
+  { to: '/admin', label: 'Admin Studio', icon: faGaugeHigh },
 ];
 
 const otherLinks = [
@@ -64,6 +70,15 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
             <p className="nav-section-title">Library</p>
             <div className="nav-links">
               {renderNavLinks(userLibraryLinks)}
+            </div>
+          </div>
+        )}
+
+        {currentUser?.isAdmin && (
+          <div className="nav-section nav-section--admin">
+            <p className="nav-section-title">Studio</p>
+            <div className="nav-links">
+              {renderNavLinks(adminLinks)}
             </div>
           </div>
         )}
