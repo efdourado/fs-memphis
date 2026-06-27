@@ -1,6 +1,7 @@
 import express from "express";
 import { protect, optionalProtect, admin } from "../middlewares/authMiddleware.js";
 import container from "../container.js";
+import { getSpotifyStatus, searchSpotifyTracks } from "../controllers/spotifyController.js";
 
 import {
   createAlbumValidator,
@@ -34,6 +35,8 @@ const {
 } = container;
 
 router.use("/auth", authRouter);
+router.get("/spotify/status", protect, getSpotifyStatus);
+router.get("/spotify/search", protect, searchSpotifyTracks);
 router.get("/search", searchController.search);
 router.get("/recommendations", optionalProtect, songController.getRecommendations);
 router.get("/shuffle/songs", optionalProtect, songController.getExplainableShuffle);
@@ -101,6 +104,9 @@ router.delete(
   protect,
   playlistController.removeSongFromPlaylist
 );
+
+router.get("/admin/posts", protect, admin, postController.getAllPostsForAdmin);
+router.get("/admin/post/:slug", protect, admin, postController.getPostBySlugForAdmin);
 
 router
   .route("/posts")

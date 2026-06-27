@@ -17,7 +17,8 @@ export const deleteUser = (id) => apiClient.delete(`/user/${id}`);
 
 export const createUser = (formData) => apiClient.post('/users', formData);
 
-export const fetchPosts = () => apiClient.get('/posts');
+export const fetchPosts = () => apiClient.get('/admin/posts');
+export const fetchPostBySlug = (slug) => apiClient.get(`/admin/post/${slug}`);
 export const createPost = (formData) => apiClient.post('/posts', formData);
 export const updatePost = (slug, formData) => apiClient.put(`/post/${slug}`, formData);
 export const deletePost = (slug) => apiClient.delete(`/post/${slug}`);

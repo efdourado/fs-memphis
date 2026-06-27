@@ -8,7 +8,7 @@ const postSchema = new mongoose.Schema({
   author: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
   type: {
     type: String,
-    enum: ['analysis', 'story', 'tutorial', 'podcast_notes', 'news'],
+    enum: ['analysis', 'story', 'tutorial', 'podcast_notes', 'news', 'behind_scenes', 'interview', 'event', 'diary'],
     required: true,
   },
   status: {
