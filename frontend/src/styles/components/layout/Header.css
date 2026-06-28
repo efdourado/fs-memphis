@@ -56,7 +56,7 @@
  font-weight: var(--font-weight-black);
  color: var(--color-text-primary);
  opacity: 0.8;
- letter-spacing: 0.03em;
+ letter-spacing: 0;
 }
 
 .search-form {
@@ -391,7 +391,7 @@
   padding: 0 var(--spacing-lg);
   font-size: var(--font-size-xs);
   font-weight: var(--font-weight-bold);
-  letter-spacing: 1px;
+  letter-spacing: 0;
   text-transform: uppercase;
   transition: all var(--transition-duration-medium) var(--transition-timing-function-ease);
 }

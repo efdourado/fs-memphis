@@ -22,14 +22,14 @@ const userLibraryLinks = [
   { to: '/library/songs', label: 'Liked Songs' },
 ];
 
-const adminLinks = [
-  { to: '/admin', label: 'Admin Studio', icon: faGaugeHigh },
-];
-
 const otherLinks = [
   { to: '/archives', label: 'Archives', icon: faTrashCan, end: true },
   { to: '/help', label: 'Help', icon: faCircleQuestion, end: true },
   { to: '/settings', label: 'Settings', icon: faCog },
+];
+
+const studioLinks = [
+  { to: '/admin', label: 'Admin', icon: faGaugeHigh },
 ];
 
 
@@ -75,10 +75,10 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
         )}
 
         {currentUser?.isAdmin && (
-          <div className="nav-section nav-section--admin">
+          <div className="nav-section">
             <p className="nav-section-title">Studio</p>
             <div className="nav-links">
-              {renderNavLinks(adminLinks)}
+              {renderNavLinks(studioLinks)}
             </div>
           </div>
         )}

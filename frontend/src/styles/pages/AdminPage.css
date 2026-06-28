@@ -35,7 +35,7 @@
   color: var(--color-text-secondary);
   text-align: center;
   text-transform: uppercase;
-  letter-spacing: 0.08em;
+  letter-spacing: 0;
 }
 
 .admin-table tbody tr {
@@ -173,7 +173,7 @@
   font-size: var(--font-size-xs);
   font-weight: var(--font-weight-light);
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: 0;
 }
 
 .verified-badge.verified {
