@@ -10,7 +10,7 @@ import AdminModal from './components/AdminModal';
 import AdminTable from './components/AdminTable';
 import LoadingSpinner from '../../components/ui/LoadingSpinner';
 
-import { userFormConfig } from './components/formConfigs/userFormConfig';
+import { artistFormConfig, userFormConfig } from './components/formConfigs/userFormConfig';
 import { songFormConfig } from './components/formConfigs/songFormConfig';
 import { albumFormConfig } from './components/formConfigs/albumFormConfig';
 import { postFormConfig } from './components/formConfigs/postFormConfig';
@@ -18,7 +18,8 @@ import { tagFormConfig } from './components/formConfigs/tagFormConfig';
 import { podcastFormConfig } from './components/formConfigs/podcastFormConfig';
 
 const TABS = {
-  users: { label: 'Users', fetch: adminService.fetchUsers, delete: adminService.deleteUser, config: userFormConfig },
+  users: { label: 'People', fetch: adminService.fetchUsers, delete: adminService.deleteUser, config: userFormConfig },
+  artists: { label: 'Artist Archive', fetch: collectionService.fetchArtists, delete: null, config: artistFormConfig },
   songs: { label: 'Songs', fetch: collectionService.fetchSongs, delete: adminService.deleteSong, config: songFormConfig },
   albums: { label: 'Albums', fetch: collectionService.fetchAlbums, delete: adminService.deleteAlbum, config: albumFormConfig },
   posts: { label: 'Posts', fetch: adminService.fetchPosts, delete: adminService.deletePost, config: postFormConfig },
@@ -90,7 +91,7 @@ const AdminPage = () => {
 
   const currentTabConfig = TABS[activeTab];
   // Ajuste para plural/singular
-  const singularName = activeTab.endsWith('s') ? activeTab.slice(0, -1) : activeTab;
+  const singularName = activeTab === 'users' ? 'person' : activeTab.endsWith('s') ? activeTab.slice(0, -1) : activeTab;
   const modalTitle = `${editingItem ? 'Update' : 'Create'} ${singularName}`;
 
   return (
@@ -112,7 +113,12 @@ const AdminPage = () => {
         {loading ? (
           <LoadingSpinner />
         ) : (
-          <AdminTable type={activeTab} data={data} handleDelete={handleDelete} handleEdit={handleOpenModal} />
+          <AdminTable
+            type={activeTab}
+            data={data}
+            handleDelete={currentTabConfig.delete ? handleDelete : null}
+            handleEdit={handleOpenModal}
+          />
         )}
       </div>
 

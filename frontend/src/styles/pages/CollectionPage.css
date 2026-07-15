@@ -102,6 +102,57 @@
   margin-top: var(--spacing-xl);
 }
 
+.artist-archive-profile {
+  margin-top: var(--spacing-xl);
+  padding: var(--spacing-lg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-lg);
+  background: var(--color-surface);
+}
+
+.artist-archive-profile__facts,
+.artist-archive-profile__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-xs);
+}
+
+.artist-archive-profile__facts span,
+.artist-archive-profile__links a {
+  padding: var(--spacing-xxs) var(--spacing-sm);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-full);
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-xs);
+  text-transform: capitalize;
+}
+
+.artist-archive-profile__notes {
+  margin-top: var(--spacing-lg);
+}
+
+.artist-archive-profile__notes p:last-child {
+  margin-bottom: 0;
+  line-height: var(--line-height-relaxed);
+}
+
+.artist-archive-profile__eyebrow {
+  margin-bottom: var(--spacing-xs);
+  color: var(--color-primary);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+  text-transform: uppercase;
+}
+
+.artist-archive-profile__links {
+  margin-top: var(--spacing-lg);
+}
+
+.artist-archive-profile__links a:hover {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
 .song-list-container {
   flex-grow: 1;
   overflow-y: auto;

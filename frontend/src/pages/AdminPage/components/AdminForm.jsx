@@ -14,6 +14,15 @@ const AdminForm = ({ id, config, onSaved, onCancel }) => {
 
   const isEditing = Boolean(id);
 
+  const updateNestedValue = (source, path, value) => {
+    const [key, ...rest] = path;
+    if (rest.length === 0) return { ...source, [key]: value };
+    return {
+      ...source,
+      [key]: updateNestedValue(source?.[key] || {}, rest, value),
+    };
+  };
+
   useEffect(() => {
     const loadInitialData = async () => {
       setLoading(true);
@@ -59,13 +68,11 @@ const AdminForm = ({ id, config, onSaved, onCancel }) => {
     const { name, value, type, checked, selectedOptions } = e.target;
     
     if (name.includes('.')) {
-        const [outerKey, innerKey] = name.split('.');
-        setFormData(prev => ({
-            ...prev,
-            [outerKey]: {
-                ...prev[outerKey],
-                [innerKey]: type === 'checkbox' ? checked : value
-        } }));
+      setFormData((previous) => updateNestedValue(
+        previous,
+        name.split('.'),
+        type === 'checkbox' ? checked : value,
+      ));
     } else if (type === 'select-multiple') {
       const values = Array.from(selectedOptions, option => option.value);
       setFormData(prev => ({ ...prev, [name]: values }));
