@@ -10,7 +10,6 @@ const SWATCHES = {
   ember: "#c45c3e",
   forest: "#3d8f6e",
   dusk: "#8b6bb8",
-  daylight: "#28786a",
 };
 
 const THEMES = THEME_PRESETS.map((t) => ({

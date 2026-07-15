@@ -61,5 +61,5 @@
 }
 
 .show-more-link:hover {
-  color: var(--color-white);
+  color: var(--color-text-primary);
 }

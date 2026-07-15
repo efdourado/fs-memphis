@@ -4,7 +4,6 @@ export const THEME_PRESETS = [
   { id: "ember", label: "Ember", className: "theme-ember" },
   { id: "forest", label: "Forest", className: "theme-forest" },
   { id: "dusk", label: "Dusk", className: "theme-dusk" },
-  { id: "daylight", label: "Daylight", className: "theme-light" },
 ];
 
 export function applyStoredTheme() {

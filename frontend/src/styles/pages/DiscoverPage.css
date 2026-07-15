@@ -36,7 +36,7 @@
 
 .discover-segment button.is-active {
   background: var(--color-primary);
-  color: var(--color-white);
+  color: var(--color-on-primary);
 }
 
 .discover-page__grid {

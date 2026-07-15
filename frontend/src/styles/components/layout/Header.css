@@ -397,7 +397,7 @@
 }
 .login-btn:hover, .login-btn.always-hover {
   background: var(--color-primary);
-  color: var(--color-white);
+  color: var(--color-on-primary);
 }
 
 .create-btn {

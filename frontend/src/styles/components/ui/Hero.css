@@ -38,7 +38,7 @@
 .talents-title {
   writing-mode: vertical-rl;
   transform: rotate(180deg);
-  font-size: var(--font-size-xxs);
+  font-size: var(--font-size-xs);
   text-transform: uppercase;
   letter-spacing: 0;
   color: var(--color-text-secondary);
@@ -155,14 +155,14 @@
 }
 
 .feature-card {
-  background: rgba(255,255,255,0.06);
+  background: var(--color-glass-surface);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   border-radius: var(--border-radius-xl);
   padding: var(--spacing-lg);
-  color: var(--color-white);
+  color: var(--color-text-primary);
   width: 100%;
-  border: 1px solid rgba(255,255,255,0.06);
+  border: 1px solid var(--color-glass-border);
   box-shadow: var(--shadow-md);
   display: flex;
   flex-direction: column;
