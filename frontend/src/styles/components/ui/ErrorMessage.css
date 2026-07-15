@@ -12,7 +12,7 @@
   
   min-width: 44px; 
 
-  color: var(--color-white);
+  color: var(--color-on-primary);
   background-color: var(--color-error);
   
   border-radius: var(--border-radius-full);

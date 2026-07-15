@@ -297,7 +297,7 @@
 .auth-form__checkbox-group input[type="checkbox"]:checked::after {
   content: "✓";
   position: absolute;
-  color: var(--color-white);
+  color: var(--color-on-primary);
   font-size: 12px;
   top: 50%;
   left: 50%;

@@ -120,8 +120,8 @@
   justify-content: center;
   width: var(--spacing-xl);
   height: var(--spacing-xl);
-  background-color: rgba(255, 255, 255, 0.08);
-  color: rgba(255, 255, 255, 0.8);
+  background-color: var(--color-control-surface);
+  color: var(--color-control-text);
   border: none;
   border-radius: 50%;
   cursor: pointer;
@@ -129,13 +129,13 @@
 }
 
 .action-btn:hover {
-  background-color: rgba(255, 255, 255, 0.15);
-  color: #fff;
+  background-color: var(--color-control-surface-hover);
+  color: var(--color-text-primary);
 }
 
 .action-btn.play {
   background-color: var(--color-primary);
-  color: #fff;
+  color: var(--color-on-primary);
   width: 48px;
   height: 48px;
 }
