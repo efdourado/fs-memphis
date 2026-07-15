@@ -20,6 +20,12 @@ export const normalizeDataForPage = (type, data) => {
         pageType: 'Artist',
         title: data.name,
         description: data.artistProfile?.description,
+        profile: {
+          country: data.artistProfile?.country || '',
+          genres: data.artistProfile?.genres || [],
+          curatedNotes: data.artistProfile?.curatedNotes || '',
+          socials: data.artistProfile?.socials || {},
+        },
         
         backgroundImage: data.profilePic,
         

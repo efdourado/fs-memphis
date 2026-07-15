@@ -50,6 +50,21 @@ const SongPage = () => {
     return formatDuration(song.durationMs / 1000);
   }, [song]);
 
+  const editorialSections = [
+    ["Story", song?.editorial?.story],
+    ["Production notes", song?.editorial?.productionNotes],
+    ["Theory", song?.education?.theoryNotes],
+    ["Arrangement", song?.education?.arrangementNotes],
+    ["Production breakdown", song?.education?.productionBreakdown],
+  ].filter(([, content]) => Boolean(content));
+
+  const creditGroups = Object.entries(song?.credits || {})
+    .map(([role, value]) => [role, Array.isArray(value) ? value : value ? [value] : []])
+    .filter(([, names]) => names.length > 0);
+
+  const externalLinks = Object.entries(song?.externalLinks || {})
+    .filter(([, url]) => Boolean(url));
+
   const handlePlay = useCallback(() => {
     if (!song?.audioUrl) return;
     if (isCurrent) {
@@ -91,7 +106,7 @@ const SongPage = () => {
           <img src={coverImage} alt={song.title} onError={(event) => { event.currentTarget.src = fallbackImage; }} />
         </div>
         <div className="song-page__body">
-          <p className="song-page__eyebrow">{song.album?.title || "Single"}</p>
+          <p className="song-page__eyebrow">Music archive · {song.album?.title || "Single"}</p>
           <h1 className="song-page__title">{song.title}</h1>
           {song.subtitle && <p className="song-page__subtitle">{song.subtitle}</p>}
           <p className="song-page__artist">
@@ -102,9 +117,11 @@ const SongPage = () => {
           </p>
 
           <div className="song-page__actions">
-            <button className="action-btn play" onClick={handlePlay} disabled={!song.audioUrl}>
-              <FontAwesomeIcon icon={isCurrent && isPlaying ? faPause : faPlay} />
-            </button>
+            {song.audioUrl && (
+              <button className="action-btn play" onClick={handlePlay} aria-label="Play test audio">
+                <FontAwesomeIcon icon={isCurrent && isPlaying ? faPause : faPlay} />
+              </button>
+            )}
             <button className="action-btn menu" onClick={handleLike}>
               <FontAwesomeIcon icon={faHeart} />
             </button>
@@ -114,6 +131,7 @@ const SongPage = () => {
           </div>
 
           {feedback && <p className="song-page__feedback">{feedback}</p>}
+          {song.audioUrl && <p className="song-page__prototype-note">Prototype audio available for interface testing.</p>}
         </div>
       </section>
 
@@ -126,11 +144,40 @@ const SongPage = () => {
             ))}
           </div>
         )}
-        {(song.education?.theoryNotes || song.editorial?.productionNotes) && (
-          <div className="song-page__notes">
-            {song.education?.theoryNotes && <p>{song.education.theoryNotes}</p>}
-            {song.editorial?.productionNotes && <p>{song.editorial.productionNotes}</p>}
+        {editorialSections.length > 0 && (
+          <div className="song-page__archive-grid">
+            {editorialSections.map(([title, content]) => (
+              <article key={title} className="song-page__archive-card">
+                <p className="song-page__section-label">{title}</p>
+                <p>{content}</p>
+              </article>
+            ))}
           </div>
+        )}
+
+        {creditGroups.length > 0 && (
+          <section className="song-page__reference-section">
+            <h2>Credits</h2>
+            <div className="song-page__credits">
+              {creditGroups.map(([role, names]) => (
+                <div key={role}>
+                  <span>{role}</span>
+                  <strong>{names.join(', ')}</strong>
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {externalLinks.length > 0 && (
+          <section className="song-page__reference-section">
+            <h2>Listen elsewhere</h2>
+            <div className="song-page__external-links">
+              {externalLinks.map(([label, url]) => (
+                <a key={label} href={url} target="_blank" rel="noreferrer">{label}</a>
+              ))}
+            </div>
+          </section>
         )}
       </section>
     </main>

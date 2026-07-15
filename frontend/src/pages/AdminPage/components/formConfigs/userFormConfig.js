@@ -11,9 +11,11 @@ export const userFormConfig = {
 
     artistProfile: {
       description: '',
+      country: '',
+      curatedNotes: '',
       verified: false,
       genres: '',
-      socials: { instagram: '', x: '', youtube: '', tiktok: '' },
+      socials: { spotify: '', instagram: '', x: '', youtube: '', tiktok: '' },
   } },
   
   api: {
@@ -28,7 +30,7 @@ export const userFormConfig = {
     artistProfile: data.artistProfile ? {
         ...data.artistProfile,
         genres: data.artistProfile.genres?.join(', ') || '',
-    } : { description: '', verified: false, genres: '', socials: {} },
+    } : { description: '', country: '', curatedNotes: '', verified: false, genres: '', socials: {} },
   }),
   
   processDataForSubmit: (data) => {
@@ -52,6 +54,21 @@ export const userFormConfig = {
     { name: 'isArtist', label: 'Artist?', description: '(Artist-Specific Tools)', component: 'checkbox' },
 
     { name: 'artistProfile.genres', label: 'Genres (Comma-Separated)', type: 'text', condition: (data) => data.isArtist },
+    { name: 'artistProfile.country', label: 'Country / Scene', type: 'text', condition: (data) => data.isArtist },
     { name: 'artistProfile.verified', label: 'Verified?', description: '(Artist Status)', component: 'checkbox', condition: (data) => data.isArtist },
     { name: 'artistProfile.description', label: 'Description', component: 'textarea', rows: '4', span: 'span-2', condition: (data) => data.isArtist },
+    { name: 'artistProfile.curatedNotes', label: 'Curiosities & Notes', component: 'textarea', rows: '4', span: 'span-2', condition: (data) => data.isArtist },
+    { name: 'artistProfile.socials.spotify', label: 'Spotify Reference', type: 'url', condition: (data) => data.isArtist },
+    { name: 'artistProfile.socials.youtube', label: 'YouTube Reference', type: 'url', condition: (data) => data.isArtist },
+    { name: 'artistProfile.socials.instagram', label: 'Instagram', type: 'url', condition: (data) => data.isArtist },
 ], };
+
+export const artistFormConfig = {
+  ...userFormConfig,
+  initialState: {
+    ...userFormConfig.initialState,
+    isArtist: true,
+  },
+  processDataForSubmit: (data) => userFormConfig.processDataForSubmit({ ...data, isArtist: true }),
+  fields: userFormConfig.fields.filter((field) => !['isAdmin', 'isArtist'].includes(field.name)),
+};

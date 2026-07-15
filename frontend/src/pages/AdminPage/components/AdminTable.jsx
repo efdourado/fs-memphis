@@ -74,6 +74,31 @@ const tableConfig = {
       </>
   ), },
 
+  artists: {
+    columns: ["Artist", "Description", "Curiosities", "Scene", "Updated At", "Actions"],
+    renderRow: (item) => (
+      <>
+        <td
+          className="item-cell-background"
+          style={{ backgroundImage: `url(${item.profilePic || fallbackImage})` }}
+        >
+          <div className="item-cell">
+            <img src={item.profilePic || fallbackImage} alt={item.name} className="admin-table-image artist" />
+            <div>
+              <div style={{ fontWeight: 'var(--font-weight-semibold)' }}>{item.name}</div>
+              <div style={{ fontSize: 'var(--font-size-sm)', color: 'var(--color-text-secondary)' }}>
+                {(item.artistProfile?.genres || []).join(', ') || 'Unclassified'}
+              </div>
+            </div>
+          </div>
+        </td>
+        <td data-label="Description"><div className="artist-description">{item.artistProfile?.description || "No description yet."}</div></td>
+        <td data-label="Curiosities"><div className="artist-description">{item.artistProfile?.curatedNotes || "No notes yet."}</div></td>
+        <td data-label="Scene" style={{ textAlign: 'center' }}>{item.artistProfile?.country || '—'}</td>
+        <td data-label="Updated At" className="date-cell-background"><div className="date-cell">{formatDateTime(item.updatedAt)}</div></td>
+      </>
+  ), },
+
   albums: {
     columns: ["Album", "Songs", "Created At", "Updated At", "Actions"],
     renderRow: (item) => (

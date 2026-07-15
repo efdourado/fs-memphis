@@ -142,6 +142,7 @@ const CollectionPage = ({ type }) => {
     mainContent,
     subContent,
     stats,
+    profile,
   } = normalizedData;
 
   const isMainContentPlaying = playContext?.type === `${type}-main` && playContext?.id === id;
@@ -193,6 +194,30 @@ const CollectionPage = ({ type }) => {
               </button>
             </div>
           </div>
+
+          {type === "artist" && profile && (
+            <section className="artist-archive-profile" aria-label="Artist notes">
+              {(profile.country || profile.genres?.length > 0) && (
+                <div className="artist-archive-profile__facts">
+                  {profile.country && <span>{profile.country}</span>}
+                  {(profile.genres || []).map((genre) => <span key={genre}>{genre}</span>)}
+                </div>
+              )}
+              {profile.curatedNotes && (
+                <div className="artist-archive-profile__notes">
+                  <p className="artist-archive-profile__eyebrow">Curiosities & notes</p>
+                  <p>{profile.curatedNotes}</p>
+                </div>
+              )}
+              {Object.entries(profile.socials || {}).some(([, url]) => Boolean(url)) && (
+                <div className="artist-archive-profile__links">
+                  {Object.entries(profile.socials).filter(([, url]) => Boolean(url)).map(([label, url]) => (
+                    <a key={label} href={url} target="_blank" rel="noreferrer">{label}</a>
+                  ))}
+                </div>
+              )}
+            </section>
+          )}
           
           {mainContent?.items?.length > 0 ? (
             <section className="entity-content-section list-container">
