@@ -2,6 +2,7 @@
 
 frontend/dist
 frontend/.vite
+backend/archives/
 
 .env
 **/.env
