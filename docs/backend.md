@@ -35,5 +35,9 @@ The separation lets the domain evolve without moving database logic into routes 
 - Podcasts
 - Search and discovery
 - Spotify connection
+- Listening sessions and external references
+- Explainable personal insights
+
+Listening sessions are private and owned by their user. Admin visibility is read-only in the interface.
 
 The next version will add listening sessions and personal insight without deleting the original domains.

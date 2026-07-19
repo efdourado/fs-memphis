@@ -32,6 +32,15 @@ Themes change tokens. Components keep their identity.
 
 `Card`, `Item`, `List`, `Bias`, `Carousel`, `Hero`, `Modal` and `Form` are shared primitives. Collection and playback components build on the same states and actions.
 
+## Listening experience
+
+- Today records a moment.
+- Journal keeps the private timeline.
+- Session Detail explains one entry.
+- Patterns shows evidence with every insight.
+- References keeps optional links outside Memphis.
+- Design Archive preserves the original interface.
+
 ## Design archive
 
 The original music UI will remain available as a representation of the first Memphis version.
