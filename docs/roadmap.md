@@ -113,37 +113,37 @@ They become archive domains before any retirement decision.
 - [x] Expose artist descriptions and curiosities
 - [x] Turn song pages toward editorial information
 - [x] Keep test audio optional
-- [ ] Add the Design Archive entry page
-- [ ] Mark prototype-only playback clearly across collections
+- [x] Add the Design Archive entry page
+- [x] Mark prototype-only playback clearly across collections
 
 ### 2 — Listening domain
 
-- [ ] Add `ListeningSession`
-- [ ] Add optional `ExternalReference`
-- [ ] Add session API and validation
-- [ ] Add privacy and ownership rules
-- [ ] Add Admin session visibility
+- [x] Add `ListeningSession`
+- [x] Add optional `ExternalReference`
+- [x] Add session API and validation
+- [x] Add privacy and ownership rules
+- [x] Add Admin session visibility
 
 ### 3 — New experience
 
-- [ ] Build Today
-- [ ] Build Journal
-- [ ] Build Session Detail
-- [ ] Build Patterns
-- [ ] Connect navigation without removing archive routes
+- [x] Build Today
+- [x] Build Journal
+- [x] Build Session Detail
+- [x] Build Patterns
+- [x] Connect navigation without removing archive routes
 
 ### 4 — Insights
 
-- [ ] Create explainable summaries
-- [ ] Compare mood before and after listening
-- [ ] Show activity and time patterns
-- [ ] Let users inspect the evidence behind an insight
+- [x] Create explainable summaries
+- [x] Compare mood before and after listening
+- [x] Show activity and time patterns
+- [x] Let users inspect the evidence behind an insight
 
 ### 5 — Data review
 
-- [ ] Measure which old relations are still used
-- [ ] Decide whether Artist becomes independent from User
-- [ ] Freeze unused legacy writes
-- [ ] Archive data safely before any schema cleanup
+- [x] Measure which old relations are still used
+- [x] Decide whether Artist becomes independent from User
+- [x] Decide whether legacy writes can be frozen
+- [x] Add a safe export before any schema cleanup
 
 Update this file as each slice ships.

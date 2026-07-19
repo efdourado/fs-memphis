@@ -24,6 +24,16 @@ Base path: `/api`
 | GET | `/recommendations` | optional auth |
 | GET | `/shuffle/songs` | optional auth |
 
+## Listening
+
+| Method | Path | Access |
+| --- | --- | --- |
+| GET / POST | `/sessions` | auth |
+| GET / PUT / DELETE | `/session/:id` | owner or admin |
+| GET | `/me/references` | auth |
+| GET | `/me/listening-insights` | auth |
+| GET | `/admin/listening-sessions` | admin |
+
 ## Artists and users
 
 | Method | Path | Access |
