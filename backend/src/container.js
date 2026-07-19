@@ -7,6 +7,8 @@ import PostModel from './persistence/models/postModel.js';
 import TagModel from './persistence/models/tagModel.js';
 import PodcastModel from './persistence/models/podcastModel.js';
 import PlayEventModel from './persistence/models/playEventModel.js';
+import ListeningSessionModel from './persistence/models/listeningSessionModel.js';
+import InsightModel from './persistence/models/insightModel.js';
 
 // DAOs
 import { AlbumMongooseDAO } from './persistence/daos/albumMongooseDAO.js';
@@ -17,6 +19,8 @@ import { PostMongooseDAO } from './persistence/daos/postMongooseDAO.js';
 import { TagMongooseDAO } from './persistence/daos/tagMongooseDAO.js';
 import { PodcastMongooseDAO } from './persistence/daos/podcastMongooseDAO.js';
 import { PlayEventMongooseDAO } from './persistence/daos/playEventMongooseDAO.js';
+import { ListeningSessionMongooseDAO } from './persistence/daos/listeningSessionMongooseDAO.js';
+import { InsightMongooseDAO } from './persistence/daos/insightMongooseDAO.js';
 
 const albumDAO = new AlbumMongooseDAO(AlbumModel);
 const playlistDAO = new PlaylistMongooseDAO(PlaylistModel);
@@ -26,6 +30,8 @@ const postDAO = new PostMongooseDAO();
 const tagDAO = new TagMongooseDAO();
 const podcastDAO = new PodcastMongooseDAO();
 const playEventDAO = new PlayEventMongooseDAO(PlayEventModel);
+const listeningSessionDAO = new ListeningSessionMongooseDAO(ListeningSessionModel);
+const insightDAO = new InsightMongooseDAO(InsightModel);
 
 // Services
 import { AlbumService } from './services/albumService.js';
@@ -36,6 +42,7 @@ import { SearchService } from './services/searchService.js';
 import { PostService } from './services/postService.js';
 import { TagService } from './services/tagService.js';
 import { PodcastService } from './services/podcastService.js';
+import { ListeningSessionService } from './services/listeningSessionService.js';
 
 const albumService = new AlbumService(albumDAO, songDAO);
 const playlistService = new PlaylistService(playlistDAO, songDAO);
@@ -45,6 +52,7 @@ const searchService = new SearchService();
 const postService = new PostService(postDAO);
 const tagService = new TagService(tagDAO);
 const podcastService = new PodcastService(podcastDAO);
+const listeningSessionService = new ListeningSessionService(listeningSessionDAO, insightDAO);
 
 // Controllers
 import { AlbumController } from './controllers/albumController.js';
@@ -55,6 +63,7 @@ import { SearchController } from './controllers/searchController.js';
 import { PostController } from './controllers/postController.js';
 import { TagController } from './controllers/tagController.js';
 import { PodcastController } from './controllers/podcastController.js';
+import { ListeningSessionController } from './controllers/listeningSessionController.js';
 import { createAuthRouter } from './routes/authRoutes.js';
 
 const albumController = new AlbumController(albumService);
@@ -65,6 +74,7 @@ const searchController = new SearchController(searchService);
 const postController = new PostController(postService);
 const tagController = new TagController(tagService);
 const podcastController = new PodcastController(podcastService);
+const listeningSessionController = new ListeningSessionController(listeningSessionService);
 
 const authRouter = createAuthRouter(userController);
 
@@ -77,5 +87,6 @@ export default {
   postController,
   tagController,
   podcastController,
+  listeningSessionController,
   authRouter
 };

@@ -19,6 +19,7 @@ import {
   updateUserValidator,
   createUserValidator,
 } from "../validators/userValidators.js";
+import { listeningSessionValidator } from "../validators/listeningSessionValidators.js";
 
 const router = express.Router();
 
@@ -32,7 +33,17 @@ const {
   tagController,
   podcastController,
   authRouter,
+  listeningSessionController,
 } = container;
+
+router.get('/sessions', protect, listeningSessionController.getMine);
+router.post('/sessions', protect, listeningSessionValidator, listeningSessionController.create);
+router.get('/session/:id', protect, listeningSessionController.getById);
+router.put('/session/:id', protect, listeningSessionValidator, listeningSessionController.update);
+router.delete('/session/:id', protect, listeningSessionController.delete);
+router.get('/me/references', protect, listeningSessionController.getReferences);
+router.get('/me/listening-insights', protect, listeningSessionController.getInsights);
+router.get('/admin/listening-sessions', protect, admin, listeningSessionController.getAllForAdmin);
 
 router.use("/auth", authRouter);
 router.get("/spotify/status", protect, getSpotifyStatus);
