@@ -154,9 +154,9 @@ const Header = ({ toggleSidebar }) => {
           </form>
 
           {isAuthenticated && currentUser && (
-            <Link to="/create" className="login-btn create-btn">
+            <Link to="/today" className="login-btn create-btn">
               <FontAwesomeIcon icon={faPlus} className="btn-icon-graphic" />
-              <span className="btn-label"> Create</span>
+              <span className="btn-label"> Reflect</span>
             </Link>
           )}
 

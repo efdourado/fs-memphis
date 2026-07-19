@@ -163,6 +163,7 @@ const CollectionPage = ({ type }) => {
         <main className="collection-page__right-column">
           <div className="collection-page__actions">
             <div className="actions-left">
+              <span className="prototype-label">Design archive · optional playback</span>
               {stats && (
                 <div className="collection-page__stats">
                   {stats.map((stat, index) => (

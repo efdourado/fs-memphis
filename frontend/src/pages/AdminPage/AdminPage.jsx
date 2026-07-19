@@ -4,6 +4,7 @@ import { faPlus, faSyncAlt } from "@fortawesome/free-solid-svg-icons";
 
 import * as adminService from '../../services/adminService';
 import * as collectionService from '../../services/collectionService';
+import { fetchAdminSessions } from '../../services/listeningService';
 
 import AdminForm from './components/AdminForm';
 import AdminModal from './components/AdminModal';
@@ -20,7 +21,8 @@ import { podcastFormConfig } from './components/formConfigs/podcastFormConfig';
 const TABS = {
   users: { label: 'People', fetch: adminService.fetchUsers, delete: adminService.deleteUser, config: userFormConfig },
   artists: { label: 'Artist Archive', fetch: collectionService.fetchArtists, delete: null, config: artistFormConfig },
-  songs: { label: 'Songs', fetch: collectionService.fetchSongs, delete: adminService.deleteSong, config: songFormConfig },
+  sessions: { label: 'Listening Sessions', fetch: fetchAdminSessions, delete: null, config: null, readOnly: true },
+  songs: { label: 'Music Archive', fetch: collectionService.fetchSongs, delete: adminService.deleteSong, config: songFormConfig },
   albums: { label: 'Albums', fetch: collectionService.fetchAlbums, delete: adminService.deleteAlbum, config: albumFormConfig },
   posts: { label: 'Posts', fetch: adminService.fetchPosts, delete: adminService.deletePost, config: postFormConfig },
   tags: { label: 'Tags', fetch: adminService.fetchTags, delete: null, config: tagFormConfig },
@@ -54,6 +56,7 @@ const AdminPage = () => {
   }, [loadData]);
 
   const handleOpenModal = (item = null) => {
+    if (!currentTabConfig.config) return;
     setEditingItem(item);
     setIsModalOpen(true);
   };
@@ -102,10 +105,12 @@ const AdminPage = () => {
           <FontAwesomeIcon icon={faSyncAlt} className="btn-icon-graphic" style={{ marginLeft: '8px' }}/>
         </button>
 
-        <button onClick={() => handleOpenModal()} className="login-btn create-btn">
-          <FontAwesomeIcon icon={faPlus} className="btn-icon-graphic" />
-          <span className="btn-label"> Add New {singularName}</span>
-        </button>
+        {!currentTabConfig.readOnly && (
+          <button onClick={() => handleOpenModal()} className="login-btn create-btn">
+            <FontAwesomeIcon icon={faPlus} className="btn-icon-graphic" />
+            <span className="btn-label"> Add New {singularName}</span>
+          </button>
+        )}
       </div>
 
       <div className="admin-content-area">
@@ -117,12 +122,12 @@ const AdminPage = () => {
             type={activeTab}
             data={data}
             handleDelete={currentTabConfig.delete ? handleDelete : null}
-            handleEdit={handleOpenModal}
+            handleEdit={currentTabConfig.readOnly ? null : handleOpenModal}
           />
         )}
       </div>
 
-      {isModalOpen && (
+      {isModalOpen && currentTabConfig.config && (
         <AdminModal
           isOpen={isModalOpen}
           onClose={handleCloseModal}

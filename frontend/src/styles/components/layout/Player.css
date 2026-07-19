@@ -11,6 +11,16 @@
   box-shadow: var(--shadow-xl);
 }
 
+.player-disc__prototype-label {
+  position: fixed;
+  right: calc(var(--spacing-lg) + 90px);
+  bottom: calc(var(--spacing-lg) + 30px);
+  z-index: var(--z-index-player);
+  color: var(--color-text-tertiary);
+  font-size: var(--font-size-xxs);
+  text-transform: uppercase;
+}
+
 .player-disc:hover {
   transform: scale(1.1);
 }
@@ -97,6 +107,7 @@
 }
 
 @media (max-width: 768px) {
+  .player-disc__prototype-label { display: none; }
   .player-disc {
     bottom: var(--spacing-md);
     right: var(--spacing-md);
