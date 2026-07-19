@@ -131,6 +131,7 @@
   --color-primary-accent-l: 55%;
   --color-primary: var(--color-primary-accent);
   --color-primary-hover: var(--color-primary-accent-hover);
+  --button-gradient: linear-gradient(135deg, #6f88a9 0%, #354a65 100%);
 
   --color-background: hsl(210, 30%, 12%);
   --color-background-header: hsla(210, 30%, 18%, 0.85);
@@ -153,6 +154,7 @@
   --color-primary-dark: #6f3021;
   --color-primary: var(--color-primary-accent);
   --color-primary-hover: var(--color-primary-accent-hover);
+  --button-gradient: linear-gradient(135deg, #c45c3e 0%, #6f3021 100%);
 
   --color-background: hsl(15, 18%, 8%);
   --color-background-header: hsla(15, 20%, 11%, 0.88);
@@ -175,6 +177,7 @@
   --color-primary-dark: #1e503e;
   --color-primary: var(--color-primary-accent);
   --color-primary-hover: var(--color-primary-accent-hover);
+  --button-gradient: linear-gradient(135deg, #3d8f6e 0%, #1e503e 100%);
 
   --color-background: hsl(155, 22%, 8%);
   --color-background-header: hsla(155, 24%, 12%, 0.88);
@@ -197,6 +200,7 @@
   --color-primary-dark: #523b70;
   --color-primary: var(--color-primary-accent);
   --color-primary-hover: var(--color-primary-accent-hover);
+  --button-gradient: linear-gradient(135deg, #9b7ec4 0%, #523b70 100%);
 
   --color-background: hsl(265, 22%, 9%);
   --color-background-header: hsla(265, 24%, 13%, 0.88);
