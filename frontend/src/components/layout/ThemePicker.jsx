@@ -9,7 +9,7 @@ const SWATCHES = {
   ocean: "#6f88a9",
   ember: "#c45c3e",
   forest: "#3d8f6e",
-  dusk: "#9b7ec4",
+  dusk: "#8b6bb8",
 };
 
 const THEMES = THEME_PRESETS.map((t) => ({
