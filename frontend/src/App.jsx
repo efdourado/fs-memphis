@@ -34,6 +34,12 @@ import LibraryHomePage from './pages/library/LibraryHomePage';
 import LibraryPlaylistsPage from './pages/library/LibraryPlaylistsPage';
 import LibrarySongsPage from './pages/library/LibrarySongsPage';
 import ArtistsPage from './pages/ArtistsPage';
+import TodayPage from './pages/TodayPage';
+import JournalPage from './pages/JournalPage';
+import SessionDetailPage from './pages/SessionDetailPage';
+import PatternsPage from './pages/PatternsPage';
+import ReferencesPage from './pages/ReferencesPage';
+import DesignArchivePage from './pages/DesignArchivePage';
 
 import AuthCallbackPage from './pages/Auth/AuthCallbackPage';
 
@@ -85,6 +91,12 @@ const App = () => {
                 <Route path="/song/:id" element={<SongPage />} />
 
                 <Route path="/artists" element={<ArtistsPage />} />
+                <Route path="/design-archive" element={<DesignArchivePage />} />
+                <Route path="/today" element={<ProtectedRoute><TodayPage /></ProtectedRoute>} />
+                <Route path="/journal" element={<ProtectedRoute><JournalPage /></ProtectedRoute>} />
+                <Route path="/session/:id" element={<ProtectedRoute><SessionDetailPage /></ProtectedRoute>} />
+                <Route path="/patterns" element={<ProtectedRoute><PatternsPage /></ProtectedRoute>} />
+                <Route path="/references" element={<ProtectedRoute><ReferencesPage /></ProtectedRoute>} />
                 <Route path="/discover" element={<DiscoverPage />} />
                 <Route path="/spotify" element={<SpotifyPlaygroundPage />} />
                 <Route path="/archives" element={<MemphisArchivePage />} />

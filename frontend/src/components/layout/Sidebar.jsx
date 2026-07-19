@@ -3,7 +3,7 @@ import { NavLink } from 'react-router-dom';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-  faHome, faFolder, faCompass, faChevronRight, faUsers, faCog, faSignOutAlt, faCircleQuestion, faTrashCan, faCommentDots, faGaugeHigh
+  faHome, faFolder, faCompass, faChevronRight, faUsers, faCog, faSignOutAlt, faCircleQuestion, faTrashCan, faCommentDots, faGaugeHigh, faBookOpen, faChartSimple, faPenToSquare, faLandmark
 } from '@fortawesome/free-solid-svg-icons';
 import { faSpotify } from '@fortawesome/free-brands-svg-icons';
 
@@ -18,11 +18,16 @@ const menuLinks = [
 ];
 
 const userLibraryLinks = [
+  { to: '/today', label: 'Today', icon: faPenToSquare },
+  { to: '/journal', label: 'Journal', icon: faBookOpen },
+  { to: '/patterns', label: 'Patterns', icon: faChartSimple },
+  { to: '/references', label: 'References', icon: faLandmark },
   { to: '/library/playlists', label: 'Playlists' },
   { to: '/library/songs', label: 'Liked Songs' },
 ];
 
 const otherLinks = [
+  { to: '/design-archive', label: 'Design Archive', icon: faLandmark, end: true },
   { to: '/archives', label: 'Archives', icon: faTrashCan, end: true },
   { to: '/help', label: 'Help', icon: faCircleQuestion, end: true },
   { to: '/settings', label: 'Settings', icon: faCog },

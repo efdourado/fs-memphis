@@ -123,6 +123,12 @@
   color: var(--color-text-secondary);
 }
 
+.admin-table-secondary {
+  margin-top: var(--spacing-xxs);
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-xs);
+}
+
 .date-cell-background {
   background-color: var(--color-border-subtle);
   color: var(--color-text-secondary);

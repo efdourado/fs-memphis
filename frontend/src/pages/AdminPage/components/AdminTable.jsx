@@ -99,6 +99,19 @@ const tableConfig = {
       </>
   ), },
 
+  sessions: {
+    columns: ["Person", "Moment", "Mood Path", "Reference", "Occurred At", "Privacy"],
+    renderRow: (item) => (
+      <>
+        <td data-label="Person"><strong>{item.user?.name || 'Unknown'}</strong><div className="admin-table-secondary">{item.user?.email}</div></td>
+        <td data-label="Moment"><strong>{item.activity || 'Listening'}</strong><div className="admin-table-secondary">{item.durationMinutes} min · {item.source}</div></td>
+        <td data-label="Mood Path">{item.moodBefore?.join(', ') || '—'} → {item.moodAfter?.join(', ') || '—'}</td>
+        <td data-label="Reference">{item.reference?.title || item.reference?.url || 'Optional'}</td>
+        <td data-label="Occurred At" className="date-cell-background"><div className="date-cell">{formatDateTime(item.occurredAt)}</div></td>
+        <td data-label="Privacy"><span className="verified-badge not-verified">{item.privacy}</span></td>
+      </>
+  ), },
+
   albums: {
     columns: ["Album", "Songs", "Created At", "Updated At", "Actions"],
     renderRow: (item) => (
@@ -235,13 +248,13 @@ const AdminTable = ({ type, data, handleDelete, handleEdit }) => {
             {config.renderRow(item)}
             <td data-label="Actions">
               <div className="admin-table-actions">
-                <button
+                {handleEdit && <button
                   onClick={() => handleEdit(item)}
                   className="admin-action-button edit"
                   aria-label="Edit"
                 >
                   <FontAwesomeIcon icon={faEdit} />
-                </button>
+                </button>}
                 {handleDelete && (
                   <button
                   onClick={() => handleDelete(type === 'posts' ? item.slug : item._id)}

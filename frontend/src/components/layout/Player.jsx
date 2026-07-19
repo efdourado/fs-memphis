@@ -28,7 +28,9 @@ const Player = () => {
   const strokeDashoffset = circumference * (1 - progress);
 
   return (
-    <div 
+    <>
+    <span className="player-disc__prototype-label">Prototype player</span>
+    <div
       className={`player-disc ${isPlaying ? 'is-playing' : ''}`}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
@@ -65,6 +67,7 @@ const Player = () => {
         </div>
       )}
     </div>
+    </>
 ); };
 
 export default Player;
