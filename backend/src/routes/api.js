@@ -2,6 +2,10 @@ import express from "express";
 import { protect, optionalProtect, admin } from "../middlewares/authMiddleware.js";
 import container from "../container.js";
 import { getSpotifyStatus, searchSpotifyTracks } from "../controllers/spotifyController.js";
+import {
+  getPrototypeAudio,
+  getPrototypeCover,
+} from "../controllers/prototypeMediaController.js";
 
 import {
   createAlbumValidator,
@@ -51,6 +55,8 @@ router.get("/spotify/search", protect, searchSpotifyTracks);
 router.get("/search", searchController.search);
 router.get("/recommendations", optionalProtect, songController.getRecommendations);
 router.get("/shuffle/songs", optionalProtect, songController.getExplainableShuffle);
+router.get("/demo/audio/:key.wav", getPrototypeAudio);
+router.get("/demo/cover/:key.svg", getPrototypeCover);
 
 router.get("/artists", userController.getAllArtists);
 router.get("/artist/:id", userController.getArtistProfileById);

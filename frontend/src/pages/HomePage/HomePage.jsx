@@ -16,8 +16,11 @@ const HomePage = () => {
   const featuredContent = useMemo(() => {
     if (loading || error) return { featuredPlaylistId: null, featuredAlbumId: null };
     
-    const featuredPlaylistId = playlists[8]?._id || null;
-    const featuredAlbumId = albums.length > 3 ? albums[1]._id : albums[1]?._id || null;
+    const featuredPlaylistId = playlists.find((playlist) => playlist.tags?.includes('featured'))?._id
+      || playlists[8]?._id
+      || playlists[0]?._id
+      || null;
+    const featuredAlbumId = albums[1]?._id || albums[0]?._id || null;
 
     return { featuredPlaylistId, featuredAlbumId };
   }, [playlists, albums, loading, error]);

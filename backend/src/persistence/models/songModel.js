@@ -129,6 +129,9 @@ songSchema.index({
   "editorial.productionNotes": "text",
   "education.theoryNotes": "text",
   "education.productionBreakdown": "text"
+}, {
+  default_language: "none",
+  language_override: "searchIndexLanguage"
 });
 songSchema.index({ artist: 1, releaseDate: -1 });
 songSchema.index({ plays: -1, createdAt: -1 });

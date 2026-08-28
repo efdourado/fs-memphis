@@ -4,9 +4,10 @@ services:
       context: ./backend
       dockerfile: Dockerfile.dev
     container_name: memphis-backend-dev
-    command: npm run dev
+    command: npm run dev:docker
     environment:
       FRONTEND_URL: http://localhost:5173
+      SEED_LOCAL_DEMO: ${SEED_LOCAL_DEMO:-true}
     volumes:
       - ./backend:/usr/src/app/backend
       - /usr/src/app/backend/node_modules

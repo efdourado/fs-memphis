@@ -20,7 +20,7 @@ const artistSchema = new mongoose.Schema({
 const userSchema = new mongoose.Schema({
   name: { type: String, required: true, trim: true },
   email: { type: String, required: true, unique: true, trim: true, lowercase: true },
-  password: { type: String, required: true },
+  password: { type: String, required: true, select: false },
   profilePic: { type: String, default: '' },
   followers: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
   following: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
@@ -36,8 +36,8 @@ const userSchema = new mongoose.Schema({
     default: null,
   },
   spotifyId: { type: String, unique: true, sparse: true },
-  spotifyAccessToken: { type: String },
-  spotifyRefreshToken: { type: String },
+  spotifyAccessToken: { type: String, select: false },
+  spotifyRefreshToken: { type: String, select: false },
 }, {
   timestamps: true,
   toJSON: { virtuals: true },
