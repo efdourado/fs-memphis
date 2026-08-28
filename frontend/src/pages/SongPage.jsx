@@ -130,6 +130,10 @@ const SongPage = () => {
             </button>
           </div>
 
+          <Link className="song-page__atlas-link" to="/atlas">
+            Explore the knowledge Atlas <span aria-hidden="true">↗</span>
+          </Link>
+
           {feedback && <p className="song-page__feedback">{feedback}</p>}
           {song.audioUrl && <p className="song-page__prototype-note">Prototype audio available for interface testing.</p>}
         </div>

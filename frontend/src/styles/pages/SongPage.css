@@ -74,6 +74,29 @@
   margin-top: var(--spacing-xl);
 }
 
+.song-page__atlas-link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  margin-top: var(--spacing-md);
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+}
+
+.song-page__atlas-link span {
+  color: var(--color-primary);
+  transition: transform var(--transition-duration-short) var(--transition-timing-function-smooth);
+}
+
+.song-page__atlas-link:hover {
+  color: var(--color-text-primary);
+}
+
+.song-page__atlas-link:hover span {
+  transform: translate(2px, -2px);
+}
+
 .song-page__details {
   max-width: 960px;
   margin-top: clamp(32px, 6vw, 80px);

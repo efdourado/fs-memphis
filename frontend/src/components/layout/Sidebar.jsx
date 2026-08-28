@@ -11,6 +11,9 @@ import { useAuth } from '../../context/AuthContext';
 
 const menuLinks = [
   { to: '/', label: 'Home', icon: faHome, end: true },
+  { to: '/atlas', label: 'Knowledge Atlas', icon: faLandmark },
+  { to: '/stories/pop-youth', label: 'Stories', icon: faBookOpen },
+  { to: '/picks', label: 'Memphis Picks', icon: faCompass },
   { to: '/discover', label: 'Discover', icon: faCompass },
   { to: '/spotify', label: 'Spotify', icon: faSpotify },
   { to: '/artists', label: 'Artists', icon: faUsers },
@@ -72,7 +75,7 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
 
         {isAuthenticated && (
           <div className="nav-section">
-            <p className="nav-section-title">Library</p>
+            <p className="nav-section-title">My Memphis</p>
             <div className="nav-links">
               {renderNavLinks(userLibraryLinks)}
             </div>

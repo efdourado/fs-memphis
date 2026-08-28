@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { lazy, Suspense, useState, useEffect } from 'react';
 import { Routes, Route } from 'react-router-dom';
 
 import ProtectedRoute from './components/auth/ProtectedRoute';
@@ -10,6 +10,7 @@ import Footer from './components/layout/Footer';
 import Sidebar from './components/layout/Sidebar';
 
 import SongModal from './components/songs/SongModal';
+import LoadingSpinner from './components/ui/LoadingSpinner';
 
 import { PlayerProvider } from './context/PlayerContext';
 import { useAuth } from './context/AuthContext';
@@ -42,6 +43,16 @@ import ReferencesPage from './pages/ReferencesPage';
 import DesignArchivePage from './pages/DesignArchivePage';
 
 import AuthCallbackPage from './pages/Auth/AuthCallbackPage';
+
+const KnowledgeHubPage = lazy(() => import('./pages/knowledge/KnowledgeHubPage'));
+const SongDossierPage = lazy(() => import('./pages/knowledge/SongDossierPage'));
+const PersonDetailPage = lazy(() => import('./pages/knowledge/PersonDetailPage'));
+const GenreDetailPage = lazy(() => import('./pages/knowledge/GenreDetailPage'));
+const StoryDetailPage = lazy(() => import('./pages/knowledge/StoryDetailPage'));
+const MemphisPicksPage = lazy(() => import('./pages/knowledge/MemphisPicksPage'));
+const ComparisonPage = lazy(() => import('./pages/knowledge/ComparisonPage'));
+const CreativeTechnologyPage = lazy(() => import('./pages/knowledge/CreativeTechnologyPage'));
+const SourceLedgerPage = lazy(() => import('./pages/knowledge/SourceLedgerPage'));
 
 const App = () => {
   const { currentUser, loadingAuth } = useAuth();
@@ -76,7 +87,8 @@ const App = () => {
           <div className={`content-pusher ${isSidebarOpen ? 'sidebar-open' : ''}`}>
             <Header toggleSidebar={toggleSidebar} />
             <main style={{ flex: 1 }}>
-              <Routes>
+              <Suspense fallback={<LoadingSpinner fullScreen />}>
+                <Routes>
                 <Route path="/" element={<HomePage />} />
                 <Route path="/auth" element={<UnifiedAuthPage />} />
                 <Route path="/login" element={<AuthLoginRedirect />} />
@@ -92,6 +104,15 @@ const App = () => {
 
                 <Route path="/artists" element={<ArtistsPage />} />
                 <Route path="/design-archive" element={<DesignArchivePage />} />
+                <Route path="/atlas" element={<KnowledgeHubPage />} />
+                <Route path="/atlas/song/die-young" element={<SongDossierPage />} />
+                <Route path="/people/benny-blanco" element={<PersonDetailPage />} />
+                <Route path="/genres/pop" element={<GenreDetailPage />} />
+                <Route path="/stories/pop-youth" element={<StoryDetailPage />} />
+                <Route path="/picks" element={<MemphisPicksPage />} />
+                <Route path="/comparisons/breakthrough" element={<ComparisonPage />} />
+                <Route path="/technology/ai-and-art" element={<CreativeTechnologyPage />} />
+                <Route path="/sources" element={<SourceLedgerPage />} />
                 <Route path="/today" element={<ProtectedRoute><TodayPage /></ProtectedRoute>} />
                 <Route path="/journal" element={<ProtectedRoute><JournalPage /></ProtectedRoute>} />
                 <Route path="/session/:id" element={<ProtectedRoute><SessionDetailPage /></ProtectedRoute>} />
@@ -112,7 +133,8 @@ const App = () => {
                 </Route>
 
                 <Route path="/admin" element={<AdminRoute><AdminPage /></AdminRoute>} />
-              </Routes>
+                </Routes>
+              </Suspense>
             </main>
             <Footer companyName={'Memphis'} />
             <SongModal />

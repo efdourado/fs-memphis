@@ -146,4 +146,22 @@ They become archive domains before any retirement decision.
 - [x] Decide whether legacy writes can be frozen
 - [x] Add a safe export before any schema cleanup
 
+### 6 — Knowledge Atlas prototype
+
+- [x] Define the progressive knowledge flow
+- [x] Build the Atlas entrance
+- [x] Build song, person, genre and story templates
+- [x] Build Memphis Picks and the comparison lab
+- [x] Reserve space for creative technology and provenance
+- [x] Separate the public source ledger from private references
+- [x] Label prototype, editorial, computed and unsourced content
+
+### 7 — Verified knowledge data
+
+- [ ] Define sources and evidence records
+- [ ] Import complete credits from licensed or public sources
+- [ ] Connect works, people, genres, tools and stories
+- [ ] Add editorial review and publication states
+- [ ] Replace prototype values without changing the page hierarchy
+
 Update this file as each slice ships.
