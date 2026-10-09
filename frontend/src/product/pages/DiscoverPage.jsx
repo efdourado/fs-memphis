@@ -1,127 +1,139 @@
-import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faFireFlameCurved } from '@fortawesome/free-solid-svg-icons';
+import { useAuth } from '../../context/AuthContext';
 import { api } from '../api';
-import { formatDate, usePageTitle, useResource } from '../hooks';
-import SongRow from '../components/SongRow';
-import { STATUS_INFO } from '../components/Status';
-import Status from '../components/Status';
+import { formatDate, usePageTitle, useResource, yearOf } from '../hooks';
+import { PersonCard, Row, SongCard } from '../components/Cards';
+import Cover from '../components/Cover';
 import { ErrorState, Loading } from '../components/States';
-import { SearchIcon } from '../shell/Icons';
 
 const JOURNEYS = [
   {
-    to: '/compare?a=running-up-that-hill&b=dreams',
-    kicker: 'Compare',
-    title: 'Two old songs, two different returns',
-    body: 'One came back through a TV series, the other through a skateboarding video.',
+    title: 'Two songs, two comebacks',
+    by: 'A Memphis journey',
+    note: 'One came back through a TV show, the other through a skateboard and a bottle of juice. Decades later, both hit the charts again.',
+    songs: ['running-up-that-hill', 'dreams'],
   },
   {
-    to: '/compare?a=bad-guy&b=birds-of-a-feather',
-    kicker: 'Compare',
     title: 'Same writers, five years apart',
-    body: 'Billie Eilish and Finneas, from a whisper to an open chorus.',
-  },
-  {
-    to: '/people/max-martin',
-    kicker: 'Follow a person',
-    title: 'One writer across two decades of No. 1s',
-    body: 'From Britney Spears in 1998 to The Weeknd in 2019.',
+    by: 'A Memphis journey',
+    note: 'Billie Eilish and Finneas went from a whisper to a wide-open chorus. Hear what changed — and what didn’t.',
+    songs: ['bad-guy', 'birds-of-a-feather'],
   },
 ];
+
+function Journey({ journey, works }) {
+  const songs = journey.songs.map((slug) => works.find((w) => w.slug === slug)).filter(Boolean);
+  if (songs.length < 2) return null;
+  const [a, b] = songs;
+  return (
+    <section className="p-journey">
+      <Link to={`/compare?a=${a.slug}&b=${b.slug}`} className="p-journey__info">
+        <Cover slug={a.slug} title={a.title} size="xl" />
+        <div className="p-journey__details">
+          <h2>{journey.title}</h2>
+          <p className="p-journey__by">{journey.by}</p>
+          <p className="p-journey__meta">{songs.length} songs • {yearOf(a.released)} and {yearOf(b.released)}</p>
+          <p className="p-journey__note">{journey.note}</p>
+          <span className="p-pill p-pill--solid">Compare them</span>
+        </div>
+      </Link>
+      <ol className="p-tracks">
+        {songs.map((work, index) => (
+          <li key={work.slug}>
+            <Link to={`/songs/${work.slug}`}>
+              <span className="p-tracks__number">{index + 1}</span>
+              <span className="p-tracks__text">
+                <strong>{work.title}</strong>
+                <span>{work.artist}</span>
+              </span>
+            </Link>
+          </li>
+        ))}
+      </ol>
+    </section>
+  );
+}
 
 export default function DiscoverPage() {
   usePageTitle('');
   const navigate = useNavigate();
-  const [query, setQuery] = useState('');
+  const { isAuthenticated } = useAuth();
   const works = useResource(() => api.works(), []);
+  const people = useResource(() => api.people(), []);
   const updates = useResource(() => api.updates(), []);
 
-  const submit = (event) => {
-    event.preventDefault();
-    navigate(query.trim() ? `/search?q=${encodeURIComponent(query.trim())}` : '/search');
-  };
-
   return (
-    <div className="m-page">
-      <section className="m-hero">
-        <h1 className="m-display">Understand what you’re hearing.</h1>
-        <p className="m-lede">
-          Pick a song. See what changed around it, what you can hear inside it and who connects it
-          to the rest of your music. Every claim says where it comes from.
-        </p>
-        <form className="m-search" role="search" onSubmit={submit}>
-          <SearchIcon size={20} />
-          <input
-            type="search"
-            value={query}
-            onChange={(event) => setQuery(event.target.value)}
-            placeholder="A song, an artist, a producer…"
-            aria-label="Search the collection"
-          />
-        </form>
-      </section>
-
-      <section className="m-block" aria-labelledby="start-title">
-        <header className="m-block__header">
-          <h2 id="start-title">Start with a question</h2>
-          <p className="m-muted">Ten songs, each researched for one complete journey.</p>
-        </header>
-        {works.loading && <Loading />}
-        {works.error && <ErrorState message={works.error} onRetry={works.reload} />}
-        {works.data && (
-          <ul className="m-list m-list--grid">
-            {works.data.map((work) => (
-              <SongRow key={work.slug} work={work} note={work.question} />
-            ))}
-          </ul>
-        )}
-      </section>
-
-      <section className="m-block" aria-labelledby="journeys-title">
-        <header className="m-block__header">
-          <h2 id="journeys-title">Follow a connection</h2>
-        </header>
-        <div className="m-cards">
-          {JOURNEYS.map((journey) => (
-            <Link key={journey.to} to={journey.to} className="m-card">
-              <span className="m-kicker">{journey.kicker}</span>
-              <strong>{journey.title}</strong>
-              <span className="m-muted">{journey.body}</span>
-            </Link>
-          ))}
+    <div className="p-page">
+      <section className="music-hero p-hero" style={{ backgroundImage: 'linear-gradient(to right, var(--hero-gradient-start), var(--hero-gradient-end)), url(/fb.jpg)' }}>
+        <div className="p-hero__content">
+          <h1 className="title">{isAuthenticated ? 'You’re home' : 'Listen closer'}</h1>
+          <p className="subtitle">
+            Music, reimagined. Pick a song you love and see what’s inside it — who made it,
+            why it took off, and where it leads next.
+          </p>
+          <div className="hero-quick-links">
+            <button
+              type="button"
+              className="cta-button secondary-cta"
+              onClick={() => navigate(isAuthenticated ? '/you' : '/auth')}
+            >
+              {isAuthenticated ? 'Your library' : 'Join Us'}
+            </button>
+            <button type="button" className="cta-button primary-cta" onClick={() => navigate('/updates')}>
+              What’s New?
+              <FontAwesomeIcon icon={faFireFlameCurved} style={{ marginLeft: '10px' }} />
+            </button>
+          </div>
         </div>
       </section>
 
+      {works.loading && <Loading />}
+      {works.error && <ErrorState message={works.error} onRetry={works.reload} />}
+
+      {works.data && (
+        <>
+          <Row title="Start with a song">
+            {works.data.map((work) => <SongCard key={work.slug} work={work} />)}
+          </Row>
+
+          <Journey journey={JOURNEYS[0]} works={works.data} />
+
+          {people.data?.length > 0 && (
+            <Row title="The people behind them">
+              {people.data.slice(0, 12).map((person) => (
+                <PersonCard
+                  key={person.slug}
+                  person={person}
+                  subtitle={person.songs > 1 ? `${person.songs} songs here` : person.roles[0]}
+                />
+              ))}
+            </Row>
+          )}
+
+          <Journey journey={JOURNEYS[1]} works={works.data} />
+        </>
+      )}
+
       {updates.data?.items?.length > 0 && (
-        <section className="m-block" aria-labelledby="new-title">
-          <header className="m-block__header m-block__header--row">
-            <h2 id="new-title">New in Memphis</h2>
-            <Link to="/updates">All updates</Link>
-          </header>
-          <ul className="m-feed">
+        <section className="carousel p-row">
+          <div className="carousel__header">
+            <h2 className="carousel__title">Fresh in Memphis</h2>
+            <Link to="/updates" className="show-more-link">Show More</Link>
+          </div>
+          <ul className="p-news">
             {updates.data.items.slice(0, 3).map((update) => (
               <li key={update.key}>
                 <Link to={update.link}>
-                  <time className="m-muted" dateTime={update.date}>{formatDate(update.date)}</time>
                   <strong>{update.title}</strong>
+                  <span>{formatDate(update.date)}</span>
                 </Link>
               </li>
             ))}
           </ul>
         </section>
       )}
-
-      <section className="m-block m-legend" aria-labelledby="legend-title">
-        <header className="m-block__header m-block__header--row">
-          <h2 id="legend-title">How to read Memphis</h2>
-          <Link to="/about">Method</Link>
-        </header>
-        <ul>
-          {Object.entries(STATUS_INFO).map(([key, info]) => (
-            <li key={key}><Status status={key} /><span className="m-muted">{info.description}</span></li>
-          ))}
-        </ul>
-      </section>
     </div>
   );
 }

@@ -44,6 +44,7 @@ const {
 // Memphis product: the curated collection and what each listener keeps.
 router.get('/works', catalogController.listWorks);
 router.get('/works/:slug', catalogController.getWork);
+router.get('/people', catalogController.listPeople);
 router.get('/people/:slug', catalogController.getPerson);
 router.get('/compare', catalogController.compare);
 router.get('/catalog/search', catalogController.search);

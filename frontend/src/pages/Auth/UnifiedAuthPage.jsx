@@ -107,17 +107,15 @@ const UnifiedAuthPage = () => {
                 <div className="auth-slide" inert={mode !== "login" ? true : undefined}>
                   <h2>Hi again! Welcome back to your space</h2>
                   <p className="auth-subtitle">
-                    Music, reimagined — Memphis is a web application designed to
-                    provide a seamless, modern music listening experience. Build
-                    playlists and explore sound in a fresh way.
+                    Your saved songs, the people you follow and your questions
+                    are right where you left them.
                   </p>
                 </div>
                 <div className="auth-slide" inert={mode !== "register" ? true : undefined}>
-                  <h2>Sign up for a new music experience</h2>
+                  <h2>Listen closer with Memphis</h2>
                   <p className="auth-subtitle">
-                    Music, reimagined — Memphis is a web application designed to
-                    provide a seamless, modern music listening experience. Build
-                    playlists and align new perspectives through sound.
+                    Save the songs you love, follow the people who made them,
+                    and hear about it when there’s something new.
                   </p>
                   <p className="auth-legal">
                     By signing up, you agree to our <a href="#">Terms</a> and{" "}

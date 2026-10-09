@@ -1,5 +1,7 @@
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faBookmark as faBookmarkSolid } from '@fortawesome/free-solid-svg-icons';
+import { faBookmark } from '@fortawesome/free-regular-svg-icons';
 import { useLibrary } from '../LibraryContext';
-import { BookmarkIcon } from '../shell/Icons';
 
 export function SaveButton({ slug, compact = false }) {
   const { saved, toggleSave } = useLibrary();
@@ -7,12 +9,12 @@ export function SaveButton({ slug, compact = false }) {
   return (
     <button
       type="button"
-      className={`m-button${isSaved ? ' is-on' : ''}${compact ? ' m-button--icon' : ''}`}
+      className={`p-pill${isSaved ? ' p-pill--solid' : ''}${compact ? ' p-pill--icon' : ''}`}
       onClick={() => toggleSave(slug)}
       aria-pressed={isSaved}
-      aria-label={compact ? (isSaved ? 'Saved' : 'Save song') : undefined}
+      aria-label={compact ? (isSaved ? 'Remove from library' : 'Save to library') : undefined}
     >
-      <BookmarkIcon filled={isSaved} size={18} />
+      <FontAwesomeIcon icon={isSaved ? faBookmarkSolid : faBookmark} />
       {!compact && (isSaved ? 'Saved' : 'Save')}
     </button>
   );
@@ -24,7 +26,7 @@ export function FollowButton({ slug, name }) {
   return (
     <button
       type="button"
-      className={`m-chip-button${isFollowing ? ' is-on' : ''}`}
+      className={`login-btn p-follow${isFollowing ? ' always-hover' : ''}`}
       onClick={() => toggleFollow(slug)}
       aria-pressed={isFollowing}
       aria-label={`${isFollowing ? 'Unfollow' : 'Follow'} ${name}`}

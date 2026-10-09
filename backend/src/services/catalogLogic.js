@@ -32,13 +32,16 @@ export function buildSeries(anchors) {
   return points;
 }
 
+const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+const monthLabel = (period) => `${MONTHS[Number(period.slice(5, 7)) - 1]} ${period.slice(0, 4)}`;
+
 const average = (values) => (values.length ? values.reduce((sum, v) => sum + v, 0) / values.length : 0);
 
 // Separates sustained growth, a short spike and renewed attention to an older
 // recording, using only the series itself and the release year.
 export function readAttention(points = [], released = '') {
   if (points.length < 6) {
-    return { pattern: 'insufficient', label: 'Not enough data', explanation: 'At least six observations are needed to describe a pattern.' };
+    return { pattern: 'insufficient', label: 'Not enough data yet', explanation: 'We need at least six points to call a pattern.' };
   }
 
   const values = points.map((p) => p.value);
@@ -63,8 +66,8 @@ export function readAttention(points = [], released = '') {
   if (yearsBetween >= 10 && peakValue >= baseline * 2) {
     return {
       pattern: 'renewed',
-      label: 'Renewed attention',
-      explanation: `The highest point arrives ${yearsBetween} years after release, well above the early level. The recording found attention again rather than for the first time.`,
+      label: 'Comeback',
+      explanation: `Peaked ${yearsBetween} years after release, far above where it started.`,
       ...facts,
     };
   }
@@ -75,8 +78,8 @@ export function readAttention(points = [], released = '') {
   if (retained >= sustainedShare) {
     return {
       pattern: 'sustained',
-      label: 'Sustained attention',
-      explanation: `The latest level keeps ${Math.round(retained * 100)}% of the peak. Attention has lasted rather than faded after a moment.`,
+      label: 'Built to last',
+      explanation: `Still holding ${Math.round(retained * 100)}% of its peak.`,
       ...facts,
     };
   }
@@ -84,16 +87,16 @@ export function readAttention(points = [], released = '') {
   if (retained < 0.35 && peakIndex < points.length - 3) {
     return {
       pattern: 'spike',
-      label: 'Short spike',
-      explanation: `Attention peaked in ${peak.period} and the latest level keeps ${Math.round(retained * 100)}% of it.`,
+      label: 'Quick spike',
+      explanation: `Peaked in ${monthLabel(peak.period)}. Now at ${Math.round(retained * 100)}% of that.`,
       ...facts,
     };
   }
 
   return {
     pattern: 'settling',
-    label: 'Settling after a peak',
-    explanation: `After peaking in ${peak.period}, attention settled at ${Math.round(retained * 100)}% of that level.`,
+    label: 'Cooling off',
+    explanation: `Peaked in ${monthLabel(peak.period)}, then settled at ${Math.round(retained * 100)}% of that.`,
     ...facts,
   };
 }

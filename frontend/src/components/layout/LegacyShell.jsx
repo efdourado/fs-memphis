@@ -18,7 +18,6 @@ const LegacyShell = () => {
 
   useEffect(() => {
     applyStoredTheme();
-    return () => { document.body.className = ''; };
   }, []);
 
   useEffect(() => {

@@ -39,8 +39,11 @@ export const formatDate = (value) => {
     const [year, month] = text.split('-').map(Number);
     return new Date(Date.UTC(year, month - 1, 1)).toLocaleDateString('en', { month: 'short', year: 'numeric', timeZone: 'UTC' });
   }
+  // Catalog dates are calendar days stored at UTC midnight; reading them in
+  // local time would move them a day back west of Greenwich.
+  const isCalendarDay = text.length === 10 || text.endsWith('T00:00:00.000Z');
   const date = new Date(text.length === 10 ? `${text}T00:00:00Z` : text);
-  return date.toLocaleDateString('en', { day: 'numeric', month: 'short', year: 'numeric', timeZone: text.length === 10 ? 'UTC' : undefined });
+  return date.toLocaleDateString('en', { day: 'numeric', month: 'short', year: 'numeric', timeZone: isCalendarDay ? 'UTC' : undefined });
 };
 
 export const yearOf = (value) => String(value || '').slice(0, 4);

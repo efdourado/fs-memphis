@@ -51,11 +51,13 @@ Each song answers the five questions in order:
 | `/people/:slug` | Credits and collaborators, computed from verified credits |
 | `/compare?a=&b=` | Two songs on the same dimensions, shared people, both curves |
 | `/search` | Songs and people, including credited names |
-| `/updates` | Updates about saved songs and followed people first |
-| `/you` | Saved songs, following, questions, data export and account deletion |
-| `/signin`, `/about` | Account and method |
+| `/updates` | What's new: updates about saved songs and followed people first |
+| `/you` | Your library: saved songs, following, questions, data export and account deletion |
+| `/auth`, `/about` | The original sign-in page, and how Memphis works |
 
-Phones get one floating bottom dock (Discover, Search, Updates, You, plus a back button on detail pages). From 720px up, the same links sit in the top bar. There is no second header.
+The product uses the original Memphis design: the header with the wave logo, the five theme presets behind the palette icon, Rubik, the bronze gradient buttons, the dragon hero and avatars, and the generated vinyl artwork for songs. Original classes (`.header`, `.card`, `.carousel`, `.music-hero`, `.cta-button`, `.login-btn`) are reused; new styles live in `frontend/src/product/product.css` with a `p-` prefix.
+
+There is one navigation. On desktop, Discover, What's new and Your library sit in the header next to search. On phones, the header keeps only the logo, theme and account, and the sections move to a floating dock (Discover, Search, New, Library, plus a back button on detail pages). The sidebar is gone from the product.
 
 The original interface, the first Atlas prototype and the listening journal still render in their own chrome. They are listed on `/design-archive`; the original home moved to `/archive/home`.
 
