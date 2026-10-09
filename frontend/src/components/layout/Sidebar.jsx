@@ -10,7 +10,8 @@ import { faSpotify } from '@fortawesome/free-brands-svg-icons';
 import { useAuth } from '../../context/AuthContext';
 
 const menuLinks = [
-  { to: '/', label: 'Home', icon: faHome, end: true },
+  { to: '/', label: 'Back to Memphis', icon: faHome, end: true },
+  { to: '/archive/home', label: 'Original Home', icon: faHome },
   { to: '/atlas', label: 'Knowledge Atlas', icon: faLandmark },
   { to: '/stories/pop-youth', label: 'Stories', icon: faBookOpen },
   { to: '/picks', label: 'Memphis Picks', icon: faCompass },

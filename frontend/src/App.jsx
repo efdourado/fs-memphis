@@ -1,48 +1,47 @@
-import React, { lazy, Suspense, useState, useEffect } from 'react';
-import { Routes, Route } from 'react-router-dom';
+import React, { lazy, Suspense } from 'react';
+import { Navigate, Routes, Route } from 'react-router-dom';
 
 import ProtectedRoute from './components/auth/ProtectedRoute';
 import AdminRoute from './components/auth/AdminRoute';
 
-import Player from './components/layout/Player';
-import Header from './components/layout/Header';
-import Footer from './components/layout/Footer';
-import Sidebar from './components/layout/Sidebar';
-
-import SongModal from './components/songs/SongModal';
-import LoadingSpinner from './components/ui/LoadingSpinner';
-
 import { PlayerProvider } from './context/PlayerContext';
-import { useAuth } from './context/AuthContext';
 
-import AdminPage from './pages/AdminPage/AdminPage';
+import AppShell from './product/shell/AppShell';
+import { LibraryProvider } from './product/LibraryContext';
+import DiscoverPage from './product/pages/DiscoverPage';
+import SongPage from './product/pages/SongPage';
+import PersonPage from './product/pages/PersonPage';
+import ComparePage from './product/pages/ComparePage';
+import ProductSearchPage from './product/pages/SearchPage';
+import UpdatesPage from './product/pages/UpdatesPage';
+import YouPage from './product/pages/YouPage';
+import SignInPage from './product/pages/SignInPage';
+import AboutPage from './product/pages/AboutPage';
+import NotFoundPage from './product/pages/NotFoundPage';
 
-import UnifiedAuthPage, {
-  AuthLoginRedirect,
-  AuthRegisterRedirect,
-} from './pages/Auth/UnifiedAuthPage';
-import HomePage from './pages/HomePage/HomePage';
-import SearchPage from './pages/SearchPage';
-import CollectionPage from './pages/CollectionPage';
-import SongPage from './pages/SongPage';
-import DiscoverPage from './pages/DiscoverPage';
-import SpotifyPlaygroundPage from './pages/SpotifyPlaygroundPage';
-import MemphisArchivePage from './pages/MemphisArchivePage';
-import PostPage from './pages/PostPage';
-import ComingSoonPage from './pages/ComingSoonPage';
-import LibraryLayout from './pages/library/LibraryLayout';
-import LibraryHomePage from './pages/library/LibraryHomePage';
-import LibraryPlaylistsPage from './pages/library/LibraryPlaylistsPage';
-import LibrarySongsPage from './pages/library/LibrarySongsPage';
-import ArtistsPage from './pages/ArtistsPage';
-import TodayPage from './pages/TodayPage';
-import JournalPage from './pages/JournalPage';
-import SessionDetailPage from './pages/SessionDetailPage';
-import PatternsPage from './pages/PatternsPage';
-import ReferencesPage from './pages/ReferencesPage';
-import DesignArchivePage from './pages/DesignArchivePage';
-
-import AuthCallbackPage from './pages/Auth/AuthCallbackPage';
+const LegacyShell = lazy(() => import('./components/layout/LegacyShell'));
+const AdminPage = lazy(() => import('./pages/AdminPage/AdminPage'));
+const HomePage = lazy(() => import('./pages/HomePage/HomePage'));
+const SearchPage = lazy(() => import('./pages/SearchPage'));
+const CollectionPage = lazy(() => import('./pages/CollectionPage'));
+const LegacySongPage = lazy(() => import('./pages/SongPage'));
+const DiscoverLabPage = lazy(() => import('./pages/DiscoverPage'));
+const SpotifyPlaygroundPage = lazy(() => import('./pages/SpotifyPlaygroundPage'));
+const MemphisArchivePage = lazy(() => import('./pages/MemphisArchivePage'));
+const PostPage = lazy(() => import('./pages/PostPage'));
+const ComingSoonPage = lazy(() => import('./pages/ComingSoonPage'));
+const LibraryLayout = lazy(() => import('./pages/library/LibraryLayout'));
+const LibraryHomePage = lazy(() => import('./pages/library/LibraryHomePage'));
+const LibraryPlaylistsPage = lazy(() => import('./pages/library/LibraryPlaylistsPage'));
+const LibrarySongsPage = lazy(() => import('./pages/library/LibrarySongsPage'));
+const ArtistsPage = lazy(() => import('./pages/ArtistsPage'));
+const TodayPage = lazy(() => import('./pages/TodayPage'));
+const JournalPage = lazy(() => import('./pages/JournalPage'));
+const SessionDetailPage = lazy(() => import('./pages/SessionDetailPage'));
+const PatternsPage = lazy(() => import('./pages/PatternsPage'));
+const ReferencesPage = lazy(() => import('./pages/ReferencesPage'));
+const DesignArchivePage = lazy(() => import('./pages/DesignArchivePage'));
+const AuthCallbackPage = lazy(() => import('./pages/Auth/AuthCallbackPage'));
 
 const KnowledgeHubPage = lazy(() => import('./pages/knowledge/KnowledgeHubPage'));
 const SongDossierPage = lazy(() => import('./pages/knowledge/SongDossierPage'));
@@ -54,94 +53,74 @@ const ComparisonPage = lazy(() => import('./pages/knowledge/ComparisonPage'));
 const CreativeTechnologyPage = lazy(() => import('./pages/knowledge/CreativeTechnologyPage'));
 const SourceLedgerPage = lazy(() => import('./pages/knowledge/SourceLedgerPage'));
 
-const App = () => {
-  const { currentUser, loadingAuth } = useAuth();
-  
-  const [isSidebarOpen, setSidebarOpen] = useState(false);
+const App = () => (
+  <PlayerProvider>
+    <LibraryProvider>
+      <Routes>
+        {/* Memphis: the song experience */}
+        <Route element={<AppShell />}>
+          <Route path="/" element={<DiscoverPage />} />
+          <Route path="/search" element={<ProductSearchPage />} />
+          <Route path="/songs/:slug" element={<SongPage />} />
+          <Route path="/people/:slug" element={<PersonPage />} />
+          <Route path="/compare" element={<ComparePage />} />
+          <Route path="/updates" element={<UpdatesPage />} />
+          <Route path="/you" element={<YouPage />} />
+          <Route path="/signin" element={<SignInPage />} />
+          <Route path="/about" element={<AboutPage />} />
+          <Route path="/auth" element={<Navigate to="/signin" replace />} />
+          <Route path="/login" element={<Navigate to="/signin" replace />} />
+          <Route path="/register" element={<Navigate to="/signin" replace />} />
+          <Route path="*" element={<NotFoundPage />} />
+        </Route>
 
-  useEffect(() => {
-    if (!loadingAuth && currentUser) {
-      const savedState = localStorage.getItem(`sidebarState_${currentUser._id}`);
-      setSidebarOpen(savedState ? JSON.parse(savedState) : false);
-    }
-  }, [currentUser, loadingAuth]);
+        {/* Design Archive: the original interface and the first knowledge prototype */}
+        <Route element={<Suspense fallback={null}><LegacyShell /></Suspense>}>
+          <Route path="/design-archive" element={<DesignArchivePage />} />
+          <Route path="/archive/home" element={<HomePage />} />
+          <Route path="/archive/search" element={<SearchPage />} />
+          <Route path="/auth/callback" element={<AuthCallbackPage />} />
 
-  useEffect(() => {
-    if (currentUser) {
-      localStorage.setItem(`sidebarState_${currentUser._id}`, JSON.stringify(isSidebarOpen));
-    }
-  }, [isSidebarOpen, currentUser]);
+          <Route path="/artist/:id" element={<CollectionPage type="artist" />} />
+          <Route path="/playlist/:id" element={<CollectionPage type="playlist" />} />
+          <Route path="/album/:id" element={<CollectionPage type="album" />} />
+          <Route path="/song/:id" element={<LegacySongPage />} />
+          <Route path="/artists" element={<ArtistsPage />} />
+          <Route path="/discover" element={<DiscoverLabPage />} />
+          <Route path="/spotify" element={<SpotifyPlaygroundPage />} />
+          <Route path="/archives" element={<MemphisArchivePage />} />
+          <Route path="/post/:slug" element={<PostPage />} />
+          <Route path="/help" element={<ComingSoonPage />} />
+          <Route path="/settings" element={<ComingSoonPage />} />
+          <Route path="/feedback" element={<ComingSoonPage />} />
 
+          <Route path="/atlas" element={<KnowledgeHubPage />} />
+          <Route path="/atlas/song/die-young" element={<SongDossierPage />} />
+          <Route path="/atlas/people/benny-blanco" element={<PersonDetailPage />} />
+          <Route path="/genres/pop" element={<GenreDetailPage />} />
+          <Route path="/stories/pop-youth" element={<StoryDetailPage />} />
+          <Route path="/picks" element={<MemphisPicksPage />} />
+          <Route path="/comparisons/breakthrough" element={<ComparisonPage />} />
+          <Route path="/technology/ai-and-art" element={<CreativeTechnologyPage />} />
+          <Route path="/sources" element={<SourceLedgerPage />} />
 
-  const toggleSidebar = () => {
-    setSidebarOpen(!isSidebarOpen);
-  };
+          <Route path="/today" element={<ProtectedRoute><TodayPage /></ProtectedRoute>} />
+          <Route path="/journal" element={<ProtectedRoute><JournalPage /></ProtectedRoute>} />
+          <Route path="/session/:id" element={<ProtectedRoute><SessionDetailPage /></ProtectedRoute>} />
+          <Route path="/patterns" element={<ProtectedRoute><PatternsPage /></ProtectedRoute>} />
+          <Route path="/references" element={<ProtectedRoute><ReferencesPage /></ProtectedRoute>} />
 
-  return (
-    <PlayerProvider>
-        <div className="app-container">
-          <Sidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
+          <Route path="/library" element={<ProtectedRoute><LibraryLayout /></ProtectedRoute>}>
+            <Route index element={<LibraryHomePage />} />
+            <Route path="playlists" element={<LibraryPlaylistsPage />} />
+            <Route path="songs" element={<LibrarySongsPage />} />
+          </Route>
 
-          {isSidebarOpen && <div className="sidebar-overlay" onClick={toggleSidebar}></div>}
-
-          <div className={`content-pusher ${isSidebarOpen ? 'sidebar-open' : ''}`}>
-            <Header toggleSidebar={toggleSidebar} />
-            <main style={{ flex: 1 }}>
-              <Suspense fallback={<LoadingSpinner fullScreen />}>
-                <Routes>
-                <Route path="/" element={<HomePage />} />
-                <Route path="/auth" element={<UnifiedAuthPage />} />
-                <Route path="/login" element={<AuthLoginRedirect />} />
-                <Route path="/register" element={<AuthRegisterRedirect />} />
-                <Route path="/search" element={<SearchPage />} />
-
-                <Route path="/auth/callback" element={<AuthCallbackPage />} />
-
-                <Route path="/artist/:id" element={<CollectionPage type="artist" />} />
-                <Route path="/playlist/:id" element={<CollectionPage type="playlist" />} />
-                <Route path="/album/:id" element={<CollectionPage type="album" />} />
-                <Route path="/song/:id" element={<SongPage />} />
-
-                <Route path="/artists" element={<ArtistsPage />} />
-                <Route path="/design-archive" element={<DesignArchivePage />} />
-                <Route path="/atlas" element={<KnowledgeHubPage />} />
-                <Route path="/atlas/song/die-young" element={<SongDossierPage />} />
-                <Route path="/people/benny-blanco" element={<PersonDetailPage />} />
-                <Route path="/genres/pop" element={<GenreDetailPage />} />
-                <Route path="/stories/pop-youth" element={<StoryDetailPage />} />
-                <Route path="/picks" element={<MemphisPicksPage />} />
-                <Route path="/comparisons/breakthrough" element={<ComparisonPage />} />
-                <Route path="/technology/ai-and-art" element={<CreativeTechnologyPage />} />
-                <Route path="/sources" element={<SourceLedgerPage />} />
-                <Route path="/today" element={<ProtectedRoute><TodayPage /></ProtectedRoute>} />
-                <Route path="/journal" element={<ProtectedRoute><JournalPage /></ProtectedRoute>} />
-                <Route path="/session/:id" element={<ProtectedRoute><SessionDetailPage /></ProtectedRoute>} />
-                <Route path="/patterns" element={<ProtectedRoute><PatternsPage /></ProtectedRoute>} />
-                <Route path="/references" element={<ProtectedRoute><ReferencesPage /></ProtectedRoute>} />
-                <Route path="/discover" element={<DiscoverPage />} />
-                <Route path="/spotify" element={<SpotifyPlaygroundPage />} />
-                <Route path="/archives" element={<MemphisArchivePage />} />
-                <Route path="/post/:slug" element={<PostPage />} />
-                <Route path="/help" element={<ComingSoonPage />} />
-                <Route path="/settings" element={<ComingSoonPage />} />
-                <Route path="/feedback" element={<ComingSoonPage />} />
-
-                <Route path="/library" element={<ProtectedRoute><LibraryLayout /></ProtectedRoute>}>
-                  <Route index element={<LibraryHomePage />} />
-                  <Route path="playlists" element={<LibraryPlaylistsPage />} />
-                  <Route path="songs" element={<LibrarySongsPage />} />
-                </Route>
-
-                <Route path="/admin" element={<AdminRoute><AdminPage /></AdminRoute>} />
-                </Routes>
-              </Suspense>
-            </main>
-            <Footer companyName={'Memphis'} />
-            <SongModal />
-          </div>
-        </div>
-        <Player />
-    </PlayerProvider>
-); };
+          <Route path="/admin" element={<AdminRoute><AdminPage /></AdminRoute>} />
+        </Route>
+      </Routes>
+    </LibraryProvider>
+  </PlayerProvider>
+);
 
 export default App;

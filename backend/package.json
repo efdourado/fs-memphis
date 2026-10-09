@@ -8,7 +8,8 @@
     "dev:docker": "npm run seed:demo && npm run dev",
     "test": "node --test",
     "archive:legacy": "node src/scripts/exportLegacyArchive.js",
-    "seed:demo": "node src/scripts/seedLocalDemo.js"
+    "seed:demo": "node src/scripts/seedLocalDemo.js",
+    "sync:catalog": "node src/scripts/syncCatalog.js"
   },
   "keywords": [],
   "author": "",

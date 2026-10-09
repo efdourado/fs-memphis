@@ -6,24 +6,17 @@ Start with the [vision and goal](docs/direction.md), the [product roadmap](docs/
 
 -----
 
-## Tech
+## What works today
 
-Node.js, Express, MongoDB, Mongoose, Dotenv, CORS, JWT, Bcryptjs, React, React Router DOM, FontAwesome
+A curated collection of ten songs, each answering five questions: what changed, what might explain it, what you can hear, what connects and what to do next. Listeners can save songs, follow the people in the credits, keep questions and get updates about what they follow. See the [MVP notes](docs/mvp.md).
+
+The original interface is kept in the Design Archive at `/design-archive`.
 
 -----
 
-## Endpoints
+## Tech
 
-* `/`
-* `/login`
-* `/register`
-* `/search?q=`
-* `/library`
-* `/admin`
-
-* `/artist/:id`
-* `/album/:id`
-* `/playlist/:id`
+Node.js, Express, MongoDB, Mongoose, JWT, React, React Router, Vite
 
 -----
 
@@ -47,7 +40,13 @@ docker compose up --build
 docker compose -f docker-compose.yml up --build
 ```
 
-**4. Stopping the application:**
+**4. Running the tests:**
+
+```bash
+npm test --prefix backend
+```
+
+**5. Stopping the application:**
 
 ```bash
 docker compose down

@@ -3,6 +3,7 @@
 - [Vision and goal](direction.md)
 - [Product roadmap](product-roadmap.md)
 - [Product core hypothesis](product-core.md)
+- [MVP: what is built](mvp.md)
 - [Pesquisa com usuários (português)](research/pesquisa-usuarios-pt-br.md)
 - [API](api.md)
 - [Frontend](frontend.md)
