@@ -35,6 +35,16 @@ const userSchema = new mongoose.Schema({
     type: artistSchema,
     default: null,
   },
+  library: {
+    savedWorks: [{ _id: false, slug: String, savedAt: { type: Date, default: Date.now } }],
+    following: [{ _id: false, slug: String, followedAt: { type: Date, default: Date.now } }],
+    questions: [{
+      workSlug: { type: String, required: true },
+      text: { type: String, required: true, trim: true, maxlength: 280 },
+      createdAt: { type: Date, default: Date.now },
+    }],
+    updatesSeenAt: { type: Date, default: null },
+  },
   spotifyId: { type: String, unique: true, sparse: true },
   spotifyAccessToken: { type: String, select: false },
   spotifyRefreshToken: { type: String, select: false },

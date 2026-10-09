@@ -38,7 +38,27 @@ const {
   podcastController,
   authRouter,
   listeningSessionController,
+  catalogController,
 } = container;
+
+// Memphis product: the curated collection and what each listener keeps.
+router.get('/works', catalogController.listWorks);
+router.get('/works/:slug', catalogController.getWork);
+router.get('/people/:slug', catalogController.getPerson);
+router.get('/compare', catalogController.compare);
+router.get('/catalog/search', catalogController.search);
+router.get('/updates', optionalProtect, catalogController.updates);
+router.get('/me/library', protect, catalogController.getLibrary);
+router.get('/me/library/state', protect, catalogController.libraryState);
+router.put('/me/library/saved/:slug', protect, catalogController.save);
+router.delete('/me/library/saved/:slug', protect, catalogController.unsave);
+router.put('/me/library/following/:slug', protect, catalogController.follow);
+router.delete('/me/library/following/:slug', protect, catalogController.unfollow);
+router.post('/me/library/questions', protect, catalogController.addQuestion);
+router.delete('/me/library/questions/:id', protect, catalogController.removeQuestion);
+router.post('/me/updates/seen', protect, catalogController.markUpdatesSeen);
+router.get('/me/export', protect, catalogController.exportData);
+router.delete('/me', protect, catalogController.deleteAccount);
 
 router.get('/sessions', protect, listeningSessionController.getMine);
 router.post('/sessions', protect, listeningSessionValidator, listeningSessionController.create);

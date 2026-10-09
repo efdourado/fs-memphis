@@ -8,9 +8,10 @@ import { AuthProvider } from './context/AuthContext';
 import { SongModalProvider } from './context/SongModalContext';
 
 import './styles/main.css';
-import { applyStoredTheme } from './themePresets';
+import './product/product.css';
+import { applyTheme, storedTheme } from './product/theme';
 
-applyStoredTheme();
+applyTheme(storedTheme());
 
 const container = document.getElementById('root');
 const root = createRoot(container);

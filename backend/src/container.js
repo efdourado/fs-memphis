@@ -9,6 +9,9 @@ import PodcastModel from './persistence/models/podcastModel.js';
 import PlayEventModel from './persistence/models/playEventModel.js';
 import ListeningSessionModel from './persistence/models/listeningSessionModel.js';
 import InsightModel from './persistence/models/insightModel.js';
+import WorkModel from './persistence/models/workModel.js';
+import PersonModel from './persistence/models/personModel.js';
+import UpdateModel from './persistence/models/updateModel.js';
 
 // DAOs
 import { AlbumMongooseDAO } from './persistence/daos/albumMongooseDAO.js';
@@ -43,6 +46,8 @@ import { PostService } from './services/postService.js';
 import { TagService } from './services/tagService.js';
 import { PodcastService } from './services/podcastService.js';
 import { ListeningSessionService } from './services/listeningSessionService.js';
+import { CatalogService } from './services/catalogService.js';
+import { LibraryService } from './services/libraryService.js';
 
 const albumService = new AlbumService(albumDAO, songDAO);
 const playlistService = new PlaylistService(playlistDAO, songDAO);
@@ -53,6 +58,9 @@ const postService = new PostService(postDAO);
 const tagService = new TagService(tagDAO);
 const podcastService = new PodcastService(podcastDAO);
 const listeningSessionService = new ListeningSessionService(listeningSessionDAO, insightDAO);
+const catalogModels = { workModel: WorkModel, personModel: PersonModel, updateModel: UpdateModel };
+const catalogService = new CatalogService(catalogModels);
+const libraryService = new LibraryService({ ...catalogModels, userModel: UserModel, sessionModel: ListeningSessionModel });
 
 // Controllers
 import { AlbumController } from './controllers/albumController.js';
@@ -64,6 +72,7 @@ import { PostController } from './controllers/postController.js';
 import { TagController } from './controllers/tagController.js';
 import { PodcastController } from './controllers/podcastController.js';
 import { ListeningSessionController } from './controllers/listeningSessionController.js';
+import { CatalogController } from './controllers/catalogController.js';
 import { createAuthRouter } from './routes/authRoutes.js';
 
 const albumController = new AlbumController(albumService);
@@ -75,6 +84,8 @@ const postController = new PostController(postService);
 const tagController = new TagController(tagService);
 const podcastController = new PodcastController(podcastService);
 const listeningSessionController = new ListeningSessionController(listeningSessionService);
+
+const catalogController = new CatalogController(catalogService, libraryService);
 
 const authRouter = createAuthRouter(userController);
 
@@ -88,5 +99,7 @@ export default {
   tagController,
   podcastController,
   listeningSessionController,
+  catalogController,
+  catalogModels,
   authRouter
 };
