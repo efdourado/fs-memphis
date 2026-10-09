@@ -1,6 +1,8 @@
 # Listen. Feel. Create.
 
-My goal: turn passive listening into active discovery and make musical knowledge accessible to all. The approach combines clear musical mapping (instruments, keys, structure) with insights into streaming algorithms, alongside tools and guidance for anyone to create with intention and purpose
+Memphis helps curious listeners understand the music they love: its sound, the people behind it, and the ideas that connect it to other work. The goal is to turn listening into discovery, then give each person a path toward deeper understanding and creation.
+
+Start with the [vision and goal](docs/direction.md), the [product roadmap](docs/product-roadmap.md), or the [full documentation](docs/index.md).
 
 -----
 

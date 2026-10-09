@@ -1,4 +1,6 @@
-# Roadmap
+# Implementation roadmap and history
+
+The [vision](direction.md) and [product roadmap](product-roadmap.md) define the current product priorities: understanding music first, with personal reflection and recommendations supporting that experience. This file preserves the earlier implementation plan and its reported progress. The listening-companion framing below describes that earlier phase; completed checkboxes do not imply validated knowledge content or user outcomes.
 
 ## Rule zero
 
