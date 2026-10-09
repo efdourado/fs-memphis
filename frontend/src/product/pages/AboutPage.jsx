@@ -3,53 +3,42 @@ import { usePageTitle } from '../hooks';
 import Status, { STATUS_INFO } from '../components/Status';
 
 export default function AboutPage() {
-  usePageTitle('About');
+  usePageTitle('How Memphis works');
   return (
-    <article className="m-page m-page--narrow m-prose">
-      <h1 className="m-title">About Memphis</h1>
-      <p className="m-lede">
-        Memphis helps you understand what is happening around a song, what is happening inside it and how it
-        connects to your musical world. Listening happens wherever you already listen.
+    <article className="p-page p-page--narrow p-prose">
+      <h1 className="p-page-title">How Memphis works</h1>
+      <p className="p-prose__lead">
+        You bring a song you love. We show what happened around it, what’s going on inside it,
+        and who made it — so the next listen hits different. The music stays wherever you already listen.
       </p>
 
-      <h2>Every claim says what it is</h2>
-      <ul className="m-legend-list">
+      <h2>Every line wears a tag</h2>
+      <ul className="p-legend">
         {Object.entries(STATUS_INFO).map(([key, info]) => (
-          <li key={key}><Status status={key} /> <span>{info.description}</span></li>
+          <li key={key}><Status status={key} /><span>{info.description}</span></li>
         ))}
       </ul>
 
-      <h2 id="method">How attention is read</h2>
-      <p>
-        Memphis has not yet verified a trend data source it may store and display, so every attention curve is
-        demo data. The pattern under each curve is computed from the curve itself:
-      </p>
-      <ul>
-        <li><strong>Renewed attention</strong>: the highest point comes ten or more years after release and at least double the early level.</li>
-        <li><strong>Sustained attention</strong>: the latest level keeps at least 60% of a peak it rose to.</li>
-        <li><strong>Short spike</strong>: the latest level keeps less than 35% of the peak.</li>
-        <li><strong>Settling after a peak</strong>: everything in between.</li>
+      <h2 id="method">How we read the curves</h2>
+      <p>The curves are demo data for now. The label under each one is worked out from the curve itself:</p>
+      <ul className="p-bullets">
+        <li><strong>Comeback</strong> — the peak lands ten or more years after release.</li>
+        <li><strong>Built to last</strong> — it still holds most of its peak.</li>
+        <li><strong>Quick spike</strong> — it rose fast and faded fast.</li>
+        <li><strong>Cooling off</strong> — somewhere in between.</li>
       </ul>
-      <p>
-        Views, listeners and chart positions are never merged into one popularity score. A chart position is not a
-        stream count. When real data arrives, each curve will show its source, period and coverage.
-      </p>
+      <p>We never mash views, streams and chart spots into one magic number.</p>
 
-      <h2>What Memphis does not do</h2>
-      <ul>
-        <li>It does not host music or artwork. Listening links lead to the service you choose.</li>
-        <li>It does not claim to explain why a song became a hit. Timing suggests connections, not causes.</li>
-        <li>It does not write biographies or credits it cannot source. Gaps stay visible.</li>
-        <li>It does not profile you. It keeps only what you save, and you can download or delete it from <Link to="/you">You</Link>.</li>
+      <h2>What we won’t do</h2>
+      <ul className="p-bullets">
+        <li>Host music or cover art we don’t have the rights to.</li>
+        <li>Pretend we know why a song blew up.</li>
+        <li>Fill gaps with guesses.</li>
+        <li>Profile you. Your library is yours to download or delete.</li>
       </ul>
 
-      <h2>Where this is going</h2>
       <p>
-        The collection starts with ten songs, researched for one complete journey each. It grows once listeners
-        show that they learn something, notice it on their next listen and want to follow the next connection.
-      </p>
-      <p>
-        The first Memphis interface, with its player, playlists and visual experiments, is kept in the{' '}
+        The first version of Memphis — player, playlists and all — lives on in the{' '}
         <Link to="/design-archive">Design Archive</Link>.
       </p>
     </article>

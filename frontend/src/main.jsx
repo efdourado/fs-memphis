@@ -9,9 +9,9 @@ import { SongModalProvider } from './context/SongModalContext';
 
 import './styles/main.css';
 import './product/product.css';
-import { applyTheme, storedTheme } from './product/theme';
+import { applyStoredTheme } from './themePresets';
 
-applyTheme(storedTheme());
+applyStoredTheme();
 
 const container = document.getElementById('root');
 const root = createRoot(container);

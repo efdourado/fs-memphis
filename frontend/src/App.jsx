@@ -15,7 +15,7 @@ import ComparePage from './product/pages/ComparePage';
 import ProductSearchPage from './product/pages/SearchPage';
 import UpdatesPage from './product/pages/UpdatesPage';
 import YouPage from './product/pages/YouPage';
-import SignInPage from './product/pages/SignInPage';
+import UnifiedAuthPage, { AuthLoginRedirect, AuthRegisterRedirect } from './pages/Auth/UnifiedAuthPage';
 import AboutPage from './product/pages/AboutPage';
 import NotFoundPage from './product/pages/NotFoundPage';
 
@@ -66,11 +66,11 @@ const App = () => (
           <Route path="/compare" element={<ComparePage />} />
           <Route path="/updates" element={<UpdatesPage />} />
           <Route path="/you" element={<YouPage />} />
-          <Route path="/signin" element={<SignInPage />} />
+          <Route path="/auth" element={<UnifiedAuthPage />} />
+          <Route path="/signin" element={<Navigate to="/auth" replace />} />
           <Route path="/about" element={<AboutPage />} />
-          <Route path="/auth" element={<Navigate to="/signin" replace />} />
-          <Route path="/login" element={<Navigate to="/signin" replace />} />
-          <Route path="/register" element={<Navigate to="/signin" replace />} />
+          <Route path="/login" element={<AuthLoginRedirect />} />
+          <Route path="/register" element={<AuthRegisterRedirect />} />
           <Route path="*" element={<NotFoundPage />} />
         </Route>
 

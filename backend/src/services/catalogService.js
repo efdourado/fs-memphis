@@ -50,6 +50,18 @@ export class CatalogService {
     };
   }
 
+  // People ordered by how many songs in the collection credit them.
+  async listPeople() {
+    const [people, works] = await Promise.all([this.allPeople(), this.allWorks()]);
+    return people
+      .map((person) => {
+        const credits = creditsForPerson(person.slug, works);
+        return { slug: person.slug, name: person.name, songs: credits.length, roles: [...new Set(credits.flatMap((c) => c.roles))] };
+      })
+      .filter((person) => person.songs > 0)
+      .sort((a, b) => b.songs - a.songs || a.name.localeCompare(b.name));
+  }
+
   async getPerson(slug) {
     const [person, works] = await Promise.all([
       this.personModel.findOne({ slug }).lean(),

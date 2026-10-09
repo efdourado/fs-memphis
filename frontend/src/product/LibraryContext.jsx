@@ -41,7 +41,7 @@ export function LibraryProvider({ children }) {
 
   const requireAccount = useCallback(() => {
     if (isAuthenticated) return true;
-    navigate('/signin', { state: { from: location.pathname + location.hash } });
+    navigate('/auth', { state: { from: { pathname: location.pathname } } });
     return false;
   }, [isAuthenticated, navigate, location]);
 

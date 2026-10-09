@@ -1,43 +1,39 @@
 import { useEffect, useState } from 'react';
 import { Link, useLocation, useParams } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowUpRightFromSquare, faHeadphones } from '@fortawesome/free-solid-svg-icons';
 import { useAuth } from '../../context/AuthContext';
 import { api, errorMessage } from '../api';
 import { formatDate, usePageTitle, useResource, yearOf } from '../hooks';
 import AttentionChart from '../components/AttentionChart';
+import { Avatar } from '../components/Cover';
 import Cover from '../components/Cover';
+import { SongCard } from '../components/Cards';
 import { FollowButton, SaveButton } from '../components/LibraryButtons';
-import SongRow from '../components/SongRow';
 import Status from '../components/Status';
 import { ErrorState, Loading } from '../components/States';
 import { useLibrary } from '../LibraryContext';
-import { ArrowIcon } from '../shell/Icons';
 
-const SECTIONS = [
+const TABS = [
   { id: 'change', label: 'What changed' },
-  { id: 'explain', label: 'Why' },
-  { id: 'hear', label: 'Listen for' },
-  { id: 'connect', label: 'Connections' },
-  { id: 'next', label: 'Next' },
+  { id: 'why', label: 'Why' },
+  { id: 'listen', label: 'Listen for' },
+  { id: 'people', label: 'Who made it' },
+  { id: 'next', label: 'Where next' },
 ];
 
-const EVENT_KINDS = {
-  release: 'Release',
-  chart: 'Chart',
-  screen: 'Screen',
-  social: 'Social',
-  award: 'Award',
-  performance: 'Live',
-  news: 'News',
+const KIND = {
+  release: 'Release', chart: 'Charts', screen: 'On screen', social: 'Social',
+  award: 'Award', performance: 'Live', news: 'News',
 };
 
-function Section({ id, number, title, intro, children }) {
+function Section({ id, title, lead, children }) {
   return (
-    <section id={id} className="m-section" aria-labelledby={`${id}-title`}>
-      <header className="m-section__header">
-        <span className="m-section__number">{number}</span>
-        <h2 id={`${id}-title`}>{title}</h2>
-        {intro && <p>{intro}</p>}
-      </header>
+    <section id={id} className="p-section" aria-labelledby={`${id}-title`}>
+      <div className="carousel__header">
+        <h2 id={`${id}-title`} className="carousel__title">{title}</h2>
+      </div>
+      {lead && <p className="p-section__lead">{lead}</p>}
       {children}
     </section>
   );
@@ -45,8 +41,8 @@ function Section({ id, number, title, intro, children }) {
 
 function Note({ note, sources }) {
   return (
-    <li className="m-note">
-      <div className="m-note__head">
+    <li className="p-note">
+      <div className="p-note__head">
         <strong>{note.label}</strong>
         <Status status={note.status} source={sources[note.sourceId]} />
       </div>
@@ -55,7 +51,26 @@ function Note({ note, sources }) {
   );
 }
 
-function QuestionForm({ work }) {
+function ListenMenu({ links }) {
+  return (
+    <details className="p-listen">
+      <summary className="p-pill">
+        <FontAwesomeIcon icon={faHeadphones} /> Listen
+      </summary>
+      <ul>
+        {links.map((link) => (
+          <li key={link.service}>
+            <a href={link.url} target="_blank" rel="noreferrer">
+              {link.service} <FontAwesomeIcon icon={faArrowUpRightFromSquare} />
+            </a>
+          </li>
+        ))}
+      </ul>
+    </details>
+  );
+}
+
+function QuestionBox({ work }) {
   const { isAuthenticated } = useAuth();
   const { requireAccount } = useLibrary();
   const [text, setText] = useState('');
@@ -75,22 +90,22 @@ function QuestionForm({ work }) {
   };
 
   return (
-    <form className="m-question" onSubmit={submit}>
-      <label htmlFor="question">Keep a question about this song</label>
+    <form className="p-question" onSubmit={submit}>
+      <label htmlFor="question">Got a question about this song?</label>
       <textarea
         id="question"
         rows={3}
         maxLength={280}
-        placeholder={work.question || 'What do you want to understand next?'}
+        placeholder={work.question}
         value={text}
         onChange={(event) => { setText(event.target.value); setState((s) => ({ ...s, saved: false })); }}
       />
-      <div className="m-question__footer">
-        <span className="m-muted" aria-live="polite">
-          {state.error || (state.saved ? <>Saved to <Link to="/you">your questions</Link>.</> : `${280 - text.length} characters left`)}
+      <div className="p-question__footer">
+        <span aria-live="polite">
+          {state.error || (state.saved ? <>Kept in <Link to="/you">your library</Link>.</> : 'We’ll keep it in your library.')}
         </span>
-        <button type="submit" className="m-button m-button--primary" disabled={state.saving || (isAuthenticated && !text.trim())}>
-          {isAuthenticated ? 'Save question' : 'Sign in to save'}
+        <button type="submit" className="p-pill p-pill--solid" disabled={state.saving || (isAuthenticated && !text.trim())}>
+          {isAuthenticated ? 'Keep it' : 'Log in to keep it'}
         </button>
       </div>
     </form>
@@ -104,110 +119,83 @@ export default function SongPage() {
   usePageTitle(work?.title);
 
   useEffect(() => {
-    if (!work || !hash) return;
-    document.getElementById(hash.slice(1))?.scrollIntoView({ block: 'start' });
+    if (work && hash) document.getElementById(hash.slice(1))?.scrollIntoView({ block: 'start' });
   }, [work, hash]);
 
-  if (loading) return <Loading label="Opening the song" />;
+  if (loading) return <Loading />;
   if (error) return <ErrorState message={error} onRetry={reload} notFound={status === 404} />;
 
   const sources = Object.fromEntries(work.sources.map((s) => [s.id, s]));
   const { reading } = work;
-  const firstConnection = work.connectionsResolved[0];
 
   return (
-    <article className="m-page m-song">
-      <header className="m-song__header">
-        <Cover slug={work.slug} title={work.title} size="lg" />
-        <div className="m-song__heading">
-          <h1 className="m-display">{work.title}</h1>
-          <p className="m-song__meta">
-            {work.artistSlugs[0] ? <Link to={`/people/${work.artistSlugs[0]}`}>{work.artist}</Link> : work.artist}
-            <span aria-hidden="true"> · </span>{yearOf(work.released)}
-            {work.album && <><span aria-hidden="true"> · </span>{work.album}</>}
+    <article className="p-page p-song">
+      <header className="p-song__header">
+        <Cover slug={work.slug} title={work.title} size="xl" />
+        <div className="p-song__details">
+          <p className="p-eyebrow">Song</p>
+          <h1 className="p-song__title">{work.title}</h1>
+          <p className="p-song__by">
+            By {work.artistSlugs[0] ? <Link to={`/people/${work.artistSlugs[0]}`}>{work.artist}</Link> : work.artist}
           </p>
-        </div>
-        <p className="m-lede">{work.summary}</p>
-        {work.question && (
-          <p className="m-carry"><span>Question to carry</span>{work.question}</p>
-        )}
-        <div className="m-actions">
-          <SaveButton slug={work.slug} />
-          {work.compareSuggestions[0] && (
-            <Link className="m-button" to={`/compare?a=${work.slug}&b=${work.compareSuggestions[0].slug}`}>Compare</Link>
-          )}
-          <details className="m-listen">
-            <summary className="m-button">Listen</summary>
-            <ul>
-              {work.listen.map((link) => (
-                <li key={link.service}>
-                  <a href={link.url} target="_blank" rel="noreferrer">
-                    Search on {link.service} <ArrowIcon size={14} />
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </details>
+          <p className="p-song__meta">
+            {yearOf(work.released)}
+            {work.album && <><span className="meta-divider">•</span>{work.album}</>}
+            {work.genres[0] && <><span className="meta-divider">•</span>{work.genres.join(', ')}</>}
+          </p>
+          <p className="p-song__summary">{work.summary}</p>
+          <div className="p-actions">
+            <SaveButton slug={work.slug} />
+            <ListenMenu links={work.listen} />
+            {work.compareSuggestions[0] && (
+              <Link className="p-pill" to={`/compare?a=${work.slug}&b=${work.compareSuggestions[0].slug}`}>Compare</Link>
+            )}
+          </div>
         </div>
       </header>
 
-      <nav className="m-sections" aria-label="On this page">
-        {SECTIONS.map((section) => (
-          <a key={section.id} href={`#${section.id}`}>{section.label}</a>
+      {work.question && (
+        <p className="p-big-question">“{work.question}”</p>
+      )}
+
+      <nav className="p-tabs" aria-label="On this page">
+        {TABS.map((tab) => (
+          <a key={tab.id} href={`#${tab.id}`} className="hero-tab-button">{tab.label}</a>
         ))}
       </nav>
 
-      <Section
-        id="change"
-        number="1"
-        title="What changed?"
-        intro="How attention to this recording moved over time, and what kind of pattern that is."
-      >
-        <div className="m-panel">
-          <div className="m-panel__head">
-            <span className="m-muted">{work.attention.metric}</span>
-            <Status status={work.attention.status} />
+      <Section id="change" title="What changed">
+        <div className="p-panel">
+          <div className="p-panel__head">
+            <span>How much attention it got, over time</span>
+            <Status status="demo" />
           </div>
           <AttentionChart
             points={work.attention.points}
             events={work.events}
-            label={`${work.attention.metric}. ${reading.label}. ${reading.explanation}`}
+            label={`${reading.label}. ${reading.explanation}`}
           />
-          <div className="m-reading">
-            <div className="m-reading__head">
-              <strong>{reading.label}</strong>
-              <Status status="computed" />
-            </div>
+          <div className="p-reading">
+            <strong>{reading.label}</strong>
+            <Status status="computed" />
             <p>{reading.explanation}</p>
-            <p className="m-small m-muted">
-              Read from the curve above, so it describes the demo data, not real listening.
-              {' '}<Link to="/about#method">How this is calculated</Link>
-            </p>
           </div>
-          <p className="m-small m-muted">{work.attention.note}</p>
+          <p className="p-fine">Demo curve — real listening data is on the way. <Link to="/about#method">How we read it</Link></p>
         </div>
         {work.facts.length > 0 && (
-          <ul className="m-notes">
+          <ul className="p-notes">
             {work.facts.map((fact) => <Note key={fact.label} note={fact} sources={sources} />)}
           </ul>
         )}
       </Section>
 
-      <Section
-        id="explain"
-        number="2"
-        title="What might explain it?"
-        intro="Documented moments placed beside the timeline. Timing suggests a possible connection, not proof of cause."
-      >
-        <ol className="m-timeline">
+      <Section id="why" title="Why it might have happened" lead="Timing isn’t proof — but it’s a good lead.">
+        <ol className="p-timeline">
           {work.events.map((event, index) => (
-            <li key={`${event.date}-${event.title}`} className="m-timeline__item">
-              <span className="m-timeline__pin">{index + 1}</span>
+            <li key={`${event.date}-${event.title}`}>
+              <span className="p-timeline__pin">{index + 1}</span>
               <div>
-                <p className="m-timeline__meta">
-                  <time dateTime={event.date}>{formatDate(event.date)}</time>
-                  <span aria-hidden="true"> · </span>{EVENT_KINDS[event.kind]}
-                </p>
+                <p className="p-timeline__meta">{formatDate(event.date)} • {KIND[event.kind]}</p>
                 <h3>{event.title}</h3>
                 {event.body && <p>{event.body}</p>}
                 <Status status={event.status} source={sources[event.sourceId]} />
@@ -217,11 +205,11 @@ export default function SongPage() {
         </ol>
       </Section>
 
-      <Section id="hear" number="3" title="What can I hear?" intro="A short guide to try on your next listen, then what is documented about the sound.">
-        <ol className="m-guide">
+      <Section id="listen" title="Listen for" lead="Put it on and try this.">
+        <ol className="p-guide">
           {work.guide.map((step, index) => (
             <li key={step.label}>
-              <span className="m-guide__step">{index + 1}</span>
+              <span className="p-guide__step">{index + 1}</span>
               <div>
                 <strong>{step.label}</strong>
                 <p>{step.body}</p>
@@ -230,81 +218,63 @@ export default function SongPage() {
             </li>
           ))}
         </ol>
-        <h3 className="m-subhead">About the sound</h3>
-        <ul className="m-notes">
+        <h3 className="p-subhead">Under the hood</h3>
+        <ul className="p-notes">
           {work.observations.map((note) => <Note key={note.label} note={note} sources={sources} />)}
         </ul>
       </Section>
 
-      <Section id="connect" number="4" title="What connects?" intro="Who made it, and where else their work or this sound leads.">
-        <h3 className="m-subhead">Credits</h3>
-        <ul className="m-credits">
+      <Section id="people" title="Who made it">
+        <ul className="p-credits">
           {work.credits.map((c) => (
             <li key={c.personSlug}>
-              <Link to={`/people/${c.personSlug}`} className="m-credits__name">{c.name}</Link>
-              <span className="m-muted">{c.roles.join(', ')}</span>
+              <Link to={`/people/${c.personSlug}`} className="p-credits__person">
+                <Avatar name={c.name} size="sm" />
+                <span>
+                  <strong>{c.name}</strong>
+                  <span>{c.roles.join(', ')}</span>
+                </span>
+              </Link>
               <FollowButton slug={c.personSlug} name={c.name} />
             </li>
           ))}
         </ul>
-        <p className="m-small"><Status status="verified" source={sources.wiki} /></p>
+        <p className="p-fine">Credits: <Status status="verified" source={sources.wiki} /></p>
+      </Section>
 
+      <Section id="next" title="Where next">
         {work.connectionsResolved.length > 0 && (
-          <>
-            <h3 className="m-subhead">Connected songs</h3>
-            <ul className="m-list">
-              {work.connectionsResolved.map((connection) => (
-                <SongRow key={connection.work.slug} work={connection.work} note={connection.reason}>
-                  <Status status={connection.status} />
-                </SongRow>
-              ))}
-            </ul>
-          </>
-        )}
-      </Section>
-
-      <Section id="next" number="5" title="What next?">
-        <div className="m-next">
-          {work.compareSuggestions.length > 0 && (
-            <div className="m-next__block">
-              <h3>Compare</h3>
-              <ul className="m-link-list">
-                {work.compareSuggestions.map((other) => (
-                  <li key={other.slug}>
-                    <Link to={`/compare?a=${work.slug}&b=${other.slug}`}>
-                      With {other.title} <span className="m-muted">· {other.artist}</span>
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
-          {firstConnection && (
-            <div className="m-next__block">
-              <h3>Keep exploring</h3>
-              <p className="m-muted">{firstConnection.reason}</p>
-              <Link className="m-button" to={`/songs/${firstConnection.work.slug}`}>Open {firstConnection.work.title}</Link>
-            </div>
-          )}
-          <div className="m-next__block m-next__block--wide">
-            <QuestionForm work={work} />
+          <div className="p-connections">
+            {work.connectionsResolved.map((connection) => (
+              <div key={connection.work.slug} className="p-connection">
+                <SongCard work={connection.work} />
+                <p>{connection.reason}</p>
+                <Status status={connection.status} />
+              </div>
+            ))}
           </div>
-        </div>
+        )}
+        {work.compareSuggestions.length > 0 && (
+          <div className="p-compare-links">
+            <span>Put it side by side with</span>
+            {work.compareSuggestions.map((other) => (
+              <Link key={other.slug} className="p-pill" to={`/compare?a=${work.slug}&b=${other.slug}`}>{other.title}</Link>
+            ))}
+          </div>
+        )}
+        <QuestionBox work={work} />
       </Section>
 
-      <footer className="m-sources" id="sources">
-        <h2 className="m-subhead">Sources</h2>
+      <footer className="p-sources">
+        <h3 className="p-subhead">Sources</h3>
         <ol>
           {work.sources.map((source) => (
             <li key={source.id}>
               <a href={source.url} target="_blank" rel="noreferrer">{source.title}</a>
-              <span className="m-muted"> · {source.publisher}, reviewed {formatDate(source.accessed)}</span>
+              <span> — {source.publisher}, checked {formatDate(source.accessed)}</span>
             </li>
           ))}
         </ol>
-        <p className="m-small m-muted">
-          Found something wrong or missing? Memphis keeps gaps visible rather than filling them. <Link to="/about">How Memphis labels claims</Link>
-        </p>
       </footer>
     </article>
   );

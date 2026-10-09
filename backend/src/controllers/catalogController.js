@@ -14,6 +14,10 @@ export class CatalogController {
     res.json(await this.catalogService.getWork(req.params.slug));
   });
 
+  listPeople = asyncHandler(async (req, res) => {
+    res.json(await this.catalogService.listPeople());
+  });
+
   getPerson = asyncHandler(async (req, res) => {
     res.json(await this.catalogService.getPerson(req.params.slug));
   });
