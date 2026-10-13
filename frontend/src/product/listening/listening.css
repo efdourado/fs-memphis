@@ -240,6 +240,8 @@ html[data-shell='product'], html[data-shell='product'] body { background: #15161
 .m-lab-control input { width: 100%; min-height: 30px; accent-color: var(--session-color); cursor: pointer; }
 .m-lab .m-sequencer__row > button { width: 170px; min-height: 44px; text-align: left; }
 .m-lab > .p-btns { align-items: center; }
+.m-audio-help summary { cursor: pointer; padding: 12px 0; font-size: 13px; color: var(--muted); }
+.m-audio-help p { max-width: 65ch; }
 @media (max-width: 600px) {
   .m-lab-presets { gap: 5px; }
   .m-lab-presets button { padding: 12px 8px; font-size: 11px; }

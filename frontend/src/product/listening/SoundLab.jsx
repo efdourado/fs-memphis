@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { experimentFor, settingsFor } from './soundExperiments';
 import { createSoundEngine } from './soundEngine';
+import { resumeForPlayback } from './audioPlayback';
 
 function Experiment({ session, experiment }) {
   const [settings, setSettings] = useState(() => settingsFor(experiment));
@@ -30,21 +31,30 @@ function Experiment({ session, experiment }) {
     if (engine.current) { stop(); return; }
     setError(''); setStarting(true);
     const token = ++generation.current;
-    let ctx, nextEngine;
+    let ctx, nextEngine, playback;
     try {
       const Audio = window.AudioContext || window.webkitAudioContext;
       if (!Audio) throw new Error('unavailable');
       ctx = new Audio();
       nextEngine = createSoundEngine(ctx, experiment, () => controls.current, setStep);
-      engine.current = nextEngine;
-      await ctx.resume();
+      playback = resumeForPlayback(ctx, {
+        audioSession: navigator.audioSession,
+        onInterrupted: () => {
+          if (mounted.current && token === generation.current) {
+            stop(); setError('Audio was interrupted. Tap Play experiment to listen again.');
+          }
+        },
+      });
+      engine.current = { stop: () => { playback.stop(); nextEngine.stop(); } };
+      await playback.ready;
       if (!mounted.current || token !== generation.current) { nextEngine.stop(); return; }
       nextEngine.start(); setPlaying(true); setStarting(false);
     } catch {
+      playback?.stop();
       nextEngine?.stop();
       if (ctx && !nextEngine && ctx.state !== 'closed') ctx.close().catch(() => {});
       if (mounted.current && token === generation.current) {
-        stop(); setError('Audio could not start. Try again, or explore the arrangement above.');
+        stop(); setError('Audio could not start. Tap Play experiment to retry. If it still won’t start, reload this page in Safari or Chrome.');
       }
     }
   };
@@ -94,6 +104,10 @@ function Experiment({ session, experiment }) {
       <p className="p-mono">{experiment.tip} Tap a layer to add or remove it.</p>
       <p className="p-mono">An original Memphis demonstration of an idea in {session.title}. Not the recording, its stems, or a reconstruction.</p>
       {error && <p role="alert" className="p-error">{error}</p>}
+      <details className="m-audio-help">
+        <summary>No sound on your phone?</summary>
+        <p className="p-small">While the experiment plays, turn up your media volume and check whether sound is going to Bluetooth headphones. On older iPhones, you may also need to turn off Silent mode. After switching apps or locking your phone, tap Play experiment again.</p>
+      </details>
     </section>
   );
 }

@@ -81,6 +81,8 @@ Songs sent from `/unheard` are stored in the `submissions` collection with statu
 
 `soundEngine.js` renders distinct filtered synth and noise voices, stereo panning, sustained envelopes and a master compressor. Its lookahead scheduler reads the live controls for each sixteenth note, so scene/tempo changes do not start additional loops. Playback stops and closes its audio context on unmount, hidden tabs and cancellation during audio startup. No audio downloads, original-song material, actual voices or autoplay are used.
 
+`audioPlayback.js` requests the `playback` Audio Session type where available before resuming Web Audio in the Play gesture. This routes iOS 17+ sound through the media channel instead of the ambient channel muted by Silent mode ([WebKit issue 237322](https://bugs.webkit.org/show_bug.cgi?id=237322)). Startup requires a running context and times out after five seconds; interruptions return the control to Play with a retry message. Cleanup removes listeners and restores the previous session type. Browsers without this API use normal Web Audio; older iPhones may require Silent mode to be turned off. Regression tests cover session selection, unsupported APIs, blocked/cancelled starts and interruptions. Physical iPhone validation is still required for device-specific routing and Silent mode behavior.
+
 `soundExperiments.test.js` checks distinct scores, invariant foundations, the lead handoff, the ending's real tempo and bass changes, stereo width, accent-only humanization, muting/reset behavior, voice rendering and idempotent engine cleanup.
 
 `listening/listening.css` contains the responsive edition and room styles. The arrangement is deliberately a visual, by-ear interpretation; unknown layer placement remains distinct from silence.
