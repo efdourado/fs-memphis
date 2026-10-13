@@ -3,9 +3,9 @@ import { usePageTitle } from '../hooks';
 import Status, { STATUS_INFO } from '../components/Status';
 
 const ROADMAP = [
-  { when: 'Now', title: 'Three songs, all the way down', body: 'Dreams, Bad Guy and Running Up That Hill have the full page: how it was made, what plays when, things to try.' },
-  { when: 'Next', title: 'Unheard fills up', body: 'The first artists tell how they made their songs. The other seven songs get their full pages.' },
-  { when: 'Later', title: 'A notebook', body: 'Save techniques from different songs into one list. Albums. More ways to send a song.' },
+  { when: 'Now', title: 'A song becomes an experience', body: 'Three guided listening rooms, interactive arrangements, an original sound sketch, and your own notebook. Start without an account.' },
+  { when: 'Next', title: 'Follow the craft into Unheard', body: 'Pair familiar songs with independent artists using a shared technique. First-hand stories, with the artist’s permission.' },
+  { when: 'Later', title: 'A living listening club', body: 'New curated editions, artist-led sessions, and optional notebook sync. Each addition should give you another reason to listen.' },
 ];
 
 export default function AboutPage() {
@@ -48,7 +48,7 @@ export default function AboutPage() {
       <section className="p-sec">
         <h2 className="p-md">Two rooms</h2>
         <div className="p-grid2">
-          <div className="p-card p-pad p-stack"><h3 className="p-md">Songs</h3><p className="p-small">Songs everyone knows, where the making is well documented.</p><Link className="p-btn" to="/">See the shelf</Link></div>
+          <div className="p-card p-pad p-stack"><h3 className="p-md">Songs</h3><p className="p-small">Songs everyone knows, where the making is well documented.</p><Link className="p-btn" to="/">Enter the listening club</Link></div>
           <div className="p-card p-pad p-stack"><h3 className="p-md">Unheard</h3><p className="p-small">Songs nobody is promoting, told by the people who made them. No numbers anywhere.</p><Link className="p-btn" to="/unheard">Send a song</Link></div>
         </div>
       </section>

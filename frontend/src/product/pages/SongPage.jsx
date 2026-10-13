@@ -7,6 +7,8 @@ import { FollowButton, SaveButton } from '../components/LibraryButtons';
 import Status from '../components/Status';
 import { ErrorState, Loading } from '../components/States';
 import { SongTile } from '../components/Tiles';
+import { sessionFor } from '../listening/edition';
+import { KeepIdea } from '../listening/NotebookContext';
 
 const CELL_WORDS = ['silent', 'quiet', 'playing', 'somewhere'];
 
@@ -161,6 +163,8 @@ export default function SongPage() {
         </div>
       </header>
 
+      {sessionFor(slug) && <Link className="m-resume" to={`/listen/${slug}`}><span>Experience this song <strong>Enter the listening room</strong></span><span>Listen · explore · keep an idea ↗</span></Link>}
+
       {full && (
         <dl className="p-figs">
           {work.figures.map((figure) => (
@@ -207,7 +211,7 @@ export default function SongPage() {
               {work.tryIt.map((item, index) => (
                 <li key={item.title}>
                   <span className="p-num">{index + 1}</span>
-                  <div><h5>{item.title}</h5><p>{item.body}</p></div>
+                  <div className="p-stack"><h5>{item.title}</h5><p>{item.body}</p><KeepIdea slug={slug} index={index} /></div>
                 </li>
               ))}
             </ol>

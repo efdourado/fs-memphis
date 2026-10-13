@@ -7,6 +7,9 @@ import AdminRoute from './components/auth/AdminRoute';
 import { PlayerProvider } from './context/PlayerContext';
 
 import AppShell from './product/shell/AppShell';
+import { NotebookProvider } from './product/listening/NotebookContext';
+import ListeningRoomPage from './product/pages/ListeningRoomPage';
+import NotebookPage from './product/pages/NotebookPage';
 import { LibraryProvider } from './product/LibraryContext';
 import SongsPage from './product/pages/SongsPage';
 import UnheardPage from './product/pages/UnheardPage';
@@ -58,10 +61,13 @@ const SourceLedgerPage = lazy(() => import('./pages/knowledge/SourceLedgerPage')
 const App = () => (
   <PlayerProvider>
     <LibraryProvider>
+      <NotebookProvider>
       <Routes>
         {/* Memphis: the song experience */}
         <Route element={<AppShell />}>
           <Route path="/" element={<SongsPage />} />
+          <Route path="/listen/:slug" element={<ListeningRoomPage />} />
+          <Route path="/notebook" element={<NotebookPage />} />
           <Route path="/unheard" element={<UnheardPage />} />
           <Route path="/search" element={<ProductSearchPage />} />
           <Route path="/songs/:slug" element={<SongPage />} />
@@ -124,6 +130,7 @@ const App = () => (
           <Route path="/admin" element={<AdminRoute><AdminPage /></AdminRoute>} />
         </Route>
       </Routes>
+    </NotebookProvider>
     </LibraryProvider>
   </PlayerProvider>
 );

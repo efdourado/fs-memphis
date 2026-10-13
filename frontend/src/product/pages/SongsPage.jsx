@@ -1,74 +1,49 @@
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { api } from '../api';
-import { usePageTitle, useResource } from '../hooks';
-import { ErrorState, Loading } from '../components/States';
-import { PersonTile, Shelf, SongTile } from '../components/Tiles';
+import { usePageTitle } from '../hooks';
+import { sessions } from '../listening/edition';
+import { useNotebook } from '../listening/NotebookContext';
+import Cover from '../components/Cover';
 
 export default function SongsPage() {
-  usePageTitle('');
-  const works = useResource(() => api.works(), []);
-  const people = useResource(() => api.people(), []);
-
-  const all = works.data || [];
-  const known = all.filter((work) => work.room !== 'unheard');
-  const full = known.filter((work) => work.depth === 'full');
-  const short = known.filter((work) => work.depth !== 'full');
-  const unheard = all.filter((work) => work.room === 'unheard');
-  const start = full.find((work) => work.slug === 'dreams') || full[0];
-
+  usePageTitle('A place to listen closer');
+  const [selected, setSelected] = useState('dreams');
+  const session = sessions.find(item => item.slug === selected);
+  const { notebook } = useNotebook();
+  const started = sessions.find(item => notebook.progress[item.slug] > 0 && notebook.progress[item.slug] < 3);
   return (
-    <div className="p-page">
-      <section className="p-hero">
-        <h1 className="p-xl">Hear how it’s made.</h1>
-        <p className="p-lede">Pick a song. See what’s in it, who put it there and how they did it.</p>
-        <div className="p-btns">
-          {start && <Link className="p-btn p-btn--fill" to={`/songs/${start.slug}`}>Start with {start.title}</Link>}
-          <Link className="p-btn" to="/updates">What’s new</Link>
+    <div className="p-page m-home">
+      <section className="m-intro">
+        <div className="m-eyebrow"><span className="m-live-dot" /> An independent listening club <span>Vol. 001 / The art of less</span></div>
+        <div className="m-intro__line"><h1>A familiar song.<br />An <em>unfamiliar</em> way in.</h1><p>For the part of you that always asks,<br />“How did they do that?”<br /><span>Listen. Pull a thread. Make it yours.</span></p></div>
+      </section>
+
+      <section className="m-feature" style={{ '--session-color': session.color }} aria-label="Choose a listening session">
+        <div className="m-feature__art" aria-hidden="true">
+          <div className="m-orbit m-orbit--one" /><div className="m-orbit m-orbit--two" />
+          <div className={`m-record m-record--${session.slug}`}><div className="m-record__label"><span>memphis</span><b>{String(sessions.indexOf(session) + 1).padStart(2, '0')}</b><span>LISTEN CLOSER</span></div></div>
+          <span className="m-art-caption">A small detail can change the whole record.</span>
+        </div>
+        <div className="m-feature__body">
+          <div className="m-eyebrow">The listening room <span>0{sessions.indexOf(session) + 1} / 03</span></div>
+          <div aria-live="polite" className="m-feature__copy"><p className="m-kicker">{session.category}</p><h2>{session.idea}</h2><p className="p-lede">{session.invitation}</p><p className="m-credit">{session.title} <span>— {session.artist}, {session.year}</span></p></div>
+          <div className="p-btns"><Link className="p-btn m-primary" to={`/listen/${session.slug}`}>{notebook.progress[session.slug] > 0 ? 'Return to the room' : 'Enter the listening room'} <span>↗</span></Link><span className="m-time">One song. Three discoveries.</span></div>
+          <div className="m-selector" aria-label="Featured songs">{sessions.map((item, index) => <button key={item.slug} aria-pressed={selected === item.slug} onClick={() => setSelected(item.slug)}><span>0{index + 1}</span>{item.title}<span className="m-selector__arrow">↗</span></button>)}</div>
         </div>
       </section>
 
-      {works.loading && <Loading />}
-      {works.error && <ErrorState message={works.error} onRetry={works.reload} />}
+      {started && <Link className="m-resume" to={`/listen/${started.slug}`}><span>↳ Pick up where you left off <strong>{started.title}</strong></span><span>Continue your session →</span></Link>}
 
-      {works.data && (
-        <>
-          <Shelf title="Opened up" aside={<span>{full.length} songs, all the way down</span>}>
-            {full.map((work) => <SongTile key={work.slug} work={work} big />)}
-          </Shelf>
+      <section className="m-paths p-sec">
+        <div className="p-rowhead"><div><p className="m-kicker">Follow your curiosity</p><h2 className="p-lg">Three songs. A hundred ways to hear.</h2></div><span>Curated by ear, connected by ideas.</span></div>
+        <div className="m-card-grid">{sessions.map((item, index) => <Link to={`/listen/${item.slug}`} className="m-session-card" key={item.slug} style={{ '--session-color': item.color }}><div className="m-card-art"><Cover slug={item.slug} /><span className="m-card-number">0{index + 1}</span><span className="m-card-arrow">↗</span></div><div className="m-card-copy"><p className="m-kicker">{item.category} · {item.duration}</p><h3>{item.idea}</h3><p>{item.subtitle}</p><div className="m-card-credit">{item.title}<span>{item.artist} · {item.year}</span></div></div></Link>)}</div>
+      </section>
 
-          <section className="p-sec">
-            <div className="p-rowhead">
-              <h2 className="p-md">Unheard</h2>
-              <Link to="/unheard">How it works</Link>
-            </div>
-            {unheard.length > 0 ? (
-              <div className="p-shelf">{unheard.map((work) => <SongTile key={work.slug} work={work} big />)}</div>
-            ) : (
-              <div className="p-card p-pad p-stack">
-                <p className="p-stand">Songs nobody is promoting, chosen for how they’re made. No charts, no play counts.</p>
-                <p className="p-small">The room is open and still empty. If you made a song, tell us how you did it.</p>
-                <Link className="p-btn" to="/unheard">Send a song</Link>
-              </div>
-            )}
-          </section>
-
-          <Shelf title="Next on the shelf" aside={<span>Short pages for now</span>}>
-            {short.map((work) => <SongTile key={work.slug} work={work} />)}
-          </Shelf>
-
-          {people.data?.length > 0 && (
-            <Shelf title="The people behind them">
-              {people.data.slice(0, 12).map((person) => (
-                <PersonTile
-                  key={person.slug}
-                  person={person}
-                  note={person.songs > 1 ? `${person.songs} songs here` : person.roles.slice(0, 2).join(', ')}
-                />
-              ))}
-            </Shelf>
-          )}
-        </>
-      )}
+      <section className="m-thread">
+        <div><p className="m-kicker">The thread that connects them</p><h2>Different decades.<br />The same beautiful restraint.</h2><p>A loop that stays. A voice that leaves. A release that waits. Follow what these records choose to hold back.</p></div>
+        <ol>{sessions.map((item, index) => <li key={item.slug}><Link to={`/listen/${item.slug}`}><span className="p-mono">0{index + 1}</span><div><span>{item.title}</span><small>{item.idea}</small></div><span>↗</span></Link></li>)}</ol>
+      </section>
+      <section className="m-home-bottom"><div><p className="m-kicker">Your taste, taking shape</p><h2>Leave with more than a song.</h2><p>Keep a technique. Write what you heard. Build a notebook of the things that move you.</p><Link to="/notebook" className="p-link">Open your notebook ({notebook.saved.length}) ↗</Link></div><div><p className="m-kicker">An open invitation</p><h2>Great craft can come from anywhere.</h2><p>Unheard is our next chapter: independent songs, chosen for the ideas inside them.</p><Link to="/unheard" className="p-link">Meet Unheard ↗</Link></div></section>
     </div>
   );
 }

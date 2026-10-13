@@ -6,6 +6,9 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
+    "prebuild": "npm run sync:showcase",
+    "sync:showcase": "node scripts/sync-showcase.mjs",
+    "test": "node --test src/product/listening/edition.test.js",
     "preview": "vite preview"
   },
   "dependencies": {

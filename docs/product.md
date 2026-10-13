@@ -12,7 +12,7 @@ The music stays wherever you listen. Memphis links out.
 
 ## Where it came from
 
-Memphis started as a music player built to fix what was frustrating about listening. The ambition grew past playback, toward understanding the music itself. That knowledge is scattered across credits, interviews, podcasts and theory sites. Memphis puts it on one page per song.
+Memphis started as a music player built to fix what was frustrating about listening. The ambition grew past playback, toward understanding the music itself. That knowledge is scattered across credits, interviews, podcasts and theory sites. Memphis brings it into guided listening rooms, with a sourced reference page behind each song.
 
 ## Who it's for
 
@@ -22,6 +22,14 @@ Memphis started as a music player built to fix what was frustrating about listen
 | Leaves with | Something new to hear on the next play | Techniques to try in their own song |
 
 They read the same page. Neither needs to read music; studio terms are explained in a "plain words" box.
+
+## The listening experience
+
+The front door is a curated edition: **The art of less**. Three familiar songs become guided rooms with a listening prompt, an interactive arrangement, a playable original sound sketch and a takeaway to keep. The loop is **listen → explore → keep → follow the next idea**.
+
+The notebook at `/notebook` works without an account, stores techniques, notes and session progress on this device, and exports to Markdown. The full song pages remain the source and reference layer. Public browsing ships as a static edition of the reviewed catalog; accounts and submissions retain the existing backend.
+
+See the [implementation and next-release roadmap](listening-roadmap.md) for pilot criteria and the sequence of ideas to build next.
 
 ## The song page
 
@@ -81,17 +89,17 @@ Check each source's terms before depending on it.
 
 ## Design
 
-Calm and light: regular and light type weights only, sentence case, soft pills, quiet panels with large numbers, hairline cards. One warm dark theme. From the original Memphis: the dragon hero, the wave logo, the vinyl covers and the bronze.
-
-The menu is Songs, Unheard and Saved, with search beside it. People, comparisons and About are reached from a song or the footer. The first Memphis interface lives in the Design Archive, linked from About.
+One warm, dark listening environment with light typography, original vinyl artwork, moss and parchment accents, and a clear entry into each musical idea. The archive keeps its original designs. The main navigation is Discover, Unheard and Notebook, with Search beside it; saved songs and account management remain in the footer.
 
 ## Roadmap
 
-**Now — Three songs, all the way down.** A few listeners and musicians read them and say what they took away.
+**Now — A complete three-song listening loop.** Invite a small group to listen, explore, keep an idea and follow a connection. Measure understanding through observation before adding tracking.
 
-**Next — Unheard fills up.** The first artists tell how they made their songs. The other seven songs get full pages.
+**Next — Unheard bridges and distinct sound experiments.** Connect each showcase song to an independent artist through an audible technique. Add a dedicated experiment for each idea.
 
-**Later — A notebook.** Save techniques from different songs into one list. Albums. More ways to send a song.
+**Later — Artist-led rooms, optional notebook sync and new editions.** Add community only with moderation and enough listeners to make it useful.
+
+The [detailed roadmap](listening-roadmap.md) sets scope and release gates for each stage.
 
 ## Open questions
 

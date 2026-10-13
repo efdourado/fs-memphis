@@ -2,9 +2,9 @@ import fallbackImage from '/fb.jpg';
 
 // Memphis does not host artwork it has no licence for. Songs get the original
 // generated vinyl artwork; people get the dragon.
-export const coverUrl = (slug) => `/api/demo/cover/${slug}.svg`;
+export const coverUrl = (slug) => `/covers/${slug}.svg`;
 
-const showDragon = (event) => { event.target.src = fallbackImage; };
+const showDragon = (event) => { event.target.onerror = null; event.target.src = fallbackImage; };
 
 export default function Cover({ slug, title, variant = '' }) {
   return (

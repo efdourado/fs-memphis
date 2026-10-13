@@ -7,7 +7,10 @@ const registerUser = (name, email, password) => apiClient.post('/auth/register',
 const fetchCurrentUser = () => apiClient.get('/auth/me');
 const AUTH_TOKEN_KEY = 'authToken';
 
-const getStoredToken = () => localStorage.getItem(AUTH_TOKEN_KEY) || sessionStorage.getItem(AUTH_TOKEN_KEY);
+const getStoredToken = () => {
+  try { return localStorage.getItem(AUTH_TOKEN_KEY) || sessionStorage.getItem(AUTH_TOKEN_KEY); }
+  catch { return null; }
+};
 
 const storeToken = (authToken, remember = true) => {
   const primaryStorage = remember ? localStorage : sessionStorage;

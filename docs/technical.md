@@ -23,13 +23,15 @@ The product has its own stylesheet, `frontend/src/product/product.css`, scoped u
 
 The archive keeps the original tokens in `frontend/src/styles/base.css` and its five theme presets.
 
-Songs use generated vinyl artwork from `/api/demo/cover/:key.svg`. People use the dragon (`public/fb.jpg`).
+Product songs use original generated vinyl artwork from `/covers/:slug.svg`, included in the frontend build. The archive retains the demo media API. People use the dragon (`public/fb.jpg`).
 
 ## Product routes
 
 | Route | Page |
 | --- | --- |
-| `/` | Songs: the hero, full pages, Unheard, short pages, people |
+| `/` | Curated listening edition and three showcase rooms |
+| `/listen/:slug` | Guided listening, arrangement explorer, sound sketch, takeaways |
+| `/notebook` | Device-local techniques, reflections, progress and export |
 | `/songs/:slug` | Song |
 | `/unheard` | The Unheard room and the form to send a song |
 | `/saved` | Saved songs, followed people, account |
@@ -66,6 +68,29 @@ The tests fail if a verified claim has no source, a credit names an unknown pers
 Computed things (shared credits, connections, comparisons, which updates matter to a listener, checking a submission) are pure functions in `backend/src/services/catalogLogic.js`.
 
 Songs sent from `/unheard` are stored in the `submissions` collection with status `new`. Nothing publishes them; an admin can read them at `GET /api/admin/unheard/submissions`.
+
+## Frontend listening edition
+
+`frontend/src/product/listening/edition.js` defines the three editorial sessions and the static public catalog adapter. `api.js` uses that adapter for public song, people, search and comparison reads. Existing authenticated operations and submissions still call the server.
+
+`npm run sync:showcase --prefix frontend` generates `listening/catalog.json` and public covers from the backend's reviewed data and pure catalog helpers. `prebuild` runs it automatically. The production Docker builder includes the catalog source; standalone frontend containers without backend source validate and use the checked-in edition. Run it manually after catalog edits during local development. The generated snapshot is tracked so `npm run dev --prefix frontend` works on a fresh checkout without MongoDB. Catalog changes become public after a frontend rebuild; runtime-only database catalog edits are intentionally not reflected in this edition.
+
+`NotebookContext.jsx` keeps saved technique IDs (`song-slug:index`), private notes and furthest session stage under the versioned `memphis-listening-notebook-v1` browser key. `notebook.js` validates restored data and discards invalid references. Storage failures show an export/copy warning. Stage 3 means the listener explicitly finished. Reordering techniques will require stable IDs or a notebook migration before the next catalog edition.
+
+`SoundLab.jsx` uses native Web Audio with a short lookahead scheduler, four synthesized parts and explicit playback controls. It closes its audio context on unmount and when the document becomes hidden. It downloads no audio, uses no original-song material and does not autoplay. Its common 108 BPM sketch is separate from the song's actual tempo.
+
+`listening/listening.css` contains the responsive edition and room styles. The arrangement is deliberately a visual, by-ear interpretation; unknown layer placement remains distinct from silence.
+
+### Checks and local preview
+
+```bash
+npm run dev --prefix frontend
+npm test --prefix frontend
+npm test --prefix backend
+npm run build --prefix frontend
+```
+
+The frontend tests cover session integrity, agreement with the reviewed catalog, search/compare behavior, missing entities and corrupted notebook data. Browser QA should cover: prompt reveal; changing arrangement section; start/stop and layer controls; stopping audio on navigation; saving/removing techniques; editing/reloading/exporting notes; completion and next room; mobile widths; direct links and browser Back.
 
 ## Backend flow
 

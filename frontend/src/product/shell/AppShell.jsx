@@ -19,10 +19,10 @@ const ICONS = {
 };
 
 const SECTIONS = [
-  { to: '/', label: 'Songs', icon: 'songs', end: true },
+  { to: '/', label: 'Discover', icon: 'songs', end: true },
   { to: '/unheard', label: 'Unheard', icon: 'unheard' },
   { to: '/search', label: 'Search', icon: 'search', dockOnly: true },
-  { to: '/saved', label: 'Saved', icon: 'saved', dot: true },
+  { to: '/notebook', label: 'Notebook', icon: 'saved' },
 ];
 
 const isSection = (pathname) => SECTIONS.some((s) => (s.end ? pathname === s.to : pathname.startsWith(s.to)));
@@ -87,6 +87,7 @@ export default function AppShell() {
         <span>Memphis · hear how it’s made</span>
         <nav aria-label="More">
           <Link to="/about">About</Link>
+          <Link to="/saved">Saved songs & account</Link>
           <Link to="/updates">What’s new</Link>
           <Link to="/about#archive">Design Archive</Link>
         </nav>

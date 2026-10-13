@@ -1,14 +1,10 @@
 import apiClient from '../services/apiClient';
+import { editionApi } from './listening/edition';
 
 const data = (request) => request.then((response) => response.data);
 
 export const api = {
-  works: () => data(apiClient.get('/works')),
-  work: (slug) => data(apiClient.get(`/works/${encodeURIComponent(slug)}`)),
-  people: () => data(apiClient.get('/people')),
-  person: (slug) => data(apiClient.get(`/people/${encodeURIComponent(slug)}`)),
-  compare: (a, b) => data(apiClient.get('/compare', { params: { a, b } })),
-  search: (q) => data(apiClient.get('/catalog/search', { params: { q } })),
+  ...editionApi,
   submitSong: (payload) => data(apiClient.post('/unheard/submissions', payload)),
   updates: () => data(apiClient.get('/updates')),
   library: () => data(apiClient.get('/me/library')),

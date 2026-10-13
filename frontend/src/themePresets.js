@@ -8,10 +8,13 @@ export const THEME_PRESETS = [
 
 export function applyStoredTheme() {
   if (typeof document === "undefined") return;
-  const byId = localStorage.getItem("themeId");
+  let byId, legacy;
+  try {
+    byId = localStorage.getItem("themeId");
+    legacy = localStorage.getItem("themeName");
+  } catch { /* The public listening rooms also work when storage is blocked. */ }
   let preset = byId ? THEME_PRESETS.find((t) => t.id === byId) : null;
   if (!preset) {
-    const legacy = localStorage.getItem("themeName");
     if (legacy === "ocean") {
       preset = THEME_PRESETS.find((t) => t.id === "ocean");
     }
