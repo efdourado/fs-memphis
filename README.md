@@ -1,18 +1,18 @@
-# Listen. Feel. Create.
+# Memphis
 
-Memphis helps curious listeners understand the music they love: its sound, the people behind it, and the ideas that connect it to other work. The goal is to turn listening into discovery, then give each person a path toward deeper understanding and creation.
+**Hear how it's made.** Memphis opens up songs. For each one you get the story of how it was recorded, a map of what plays when, and things to try yourself. It's for people who want to hear more in a song they love, and for people who make music.
 
-Start with the [vision and goal](docs/direction.md), the [product roadmap](docs/product-roadmap.md), or the [full documentation](docs/index.md).
+The music stays wherever you listen. Memphis links out.
 
------
+## Docs
 
-## What works today
+- [Product](docs/product.md): the goal, who it's for, the song page, Unheard, the roadmap.
+- [Technical](docs/technical.md): how the code is organised, the catalog file, the API.
+- [User survey (Portuguese)](docs/research/pesquisa-usuarios-pt-br.md)
 
-A curated collection of ten songs, each answering five questions: what changed, what might explain it, what you can hear, what connects and what to do next. Listeners can save songs, follow the people in the credits, keep questions and get updates about what they follow. See the [MVP notes](docs/mvp.md).
+## Today
 
-The original interface is kept in the Design Archive at `/design-archive`.
-
------
+Three songs have full pages: Dreams, Bad Guy and Running Up That Hill. Seven more have short pages. Unheard, a room for songs nobody is promoting, is open for submissions. The first Memphis interface is kept at `/design-archive`.
 
 ## Tech
 
