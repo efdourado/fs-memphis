@@ -1,63 +1,17 @@
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { experimentFor, settingsFor } from './soundExperiments';
-import { createSoundEngine } from './soundEngine';
-import { resumeForPlayback } from './audioPlayback';
+import { useSoundPlayer } from './useSoundPlayer';
+import AudioHelp from './AudioHelp';
 
 function Experiment({ session, experiment }) {
   const [settings, setSettings] = useState(() => settingsFor(experiment));
-  const [playing, setPlaying] = useState(false);
-  const [starting, setStarting] = useState(false);
-  const [step, setStep] = useState(-1);
-  const [error, setError] = useState('');
-  const engine = useRef(null), controls = useRef(settings), mounted = useRef(true), generation = useRef(0);
+  const { activeId, starting, step, error, play } = useSoundPlayer();
+  const playing = activeId === session.slug && !starting;
+  const controls = useRef(settings);
   controls.current = settings;
   const preset = experiment.presets.find(item => item.id === settings.presetId);
   const modified = preset.enabled.some(id => !settings.enabled.includes(id)) || settings.enabled.some(id => !preset.enabled.includes(id));
-
-  const stop = () => {
-    generation.current++;
-    engine.current?.stop();
-    engine.current = null;
-    if (mounted.current) { setPlaying(false); setStarting(false); setStep(-1); }
-  };
-  useEffect(() => {
-    mounted.current = true;
-    const hide = () => { if (document.hidden) stop(); };
-    document.addEventListener('visibilitychange', hide);
-    return () => { mounted.current = false; stop(); document.removeEventListener('visibilitychange', hide); };
-  }, []);
-
-  const play = async () => {
-    if (engine.current) { stop(); return; }
-    setError(''); setStarting(true);
-    const token = ++generation.current;
-    let ctx, nextEngine, playback;
-    try {
-      const Audio = window.AudioContext || window.webkitAudioContext;
-      if (!Audio) throw new Error('unavailable');
-      ctx = new Audio();
-      nextEngine = createSoundEngine(ctx, experiment, () => controls.current, setStep);
-      playback = resumeForPlayback(ctx, {
-        audioSession: navigator.audioSession,
-        onInterrupted: () => {
-          if (mounted.current && token === generation.current) {
-            stop(); setError('Audio was interrupted. Tap Play experiment to listen again.');
-          }
-        },
-      });
-      engine.current = { stop: () => { playback.stop(); nextEngine.stop(); } };
-      await playback.ready;
-      if (!mounted.current || token !== generation.current) { nextEngine.stop(); return; }
-      nextEngine.start(); setPlaying(true); setStarting(false);
-    } catch {
-      playback?.stop();
-      nextEngine?.stop();
-      if (ctx && !nextEngine && ctx.state !== 'closed') ctx.close().catch(() => {});
-      if (mounted.current && token === generation.current) {
-        stop(); setError('Audio could not start. Tap Play experiment to retry. If it still won’t start, reload this page in Safari or Chrome.');
-      }
-    }
-  };
+  const togglePlayback = () => play({ id: session.slug, experiment, readSettings: () => controls.current });
   const choose = selected => setSettings(current => ({ ...settingsFor(experiment, selected), amount: current.amount }));
   const toggle = id => setSettings(current => ({ ...current, enabled: current.enabled.includes(id) ? current.enabled.filter(part => part !== id) : [...current.enabled, id] }));
 
@@ -97,17 +51,14 @@ function Experiment({ session, experiment }) {
         ))}
       </div>
       <div className="p-btns">
-        <button className="p-btn m-primary" onClick={play}>{starting ? 'Cancel audio start' : playing ? '■ Stop experiment' : '▶ Play experiment'}</button>
+        <button className="p-btn m-primary" onClick={togglePlayback}>{starting ? 'Cancel audio start' : playing ? '■ Stop experiment' : '▶ Play experiment'}</button>
         <button className="p-btn" onClick={() => setSettings(settingsFor(experiment))}>Reset experiment</button>
         <span className="p-small">{settings.enabled.length ? `${settings.enabled.length} layers active` : 'All layers muted. Turn one on to hear it.'}</span>
       </div>
       <p className="p-mono">{experiment.tip} Tap a layer to add or remove it.</p>
       <p className="p-mono">An original Memphis demonstration of an idea in {session.title}. Not the recording, its stems, or a reconstruction.</p>
       {error && <p role="alert" className="p-error">{error}</p>}
-      <details className="m-audio-help">
-        <summary>No sound on your phone?</summary>
-        <p className="p-small">While the experiment plays, turn up your media volume and check whether sound is going to Bluetooth headphones. On older iPhones, you may also need to turn off Silent mode. After switching apps or locking your phone, tap Play experiment again.</p>
-      </details>
+      <AudioHelp />
     </section>
   );
 }

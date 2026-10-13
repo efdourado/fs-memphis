@@ -2,8 +2,8 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { sessions, workFor, sessionFor, editionApi } from './edition.js';
 import { sanitizeNotebook, exportNotebook } from './notebook.js';
-import { works, people } from '../../../../backend/src/data/catalog.js';
-import { compareWorks, searchCatalog, creditsForPerson } from '../../../../backend/src/services/catalogLogic.js';
+import { works, people, updates } from '../../../../backend/src/data/catalog.js';
+import { compareWorks, searchCatalog, creditsForPerson, markUpdates } from '../../../../backend/src/services/catalogLogic.js';
 
 test('every room has a complete arrangement, takeaways, and a next room', () => {
   assert.equal(sessions.length, 3);
@@ -43,8 +43,15 @@ test('local search keeps existing song and people discovery working', async () =
   await assert.rejects(editionApi.work('missing'), error => error.response.status === 404);
   await assert.rejects(editionApi.person('missing'), error => error.response.status === 404);
 });
+test('public release notes remain available without an account or backend', async () => {
+  assert.deepEqual(await editionApi.publicUpdates(), markUpdates(updates));
+  const { items, unseen } = await editionApi.publicUpdates();
+  assert.equal(items[0].link, '/connections/make-space');
+  assert.equal(unseen, 0);
+  assert.ok(items.every(item => item.isNew === false && item.relevant === false));
+});
 test('notebook recovers from obsolete and malformed browser data', () => {
-  assert.deepEqual(sanitizeNotebook(null), { saved: [], notes: {}, progress: {} });
+  assert.deepEqual(sanitizeNotebook(null), { saved: [], notes: {}, progress: {}, discoveries: [] });
   const notebook = sanitizeNotebook({ saved: ['dreams:0', 'dreams:0', 'dreams:999', 'missing:0', null, 'dreams:'], notes: { dreams: 'x'.repeat(3000), 'bad-guy': 7, missing: 'ignored' }, progress: { dreams: 3, 'bad-guy': 99, 'running-up-that-hill': 1.5, missing: 1 } });
   assert.deepEqual(notebook.saved, ['dreams:0']);
   assert.equal(notebook.notes.dreams.length, 2000);

@@ -12,10 +12,11 @@ try {
   console.log('Using the checked-in public edition (standalone frontend checkout).');
   process.exit(0);
 }
-const { works, people } = await import('../../backend/src/data/catalog.js');
+const { works, people, updates } = await import('../../backend/src/data/catalog.js');
 const { connectionsFor, creditsForPerson, collaboratorsOf, summarize } = await import('../../backend/src/services/catalogLogic.js');
 const { createPrototypeCover } = await import('../../backend/src/controllers/prototypeMediaController.js');
 const edition = {
+  updates,
   works: works.map(work => ({ ...work, artistSlugs: work.artistSlugs || [], events: work.events || [], guide: work.guide || [], observations: work.observations || [], connectionsResolved: connectionsFor(work, works), compareSuggestions: (work.compareWith || []).map(slug => works.find(w => w.slug === slug)).filter(Boolean).map(summarize) })),
   people: people.map(person => ({ ...person, alsoKnownAs: person.alsoKnownAs || [], credits: creditsForPerson(person.slug, works), collaborators: collaboratorsOf(person.slug, works) })),
 };

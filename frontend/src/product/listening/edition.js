@@ -33,6 +33,7 @@ export const sessionFor = slug => sessions.find(session => session.slug === slug
 export const workFor = slug => catalog.works.find(work => work.slug === slug);
 const missing = () => Promise.reject({ response: { status: 404, data: { message: 'This page is not in the collection.' } } });
 export const editionApi = {
+  publicUpdates: async () => ({ items: catalog.updates.map(update => ({ ...update, relevant: false, reasons: [], isNew: false })), unseen: 0 }),
   works: async () => catalog.works,
   work: slug => workFor(slug) ? Promise.resolve(workFor(slug)) : missing(),
   people: async () => catalog.people.map(person => ({ ...person, songs: person.credits.length, roles: [...new Set(person.credits.flatMap(c => c.roles))] })),

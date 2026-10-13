@@ -11,7 +11,7 @@ export default function UpdatesPage() {
   usePageTitle('What’s new');
   const { isAuthenticated } = useAuth();
   const { setUnseen } = useLibrary();
-  const { data, loading, error, reload } = useResource(() => api.updates(), [isAuthenticated]);
+  const { data, loading, error, reload } = useResource(() => isAuthenticated ? api.updates().catch(() => api.publicUpdates()) : api.publicUpdates(), [isAuthenticated]);
 
   // Opening the page counts as seeing what is new.
   useEffect(() => {

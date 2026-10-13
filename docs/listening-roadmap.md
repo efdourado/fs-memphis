@@ -17,6 +17,8 @@ Keep the full, sourced song pages as the reference layer. Let curiosity be the f
 - Three distinct original Web Audio experiments: a fixed groove with width and harmonies for Dreams; a voice-like lead/riff handoff and slower bass-heavy ending for bad guy; a machine pulse, sustained drone and variable played-style accents for Running Up That Hill. Each has three scenes, individual layer toggles and reset. These are educational synth exercises, not reconstructions, recordings, stems or automated analysis.
 - A device-local notebook: keep techniques, write a private reflection, resume sessions, mark completion, revisit, remove saved ideas, export Markdown.
 - A next-song handoff with an explicit musical reason, instead of an unrelated recommendation grid.
+- The listening table at `/connections/:id`: three playable pairings on space, repetition and endings. One sketch plays at a time; each choice reveals its own listening prompt. Save a discovery and reflection, revisit or edit it, remove with Undo, and include it in notebook exports. Share links contain only the pairing, never private notes.
+- Public release notes bundled with the edition, so “What’s new” works without a backend or account.
 - Static public catalog and original artwork, generated from the existing catalog. The three rooms, notebook, public song pages, credits, search and comparisons need no running backend. Account services and Unheard submissions still do.
 
 ## Release gates for a small invited pilot
@@ -29,6 +31,7 @@ Before calling this a public MVP, test with 5–8 listeners and 3–5 people who
 4. Do they choose to keep an idea, write a note, or follow the next song?
 5. Can they return to their notebook and find their takeaway?
 6. Does the external music-app round trip interrupt the experience? Test on a real phone with headphones.
+7. At the listening table, can they explain a contrast, switch sketches comfortably on a phone and find their saved discovery after returning?
 
 A useful pilot signal: most participants can explain a concrete discovery in their own words, and at least half voluntarily keep something or enter a second room. These are proposed gates, not measured results. Revisit the design if people enjoy the artwork but cannot explain what they gained.
 

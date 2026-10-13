@@ -553,6 +553,16 @@ export const works = raw.map((work, index) => {
 // What changed in Memphis recently. Dates are when the change was published.
 export const updates = [
   {
+    key: 'listening-table',
+    date: '2026-10-13',
+    kind: 'collection',
+    title: 'Take a seat at the listening table',
+    body: 'Hear two original sketches side by side. Explore space, repetition and endings, then keep your own discovery in the notebook.',
+    workSlugs: ['dreams', 'bad-guy', 'running-up-that-hill'],
+    personSlugs: [],
+    link: '/connections/make-space',
+  },
+  {
     key: 'unheard-open',
     date: '2026-10-12',
     kind: 'context',

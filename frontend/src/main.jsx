@@ -10,6 +10,7 @@ import { SongModalProvider } from './context/SongModalContext';
 import './styles/main.css';
 import './product/product.css';
 import './product/listening/listening.css';
+import './product/listening/connections.css';
 import { applyStoredTheme } from './themePresets';
 
 applyStoredTheme();

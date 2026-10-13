@@ -4,6 +4,7 @@ import { usePageTitle } from '../hooks';
 import { sessionFor, workFor } from '../listening/edition';
 import { KeepIdea, useNotebook } from '../listening/NotebookContext';
 import SoundLab from '../listening/SoundLab';
+import ConnectionLinks from '../listening/ConnectionLinks';
 import NotFoundPage from './NotFoundPage';
 
 function ArrangementExplorer({ work, session }) {
@@ -58,6 +59,7 @@ function Room({ session }) {
         <section className="m-note"><label htmlFor="listening-note">What will you hear differently next time?</label><textarea id="listening-note" className="p-input" rows="4" maxLength={2000} placeholder="A sound, a feeling, something you want to try…" value={notebook.notes[session.slug] || ''} onChange={event => note(session.slug, event.target.value)} /><p className="p-mono" role="status">{storageError ? 'Browser storage is unavailable. Copy your note before leaving.' : 'Saved on this device as you write. Just for you.'}</p></section>
         <button className="p-btn m-primary" onClick={() => progress(session.slug, 3)} disabled={finished}>{finished ? '✓ Session complete' : 'Finish this session'}</button>
         {finished && <div className="m-completed" role="status"><p className="m-kicker">One song, heard differently.</p><h3>Keep following the thread.</h3><p>{session.bridge}</p><div className="p-btns"><Link className="p-btn m-primary" to={`/listen/${next.slug}`}>Next: {next.title} ↗</Link><Link className="p-btn" to="/notebook">Your notebook</Link></div></div>}
+        <ConnectionLinks slug={session.slug} compact />
       </>}
       {storageError && step !== 2 && <p role="alert" className="p-error">Progress is only kept for this visit because browser storage is unavailable.</p>}
       <div className="m-room-bottom"><span className="p-small">{session.title} · A Memphis listening session</span><div className="p-btns">{step > 0 && <button className="p-btn" onClick={() => navigateStep(step - 1)}>← Back</button>}{step < 2 && <button className="p-btn m-primary" onClick={() => navigateStep(step + 1)}>{step === 0 ? 'Explore the arrangement' : 'Keep something from it'} →</button>}</div></div>

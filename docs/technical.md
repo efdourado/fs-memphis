@@ -31,6 +31,7 @@ Product songs use original generated vinyl artwork from `/covers/:slug.svg`, inc
 | --- | --- |
 | `/` | Curated listening edition and three showcase rooms |
 | `/listen/:slug` | Guided listening, arrangement explorer, sound sketch, takeaways |
+| `/connections/:id` | Two original sketches, editorial connection, listener choice and saved reflection |
 | `/notebook` | Device-local techniques, reflections, progress and export |
 | `/songs/:slug` | Song |
 | `/unheard` | The Unheard room and the form to send a song |
@@ -75,7 +76,11 @@ Songs sent from `/unheard` are stored in the `submissions` collection with statu
 
 `npm run sync:showcase --prefix frontend` generates `listening/catalog.json` and public covers from the backend's reviewed data and pure catalog helpers. `prebuild` runs it automatically. The production Docker builder includes the catalog source; standalone frontend containers without backend source validate and use the checked-in edition. Run it manually after catalog edits during local development. The generated snapshot is tracked so `npm run dev --prefix frontend` works on a fresh checkout without MongoDB. Catalog changes become public after a frontend rebuild; runtime-only database catalog edits are intentionally not reflected in this edition.
 
-`NotebookContext.jsx` keeps saved technique IDs (`song-slug:index`), private notes and furthest session stage under the versioned `memphis-listening-notebook-v1` browser key. `notebook.js` validates restored data and discards invalid references. Storage failures show an export/copy warning. Stage 3 means the listener explicitly finished. Reordering techniques will require stable IDs or a notebook migration before the next catalog edition.
+`NotebookContext.jsx` keeps saved technique IDs (`song-slug:index`), private notes and furthest session stage under the versioned `memphis-listening-notebook-v1` browser key. `notebook.js` validates restored data and discards invalid references. The additive `discoveries` array stores stable connection IDs, choice IDs and optional notes (limited to 1,000 characters). Older notebooks load with an empty discoveries array and retain their other data. Invalid or duplicate connection references are discarded. Storage failures show an export/copy warning. Stage 3 means the listener explicitly finished. Reordering techniques will require stable IDs or a notebook migration before the next catalog edition.
+
+`connections.js` defines the three editorial pairings and resolves their existing sound-experiment presets. `ConnectionPage.jsx` offers A/B playback, choice-specific prompts, an optional private note and an explicit save/update action. `ConnectionLinks.jsx` links the table from Discover and each room. Sharing copies only the public pairing URL. Nothing plays automatically, and unkept edits are not persisted. `/connections` redirects to the first pairing; unknown IDs use the existing not-found page.
+
+`useSoundPlayer.js` binds the reusable `soundPlayer.js` audio owner to React and page visibility. The owner closes the previous engine before switching, ignores stale step events and pending resumes, and disposes on navigation. Both the listening table and `SoundLab.jsx` use it. Its regression tests simulate rapid switching, late resumes, interruption/retry, failed setup and live control changes.
 
 `SoundLab.jsx` selects a dedicated experiment by song slug, resetting controls and closing playback when songs change. `soundExperiments.js` defines original scores, three scenes per song and a pure event planner: Dreams keeps its 112 BPM foundation while adding stereo width and harmony; bad guy hands the lead to a riff and shifts from 135 to 120 BPM with a longer sub bass; Running Up That Hill holds a 108 BPM machine pulse and adds a sustained drone and played-style accents with bounded timing/velocity variation. These are sketch tempos and original patterns, not recording transcriptions. Unknown songs receive no generic fallback experiment.
 
@@ -86,6 +91,8 @@ Songs sent from `/unheard` are stored in the `submissions` collection with statu
 `soundExperiments.test.js` checks distinct scores, invariant foundations, the lead handoff, the ending's real tempo and bass changes, stereo width, accent-only humanization, muting/reset behavior, voice rendering and idempotent engine cleanup.
 
 `listening/listening.css` contains the responsive edition and room styles. The arrangement is deliberately a visual, by-ear interpretation; unknown layer placement remains distinct from silence.
+
+`connections.css` styles the listening table and its notebook entries. Public release notes are included in the generated catalog and exposed through `editionApi.publicUpdates()`. Signed-out visitors do not need a server for `/updates`; signed-in visitors retain server relevance/seen behavior, with the public edition as a fallback if that request fails.
 
 ### Checks and local preview
 

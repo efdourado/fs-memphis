@@ -4,6 +4,7 @@ import { usePageTitle } from '../hooks';
 import { sessions } from '../listening/edition';
 import { useNotebook } from '../listening/NotebookContext';
 import Cover from '../components/Cover';
+import ConnectionLinks from '../listening/ConnectionLinks';
 
 export default function SongsPage() {
   usePageTitle('A place to listen closer');
@@ -34,16 +35,14 @@ export default function SongsPage() {
 
       {started && <Link className="m-resume" to={`/listen/${started.slug}`}><span>↳ Pick up where you left off <strong>{started.title}</strong></span><span>Continue your session →</span></Link>}
 
+      <ConnectionLinks />
+
       <section className="m-paths p-sec">
         <div className="p-rowhead"><div><p className="m-kicker">Follow your curiosity</p><h2 className="p-lg">Three songs. A hundred ways to hear.</h2></div><span>Curated by ear, connected by ideas.</span></div>
         <div className="m-card-grid">{sessions.map((item, index) => <Link to={`/listen/${item.slug}`} className="m-session-card" key={item.slug} style={{ '--session-color': item.color }}><div className="m-card-art"><Cover slug={item.slug} /><span className="m-card-number">0{index + 1}</span><span className="m-card-arrow">↗</span></div><div className="m-card-copy"><p className="m-kicker">{item.category} · {item.duration}</p><h3>{item.idea}</h3><p>{item.subtitle}</p><div className="m-card-credit">{item.title}<span>{item.artist} · {item.year}</span></div></div></Link>)}</div>
       </section>
 
-      <section className="m-thread">
-        <div><p className="m-kicker">The thread that connects them</p><h2>Different decades.<br />The same beautiful restraint.</h2><p>A loop that stays. A voice that leaves. A release that waits. Follow what these records choose to hold back.</p></div>
-        <ol>{sessions.map((item, index) => <li key={item.slug}><Link to={`/listen/${item.slug}`}><span className="p-mono">0{index + 1}</span><div><span>{item.title}</span><small>{item.idea}</small></div><span>↗</span></Link></li>)}</ol>
-      </section>
-      <section className="m-home-bottom"><div><p className="m-kicker">Your taste, taking shape</p><h2>Leave with more than a song.</h2><p>Keep a technique. Write what you heard. Build a notebook of the things that move you.</p><Link to="/notebook" className="p-link">Open your notebook ({notebook.saved.length}) ↗</Link></div><div><p className="m-kicker">An open invitation</p><h2>Great craft can come from anywhere.</h2><p>Unheard is our next chapter: independent songs, chosen for the ideas inside them.</p><Link to="/unheard" className="p-link">Meet Unheard ↗</Link></div></section>
+      <section className="m-home-bottom"><div><p className="m-kicker">Your taste, taking shape</p><h2>Leave with more than a song.</h2><p>Keep a technique. Write what you heard. Build a notebook of the things that move you.</p><Link to="/notebook" className="p-link">Open your notebook ({notebook.saved.length + notebook.discoveries.length}) ↗</Link></div><div><p className="m-kicker">An open invitation</p><h2>Great craft can come from anywhere.</h2><p>Unheard is our next chapter: independent songs, chosen for the ideas inside them.</p><Link to="/unheard" className="p-link">Meet Unheard ↗</Link></div></section>
     </div>
   );
 }

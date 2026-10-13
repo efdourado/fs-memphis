@@ -3,7 +3,7 @@ import { usePageTitle } from '../hooks';
 import Status, { STATUS_INFO } from '../components/Status';
 
 const ROADMAP = [
-  { when: 'Now', title: 'A song becomes an experience', body: 'Three guided listening rooms, interactive arrangements, an original sound sketch, and your own notebook. Start without an account.' },
+  { when: 'Now', title: 'A song becomes an experience', body: 'Three guided rooms and a listening table: hear original sketches side by side, follow the connections, and keep your discoveries. Start without an account.' },
   { when: 'Next', title: 'Follow the craft into Unheard', body: 'Pair familiar songs with independent artists using a shared technique. First-hand stories, with the artist’s permission.' },
   { when: 'Later', title: 'A living listening club', body: 'New curated editions, artist-led sessions, and optional notebook sync. Each addition should give you another reason to listen.' },
 ];

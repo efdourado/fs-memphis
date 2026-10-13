@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { NOTEBOOK_KEY, sanitizeNotebook, empty } from './notebook';
+import { sanitizeDiscoveries } from './connections';
 
 const NotebookContext = createContext(null);
 export function NotebookProvider({ children }) {
@@ -14,7 +15,9 @@ export function NotebookProvider({ children }) {
   const toggleIdea = id => setNotebook(previous => ({ ...previous, saved: previous.saved.includes(id) ? previous.saved.filter(item => item !== id) : [...previous.saved, id] }));
   const note = (slug, text) => setNotebook(previous => ({ ...previous, notes: { ...previous.notes, [slug]: text } }));
   const progress = (slug, step) => setNotebook(previous => ({ ...previous, progress: { ...previous.progress, [slug]: Math.max(previous.progress[slug] || 0, step) } }));
-  return <NotebookContext.Provider value={{ notebook, toggleIdea, note, progress, storageError }}>{children}</NotebookContext.Provider>;
+  const saveDiscovery = discovery => setNotebook(previous => ({ ...previous, discoveries: sanitizeDiscoveries([...previous.discoveries.filter(item => item.id !== discovery.id), discovery]) }));
+  const removeDiscovery = id => setNotebook(previous => ({ ...previous, discoveries: previous.discoveries.filter(item => item.id !== id) }));
+  return <NotebookContext.Provider value={{ notebook, toggleIdea, note, progress, saveDiscovery, removeDiscovery, storageError }}>{children}</NotebookContext.Provider>;
 }
 export const useNotebook = () => useContext(NotebookContext);
 export function KeepIdea({ slug, index }) {

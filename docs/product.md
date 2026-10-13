@@ -29,6 +29,8 @@ The front door is a curated edition: **The art of less**. Three familiar songs b
 
 The notebook at `/notebook` works without an account, stores techniques, notes and session progress on this device, and exports to Markdown. The full song pages remain the source and reference layer. Public browsing ships as a static edition of the reviewed catalog; accounts and submissions retain the existing backend.
 
+The **listening table** at `/connections` puts two original sound sketches side by side. Three curated pairings explore space, repetition and endings across the showcase songs. A listener chooses what draws them in, receives a specific next-listen prompt, and can keep the discovery with a private reflection. Saved connections can be replayed, edited, removed with Undo and exported from the notebook. These are editorial connections, not claims of influence or controlled comparisons of the recordings.
+
 See the [implementation and next-release roadmap](listening-roadmap.md) for pilot criteria and the sequence of ideas to build next.
 
 ## The song page

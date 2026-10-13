@@ -10,6 +10,7 @@ import AppShell from './product/shell/AppShell';
 import { NotebookProvider } from './product/listening/NotebookContext';
 import ListeningRoomPage from './product/pages/ListeningRoomPage';
 import NotebookPage from './product/pages/NotebookPage';
+import ConnectionPage from './product/pages/ConnectionPage';
 import { LibraryProvider } from './product/LibraryContext';
 import SongsPage from './product/pages/SongsPage';
 import UnheardPage from './product/pages/UnheardPage';
@@ -68,6 +69,8 @@ const App = () => (
           <Route path="/" element={<SongsPage />} />
           <Route path="/listen/:slug" element={<ListeningRoomPage />} />
           <Route path="/notebook" element={<NotebookPage />} />
+          <Route path="/connections" element={<Navigate to="/connections/make-space" replace />} />
+          <Route path="/connections/:id" element={<ConnectionPage />} />
           <Route path="/unheard" element={<UnheardPage />} />
           <Route path="/search" element={<ProductSearchPage />} />
           <Route path="/songs/:slug" element={<SongPage />} />
