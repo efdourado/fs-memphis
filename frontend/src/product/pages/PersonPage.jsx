@@ -1,10 +1,11 @@
 import { useParams } from 'react-router-dom';
 import { api } from '../api';
 import { usePageTitle, useResource } from '../hooks';
-import { PersonCard, Row, SongCard } from '../components/Cards';
-import { Avatar } from '../components/Cover';
+import { Face } from '../components/Cover';
 import { FollowButton } from '../components/LibraryButtons';
+import Status from '../components/Status';
 import { ErrorState, Loading } from '../components/States';
+import { PersonTile, Shelf, SongTile } from '../components/Tiles';
 
 export default function PersonPage() {
   const { slug } = useParams();
@@ -19,38 +20,33 @@ export default function PersonPage() {
 
   return (
     <div className="p-page">
-      <header className="p-person">
-        <Avatar name={person.name} size="xl" />
-        <div>
-          <p className="p-eyebrow">{roles.slice(0, 3).join(' • ')}</p>
-          <h1 className="p-song__title">{person.name}</h1>
-          {person.alsoKnownAs.length > 0 && <p className="p-song__meta">Credited as {person.alsoKnownAs.join(', ')}</p>}
-          <p className="p-song__summary">
-            On {count} {count === 1 ? 'song' : 'songs'} in Memphis. Follow to hear when there’s more.
-          </p>
-          <div className="p-actions">
-            <FollowButton slug={person.slug} name={person.name} />
-          </div>
+      <header className="p-songtop">
+        <Face />
+        <div className="p-stack">
+          <p className="p-muted">{roles.slice(0, 4).join(' · ')}</p>
+          <h1 className="p-xl">{person.name}</h1>
+          {person.alsoKnownAs.length > 0 && <p className="p-small">Credited as {person.alsoKnownAs.join(', ')}</p>}
+          <dl className="p-figs" style={{ width: '100%', maxWidth: 360 }}>
+            <div><dt>{count === 1 ? 'song on the shelf' : 'songs on the shelf'}</dt><dd>{count}</dd></div>
+            <div><dt>people worked with</dt><dd>{person.collaborators.length}</dd></div>
+          </dl>
+          <FollowButton slug={person.slug} name={person.name} />
         </div>
       </header>
 
-      <Row title="Songs">
+      <Shelf title="Songs" aside={<Status status="computed" label="From the song credits" />}>
         {person.credits.map(({ work, roles: workRoles }) => (
-          <SongCard key={work.slug} work={work} subtitle={`${work.artist} • ${workRoles.join(', ')}`} />
+          <SongTile key={work.slug} work={work} note={workRoles.join(', ')} big />
         ))}
-      </Row>
+      </Shelf>
 
       {person.collaborators.length > 0 && (
-        <Row title="Worked with">
-          {person.collaborators.map((c) => (
-            <PersonCard key={c.slug} person={c} subtitle={c.works.join(', ')} />
-          ))}
-        </Row>
+        <Shelf title="Worked with">
+          {person.collaborators.map((c) => <PersonTile key={c.slug} person={c} note={c.works.join(', ')} />)}
+        </Shelf>
       )}
 
-      <p className="p-fine p-page-note">
-        Everything here comes from the song credits. We haven’t written a bio for {person.name} yet — we’d rather wait for good sources.
-      </p>
+      <p className="p-notice">No biography yet. Everything on this page comes from the credits of songs on the shelf.</p>
     </div>
   );
 }

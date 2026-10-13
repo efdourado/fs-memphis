@@ -49,6 +49,8 @@ router.get('/people/:slug', catalogController.getPerson);
 router.get('/compare', catalogController.compare);
 router.get('/catalog/search', catalogController.search);
 router.get('/updates', optionalProtect, catalogController.updates);
+router.post('/unheard/submissions', catalogController.submit);
+router.get('/admin/unheard/submissions', protect, admin, catalogController.listSubmissions);
 router.get('/me/library', protect, catalogController.getLibrary);
 router.get('/me/library/state', protect, catalogController.libraryState);
 router.put('/me/library/saved/:slug', protect, catalogController.save);

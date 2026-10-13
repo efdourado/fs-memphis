@@ -1,21 +1,22 @@
 export const STATUS_INFO = {
   verified: { label: 'Fact', description: 'Backed by the source linked next to it.' },
   editorial: { label: 'Our take', description: 'How we hear it. An opinion, not a fact.' },
-  computed: { label: 'Calculated', description: 'Worked out from the data on this page.' },
-  demo: { label: 'Demo', description: 'Example data while we wire up the real thing.' },
-  awaiting: { label: 'No source yet', description: "We'd rather leave it blank than guess." },
+  computed: { label: 'Worked out', description: 'Calculated from other facts on the page.' },
+  demo: { label: 'Example', description: 'Shown to explain the layout. Not real data.' },
+  awaiting: { label: 'Not documented', description: 'We’d rather leave it open than guess.' },
 };
 
-export default function Status({ status, source }) {
+// A small tag that stays next to the line it describes.
+export default function Status({ status, source, label }) {
   const info = STATUS_INFO[status] || { label: status, description: '' };
   return (
-    <span className={`p-status p-status--${status}`} title={info.description}>
-      <span className="p-status__dot" aria-hidden="true" />
-      {info.label}
+    <span className={`p-tag p-tag--${status}`} title={info.description}>
+      {label || info.label}
       {source && status === 'verified' && (
-        source.url
-          ? <a href={source.url} target="_blank" rel="noreferrer">{source.publisher || source.title}</a>
-          : <span>{source.publisher || source.title}</span>
+        <>
+          {' · '}
+          {source.url ? <a href={source.url} target="_blank" rel="noreferrer">{source.publisher || source.title}</a> : source.publisher}
+        </>
       )}
     </span>
   );

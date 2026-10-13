@@ -1,13 +1,13 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {
-  buildSeries,
+  cleanSubmission,
   collaboratorsOf,
   compareWorks,
   connectionsFor,
   creditsForPerson,
+  mapProblems,
   markUpdates,
-  readAttention,
   searchCatalog,
   sharedPeople,
 } from './catalogLogic.js';
@@ -15,33 +15,6 @@ import { people, updates, works } from '../data/catalog.js';
 import { STATUSES } from '../persistence/models/workModel.js';
 
 const bySlug = (slug) => works.find((w) => w.slug === slug);
-
-test('buildSeries interpolates monthly between anchors', () => {
-  const series = buildSeries([['2020-01', 0], ['2020-05', 40]]);
-  assert.deepEqual(series.map((p) => p.period), ['2020-01', '2020-02', '2020-03', '2020-04', '2020-05']);
-  assert.deepEqual(series.map((p) => p.value), [0, 10, 20, 30, 40]);
-});
-
-test('buildSeries crosses year boundaries', () => {
-  const series = buildSeries([['2019-11', 0], ['2020-02', 30]]);
-  assert.deepEqual(series.map((p) => p.period), ['2019-11', '2019-12', '2020-01', '2020-02']);
-});
-
-test('readAttention separates renewed, sustained and spike patterns', () => {
-  assert.equal(readAttention(bySlug('running-up-that-hill').attention.points, '1985-08-05').pattern, 'renewed');
-  assert.equal(readAttention(bySlug('dreams').attention.points, '1977-03-24').pattern, 'renewed');
-  assert.equal(readAttention(bySlug('birds-of-a-feather').attention.points, '2024-05-17').pattern, 'sustained');
-  assert.equal(readAttention(bySlug('die-young').attention.points, '2012-09-25').pattern, 'spike');
-});
-
-test('readAttention refuses to describe too little data', () => {
-  assert.equal(readAttention([{ period: '2020-01', value: 3 }], '2020').pattern, 'insufficient');
-});
-
-test('a series that starts at its peak is not called sustained', () => {
-  const points = buildSeries([['2020-01', 100], ['2020-12', 70]]);
-  assert.notEqual(readAttention(points, '2020-01-01').pattern, 'sustained');
-});
 
 test('sharedPeople lists each credited person once', () => {
   const shared = sharedPeople(bySlug('die-young'), bySlug('teenage-dream'));
@@ -83,7 +56,7 @@ test('markUpdates flags updates about saved songs and followed people since last
   assert.equal(unseen, 1);
 });
 
-test('searchCatalog matches titles, artists and alternative names', () => {
+test('searchCatalog matches titles, artists, credits and alternative names', () => {
   const result = searchCatalog('gottwald', works, people);
   assert.deepEqual(result.people.map((p) => p.slug), ['dr-luke']);
   assert.ok(searchCatalog('billie', works, people).works.length === 2);
@@ -98,6 +71,25 @@ test('person pages are computed from credits', () => {
   assert.deepEqual(collaborators[0], { slug: 'billie-eilish', name: 'Billie Eilish', works: ['Bad Guy', 'Birds of a Feather'] });
 });
 
+test('mapProblems catches rows that do not match the sections', () => {
+  assert.deepEqual(mapProblems({ sections: ['a', 'b'], layers: [{ name: 'Drums', cells: [2, 2] }] }), []);
+  assert.equal(mapProblems({ sections: ['a', 'b'], layers: [{ name: 'Drums', cells: [2] }] }).length, 1);
+  assert.equal(mapProblems({ sections: ['a'], layers: [{ name: 'Drums', cells: [7] }] }).length, 1);
+});
+
+test('cleanSubmission asks for a name, a title, a link and a story', () => {
+  assert.equal(cleanSubmission({}).errors.length, 4);
+  const good = cleanSubmission({
+    artist: ' Ana ',
+    title: 'Stairwell',
+    link: 'https://example.com/song',
+    story: 'I recorded the vocal in a stairwell because the room was the reverb I wanted, then cut one synth take into every other part.',
+  });
+  assert.deepEqual(good.errors, []);
+  assert.equal(good.submission.artist, 'Ana');
+  assert.equal(cleanSubmission({ ...good.submission, link: 'javascript:alert(1)' }).errors.length, 1);
+});
+
 test('catalog data is internally consistent', () => {
   const personSlugs = new Set(people.map((p) => p.slug));
   const workSlugs = new Set(works.map((w) => w.slug));
@@ -105,7 +97,10 @@ test('catalog data is internally consistent', () => {
 
   for (const work of works) {
     const sourceIds = new Set(work.sources.map((s) => s.id));
-    const claims = [...work.facts, ...work.events, ...work.guide, ...work.observations, ...work.dimensions, ...work.credits];
+    const claims = [
+      ...work.facts, ...work.events, ...work.guide, ...work.observations, ...work.dimensions, ...work.credits,
+      ...(work.figures || []), ...(work.making || []), ...(work.moments || []), ...(work.versions || []),
+    ];
     for (const claim of claims) {
       assert.ok(STATUSES.includes(claim.status), `${work.slug}: unknown status ${claim.status}`);
       if (claim.status === 'verified') {
@@ -116,11 +111,28 @@ test('catalog data is internally consistent', () => {
     for (const slug of [...work.connections.map((c) => c.workSlug), ...work.compareWith]) {
       assert.ok(workSlugs.has(slug), `${work.slug}: unknown work ${slug}`);
     }
-    assert.equal(work.attention.status, 'demo', `${work.slug}: attention must stay labeled demo until sourced`);
+    assert.ok(work.hook, `${work.slug}: every card needs its one idea`);
+    assert.equal(work.attention, undefined, `${work.slug}: demo attention curves are not shown`);
   }
 
   for (const update of updates) {
     for (const slug of update.workSlugs) assert.ok(workSlugs.has(slug), `update ${update.key}: unknown work`);
     for (const slug of update.personSlugs) assert.ok(personSlugs.has(slug), `update ${update.key}: unknown person`);
+  }
+});
+
+test('a full page has every block and a well-formed map', () => {
+  const full = works.filter((w) => w.depth === 'full');
+  assert.deepEqual(full.map((w) => w.slug).sort(), ['bad-guy', 'dreams', 'running-up-that-hill']);
+  for (const work of full) {
+    assert.ok(work.idea, `${work.slug}: idea`);
+    assert.ok(work.figures.length >= 3, `${work.slug}: figures`);
+    assert.ok(work.making.length >= 5, `${work.slug}: making-of`);
+    assert.ok(work.why.length >= 1, `${work.slug}: why it works`);
+    assert.ok(work.tryIt.length >= 3, `${work.slug}: things to try`);
+    assert.ok(work.versions.length >= 2, `${work.slug}: versions`);
+    assert.ok(work.glossary.length >= 2, `${work.slug}: plain words`);
+    assert.deepEqual(mapProblems(work.map), [], `${work.slug}: map`);
+    assert.ok(work.map.note, `${work.slug}: the map says how it was made`);
   }
 });

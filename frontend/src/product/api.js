@@ -9,6 +9,7 @@ export const api = {
   person: (slug) => data(apiClient.get(`/people/${encodeURIComponent(slug)}`)),
   compare: (a, b) => data(apiClient.get('/compare', { params: { a, b } })),
   search: (q) => data(apiClient.get('/catalog/search', { params: { q } })),
+  submitSong: (payload) => data(apiClient.post('/unheard/submissions', payload)),
   updates: () => data(apiClient.get('/updates')),
   library: () => data(apiClient.get('/me/library')),
   libraryState: () => data(apiClient.get('/me/library/state')),

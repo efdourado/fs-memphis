@@ -2,45 +2,64 @@ import { Link } from 'react-router-dom';
 import { usePageTitle } from '../hooks';
 import Status, { STATUS_INFO } from '../components/Status';
 
+const ROADMAP = [
+  { when: 'Now', title: 'Three songs, all the way down', body: 'Dreams, Bad Guy and Running Up That Hill have the full page: how it was made, what plays when, things to try.' },
+  { when: 'Next', title: 'Unheard fills up', body: 'The first artists tell how they made their songs. The other seven songs get their full pages.' },
+  { when: 'Later', title: 'A notebook', body: 'Save techniques from different songs into one list. Albums. More ways to send a song.' },
+];
+
 export default function AboutPage() {
-  usePageTitle('How Memphis works');
+  usePageTitle('About');
   return (
-    <article className="p-page p-page--narrow p-prose">
-      <h1 className="p-page-title">How Memphis works</h1>
-      <p className="p-prose__lead">
-        You bring a song you love. We show what happened around it, what’s going on inside it,
-        and who made it — so the next listen hits different. The music stays wherever you already listen.
-      </p>
+    <div className="p-page p-page--read">
+      <header className="p-sec">
+        <h1 className="p-xl">Hear how it’s made.</h1>
+        <p className="p-lede">
+          Memphis opens up songs. For each one you get the story of how it was recorded, a map of what plays
+          when, and things to try yourself. It’s for people who love a song and want to hear more in it, and
+          for people who make music and want to borrow from the best.
+        </p>
+        <p className="p-lede">The music stays wherever you listen. Memphis links out.</p>
+      </header>
 
-      <h2>Every line wears a tag</h2>
-      <ul className="p-legend">
-        {Object.entries(STATUS_INFO).map(([key, info]) => (
-          <li key={key}><Status status={key} /><span>{info.description}</span></li>
-        ))}
-      </ul>
+      <section className="p-sec">
+        <h2 className="p-md">Where it’s going</h2>
+        <div className="p-grid3">
+          {ROADMAP.map((step, index) => (
+            <div key={step.when} className="p-card p-pad p-stack">
+              <span className={`p-pill${index ? ' p-pill--quiet' : ''}`}>{step.when}</span>
+              <h3 className="p-md">{step.title}</h3>
+              <p className="p-small">{step.body}</p>
+            </div>
+          ))}
+        </div>
+      </section>
 
-      <h2 id="method">How we read the curves</h2>
-      <p>The curves are demo data for now. The label under each one is worked out from the curve itself:</p>
-      <ul className="p-bullets">
-        <li><strong>Comeback</strong> — the peak lands ten or more years after release.</li>
-        <li><strong>Built to last</strong> — it still holds most of its peak.</li>
-        <li><strong>Quick spike</strong> — it rose fast and faded fast.</li>
-        <li><strong>Cooling off</strong> — somewhere in between.</li>
-      </ul>
-      <p>We never mash views, streams and chart spots into one magic number.</p>
+      <section className="p-sec">
+        <h2 className="p-md">How to read a page</h2>
+        <ul className="p-list">
+          {['verified', 'editorial', 'computed', 'awaiting'].map((key) => (
+            <li key={key}><Status status={key} /><div>{STATUS_INFO[key].description}</div></li>
+          ))}
+        </ul>
+        <p className="p-small">Facts come from published sources, linked at the foot of each page. The maps are drawn by ear and say so.</p>
+      </section>
 
-      <h2>What we won’t do</h2>
-      <ul className="p-bullets">
-        <li>Host music or cover art we don’t have the rights to.</li>
-        <li>Pretend we know why a song blew up.</li>
-        <li>Fill gaps with guesses.</li>
-        <li>Profile you. Your library is yours to download or delete.</li>
-      </ul>
+      <section className="p-sec">
+        <h2 className="p-md">Two rooms</h2>
+        <div className="p-grid2">
+          <div className="p-card p-pad p-stack"><h3 className="p-md">Songs</h3><p className="p-small">Songs everyone knows, where the making is well documented.</p><Link className="p-btn" to="/">See the shelf</Link></div>
+          <div className="p-card p-pad p-stack"><h3 className="p-md">Unheard</h3><p className="p-small">Songs nobody is promoting, told by the people who made them. No numbers anywhere.</p><Link className="p-btn" to="/unheard">Send a song</Link></div>
+        </div>
+      </section>
 
-      <p>
-        The first version of Memphis — player, playlists and all — lives on in the{' '}
-        <Link to="/design-archive">Design Archive</Link>.
-      </p>
-    </article>
+      <section className="p-sec" id="archive">
+        <h2 className="p-md">The first Memphis</h2>
+        <p className="p-small" style={{ maxWidth: '38rem' }}>
+          Memphis began as a music player with playlists, themes and a lot of experiments. All of it is still here.
+        </p>
+        <Link className="p-btn p-btn--quiet p-btn--small" to="/design-archive" style={{ width: 'fit-content' }}>Open the Design Archive</Link>
+      </section>
+    </div>
   );
 }

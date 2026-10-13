@@ -1,8 +1,7 @@
-// The first Memphis collection: ten songs chosen to support one complete
-// journey each. Facts marked `verified` come from the source named beside
-// them (reviewed 2026-10-09). Listening notes are `editorial`. Attention
-// curves are `demo` until a trend data source is verified.
-import { buildSeries } from '../services/catalogLogic.js';
+// The Memphis shelf. Facts marked `verified` come from the source named beside
+// them. Listening notes are `editorial`. Three songs have a full page (see
+// catalogDeep.js); the rest are short pages still being researched.
+import { deep, hooks } from './catalogDeep.js';
 
 const ACCESSED = '2026-10-09';
 
@@ -22,13 +21,6 @@ const listenLinks = (title, artist) => {
     { service: 'YouTube', url: `https://www.youtube.com/results?search_query=${query}` },
   ];
 };
-
-const demoAttention = (anchors) => ({
-  metric: 'Illustrative attention index (0–100)',
-  note: 'Demo data. Memphis has not verified a trend data source yet, so this curve only shows how the timeline will read.',
-  status: 'demo',
-  points: buildSeries(anchors),
-});
 
 const credit = (personSlug, name, roles, sourceId = 'wiki') => ({ personSlug, name, roles, status: 'verified', sourceId });
 
@@ -87,7 +79,6 @@ const raw = [
       { label: 'Original peak', body: 'No. 3 on the UK Singles Chart and No. 30 on the US Billboard Hot 100 in 1985.', status: 'verified', sourceId: 'wiki' },
       { label: 'Return', body: 'No. 1 in the UK and No. 3 on the US Hot 100 in 2022.', status: 'verified', sourceId: 'wiki' },
     ],
-    attention: demoAttention([['2019-01', 8], ['2022-04', 9], ['2022-06', 100], ['2022-09', 60], ['2023-06', 35], ['2026-09', 28]]),
     events: [
       { date: '1985-08-05', kind: 'release', title: 'Released as the lead single from Hounds of Love', status: 'verified', sourceId: 'wiki' },
       { date: '2022-05-27', kind: 'screen', title: 'Stranger Things season 4, volume 1 premieres', body: 'The song is used several times in the season, including a key scene in episode 4, “Dear Billy”.', status: 'verified', sourceId: 'st4' },
@@ -141,7 +132,6 @@ const raw = [
       { label: 'Original peak', body: 'No. 1 on the US Billboard Hot 100 on June 18, 1977, for one week.', status: 'verified', sourceId: 'wiki' },
       { label: 'Return', body: 'Re-entered the Hot 100 at No. 21 on October 17, 2020, then rose to No. 12.', status: 'verified', sourceId: 'wiki' },
     ],
-    attention: demoAttention([['2019-01', 20], ['2020-08', 22], ['2020-10', 100], ['2021-01', 50], ['2022-01', 35], ['2026-09', 30]]),
     events: [
       { date: '1977-03-24', kind: 'release', title: 'Released in the US as a single from Rumours', status: 'verified', sourceId: 'wiki' },
       { date: '1977-06-18', kind: 'chart', title: 'No. 1 on the Billboard Hot 100', status: 'verified', sourceId: 'wiki' },
@@ -196,7 +186,6 @@ const raw = [
       { label: 'Chart', body: 'Reached No. 1 on the Hot 100 in the week ending August 24, 2019, ending the 19-week run of “Old Town Road”.', status: 'verified', sourceId: 'wiki' },
       { label: 'Awards', body: 'Record of the Year and Song of the Year at the 62nd Grammy Awards.', status: 'verified', sourceId: 'wiki' },
     ],
-    attention: demoAttention([['2019-03', 30], ['2019-08', 95], ['2020-02', 70], ['2021-06', 40], ['2026-09', 38]]),
     events: [
       { date: '2019-03-29', kind: 'release', title: 'Released with the album When We All Fall Asleep, Where Do We Go?', status: 'verified', sourceId: 'wiki' },
       { date: '2019-08-24', kind: 'chart', title: 'No. 1 on the Billboard Hot 100', body: 'It ended the 19-week No. 1 run of “Old Town Road”.', status: 'verified', sourceId: 'wiki' },
@@ -245,7 +234,6 @@ const raw = [
       { label: 'Chart', body: 'Debuted at No. 13 on the Hot 100 and later peaked at No. 2, after its music video.', status: 'verified', sourceId: 'wiki' },
       { label: 'Run', body: '52 weeks on the Hot 100, longer than Bad Guy’s 49.', status: 'verified', sourceId: 'wiki' },
     ],
-    attention: demoAttention([['2024-05', 40], ['2024-09', 70], ['2024-12', 92], ['2025-06', 88], ['2026-01', 75], ['2026-09', 66]]),
     events: [
       { date: '2024-05-17', kind: 'release', title: 'Released on the album Hit Me Hard and Soft', status: 'verified', sourceId: 'wiki' },
       { date: '2024-06-01', kind: 'chart', title: 'Debuts at No. 13 on the Hot 100', status: 'verified', sourceId: 'wiki' },
@@ -293,7 +281,6 @@ const raw = [
       { label: 'Chart', body: 'Debuted at No. 7 on the Hot 100 and peaked at No. 3 on the chart dated June 22, 2024.', status: 'verified', sourceId: 'wiki' },
       { label: 'Awards', body: 'Best Pop Solo Performance at the 67th Grammy Awards.', status: 'verified', sourceId: 'wiki' },
     ],
-    attention: demoAttention([['2024-04', 60], ['2024-06', 100], ['2024-12', 70], ['2025-06', 50], ['2026-09', 35]]),
     events: [
       { date: '2024-04-11', kind: 'release', title: 'Released as the lead single from Short n’ Sweet', status: 'verified', sourceId: 'wiki' },
       { date: '2024-04-12', kind: 'performance', title: 'First live performance, at Coachella', status: 'verified', sourceId: 'wiki' },
@@ -342,7 +329,6 @@ const raw = [
       { label: 'Chart', body: 'Debuted at No. 11 and spent four non-consecutive weeks at No. 1 on the Hot 100.', status: 'verified', sourceId: 'wiki' },
       { label: 'Record', body: 'Named the best-performing song in Hot 100 history by Billboard on November 23, 2021.', status: 'verified', sourceId: 'wiki' },
     ],
-    attention: demoAttention([['2019-11', 10], ['2020-04', 90], ['2021-01', 75], ['2022-01', 66], ['2024-01', 62], ['2026-09', 58]]),
     events: [
       { date: '2019-11-29', kind: 'release', title: 'Released as a single', status: 'verified', sourceId: 'wiki' },
       { date: '2021-11-23', kind: 'chart', title: 'Billboard names it the best-performing Hot 100 song of all time', status: 'verified', sourceId: 'wiki' },
@@ -389,7 +375,6 @@ const raw = [
       { label: 'Chart', body: 'Three non-consecutive weeks at No. 1 on the Hot 100.', status: 'verified', sourceId: 'wiki' },
       { label: 'Reception', body: 'Critics at Billboard, Vulture, Complex and others compared it to Michael Jackson.', status: 'verified', sourceId: 'wiki' },
     ],
-    attention: demoAttention([['2015-06', 15], ['2015-08', 80], ['2016-06', 30], ['2020-01', 15], ['2026-09', 12]]),
     events: [
       { date: '2015-06-08', kind: 'release', title: 'Released as a single from Beauty Behind the Madness', status: 'verified', sourceId: 'wiki' },
     ],
@@ -434,7 +419,6 @@ const raw = [
     facts: [
       { label: 'Chart', body: 'Debuted at No. 17 in November 1998 and spent two weeks at No. 1 on the Hot 100.', status: 'verified', sourceId: 'wiki' },
     ],
-    attention: demoAttention([['1998-09', 5], ['1999-01', 90], ['1999-12', 40], ['2005-01', 15], ['2026-09', 14]]),
     events: [
       { date: '1998-09-29', kind: 'release', title: 'Released as Britney Spears’s debut single', status: 'verified', sourceId: 'wiki' },
       { date: '1998-11', kind: 'chart', title: 'Debuts at No. 17 on the Hot 100', status: 'verified', sourceId: 'wiki' },
@@ -477,7 +461,6 @@ const raw = [
     facts: [
       { label: 'Chart', body: 'No. 1 on the Hot 100 in the issue dated September 18, 2010.', status: 'verified', sourceId: 'wiki' },
     ],
-    attention: demoAttention([['2010-06', 3], ['2010-09', 85], ['2011-03', 45], ['2012-06', 20], ['2020-01', 12], ['2026-09', 10]]),
     events: [
       { date: '2010-07-23', kind: 'release', title: 'Released as the title track of Teenage Dream', status: 'verified', sourceId: 'wiki' },
       { date: '2010-09-18', kind: 'chart', title: 'No. 1 on the Billboard Hot 100', status: 'verified', sourceId: 'wiki' },
@@ -520,7 +503,6 @@ const raw = [
     facts: [
       { label: 'Chart', body: 'Peaked at No. 2 on the Hot 100, kept from No. 1 by Rihanna’s “Diamonds”.', status: 'verified', sourceId: 'wiki' },
     ],
-    attention: demoAttention([['2012-08', 2], ['2012-10', 55], ['2012-12', 80], ['2013-01', 40], ['2013-06', 20], ['2015-01', 8], ['2020-01', 6], ['2026-09', 5]]),
     events: [
       { date: '2012-09-25', kind: 'release', title: 'Released as the lead single from Warrior', status: 'verified', sourceId: 'wiki' },
       { date: '2012-12-15', kind: 'news', title: 'Withdrawn from various US radio stations', body: 'The day after the Sandy Hook Elementary School shooting, stations judged the title and chorus inappropriate for airplay.', status: 'verified', sourceId: 'wiki' },
@@ -552,72 +534,62 @@ const raw = [
   },
 ];
 
-export const works = raw.map((work, index) => ({
-  ...work,
-  order: index,
-  listen: listenLinks(work.title, work.artist),
-}));
+const DEEP_ACCESSED = '2026-10-12';
+
+export const works = raw.map((work, index) => {
+  const full = deep[work.slug];
+  return {
+    ...work,
+    ...(full || {}),
+    depth: full ? 'full' : 'short',
+    room: 'known',
+    hook: hooks[work.slug] || '',
+    order: index,
+    listen: listenLinks(work.title, work.artist),
+    sources: full ? work.sources.map((source) => ({ ...source, accessed: DEEP_ACCESSED })) : work.sources,
+  };
+});
 
 // What changed in Memphis recently. Dates are when the change was published.
 export const updates = [
   {
-    key: 'rutth-st4-context',
-    date: '2026-10-06',
+    key: 'unheard-open',
+    date: '2026-10-12',
     kind: 'context',
-    title: 'Context added: why Running Up That Hill returned',
-    body: 'The Stranger Things placement and the 2022 UK No. 1 are now on the timeline, with sources.',
-    workSlugs: ['running-up-that-hill'],
-    personSlugs: ['kate-bush'],
-    link: '/songs/running-up-that-hill#explain',
+    title: 'Unheard is open',
+    body: 'A room for songs nobody is promoting. If you made one, tell us how.',
+    workSlugs: [],
+    personSlugs: [],
+    link: '/unheard',
   },
   {
-    key: 'birds-added',
-    date: '2026-10-02',
+    key: 'dreams-full',
+    date: '2026-10-12',
     kind: 'collection',
-    title: 'New from Billie Eilish and Finneas: Birds of a Feather',
-    body: 'A slow climb to compare with the quick rise of Bad Guy.',
-    workSlugs: ['birds-of-a-feather', 'bad-guy'],
-    personSlugs: ['billie-eilish', 'finneas'],
-    link: '/songs/birds-of-a-feather',
+    title: 'Dreams, opened up',
+    body: 'Written in ten minutes, built on three chords, held together by an eight-bar loop.',
+    workSlugs: ['dreams'],
+    personSlugs: ['stevie-nicks', 'lindsey-buckingham', 'fleetwood-mac', 'ken-caillat'],
+    link: '/songs/dreams',
   },
   {
-    key: 'compare-returns',
-    date: '2026-09-28',
-    kind: 'comparison',
-    title: 'New comparison: two old songs, two different returns',
-    body: 'Running Up That Hill came back through a TV series; Dreams through a skateboarding video.',
-    workSlugs: ['running-up-that-hill', 'dreams'],
-    personSlugs: ['kate-bush', 'stevie-nicks', 'fleetwood-mac'],
-    link: '/compare?a=running-up-that-hill&b=dreams',
-  },
-  {
-    key: 'bad-guy-tempo',
-    date: '2026-09-24',
-    kind: 'listening',
-    title: 'Listening note: the tempo change at the end of Bad Guy',
-    body: 'From 135 to 120 BPM — and how the mood changes with it.',
+    key: 'bad-guy-full',
+    date: '2026-10-11',
+    kind: 'collection',
+    title: 'Bad Guy, opened up',
+    body: 'Four sounds, two tempos and a crossing signal recorded on a phone.',
     workSlugs: ['bad-guy'],
     personSlugs: ['billie-eilish', 'finneas'],
-    link: '/songs/bad-guy#hear',
+    link: '/songs/bad-guy',
   },
   {
-    key: 'max-martin-weeknd',
-    date: '2026-09-20',
+    key: 'rutth-full',
+    date: '2026-10-10',
     kind: 'collection',
-    title: 'More from Max Martin: Can’t Feel My Face',
-    body: 'A 2015 No. 1 he co-wrote with The Weeknd, four years before Blinding Lights.',
-    workSlugs: ['cant-feel-my-face', 'blinding-lights'],
-    personSlugs: ['max-martin', 'the-weeknd'],
-    link: '/songs/cant-feel-my-face',
-  },
-  {
-    key: 'dreams-arrangement',
-    date: '2026-09-15',
-    kind: 'listening',
-    title: 'Listening note: “just three chords” in Dreams',
-    body: 'How Lindsey Buckingham made three sections from the same chords sound different.',
-    workSlugs: ['dreams'],
-    personSlugs: ['lindsey-buckingham', 'stevie-nicks', 'fleetwood-mac'],
-    link: '/songs/dreams#hear',
+    title: 'Running Up That Hill, opened up',
+    body: 'A sung drum pattern, a frozen chord and a cello that used to be a harp.',
+    workSlugs: ['running-up-that-hill'],
+    personSlugs: ['kate-bush', 'del-palmer'],
+    link: '/songs/running-up-that-hill',
   },
 ];

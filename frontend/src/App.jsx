@@ -8,17 +8,19 @@ import { PlayerProvider } from './context/PlayerContext';
 
 import AppShell from './product/shell/AppShell';
 import { LibraryProvider } from './product/LibraryContext';
-import DiscoverPage from './product/pages/DiscoverPage';
+import SongsPage from './product/pages/SongsPage';
+import UnheardPage from './product/pages/UnheardPage';
 import SongPage from './product/pages/SongPage';
 import PersonPage from './product/pages/PersonPage';
 import ComparePage from './product/pages/ComparePage';
 import ProductSearchPage from './product/pages/SearchPage';
 import UpdatesPage from './product/pages/UpdatesPage';
-import YouPage from './product/pages/YouPage';
-import UnifiedAuthPage, { AuthLoginRedirect, AuthRegisterRedirect } from './pages/Auth/UnifiedAuthPage';
+import SavedPage from './product/pages/SavedPage';
+import SignInPage from './product/pages/SignInPage';
 import AboutPage from './product/pages/AboutPage';
 import NotFoundPage from './product/pages/NotFoundPage';
 
+const UnifiedAuthPage = lazy(() => import('./pages/Auth/UnifiedAuthPage'));
 const LegacyShell = lazy(() => import('./components/layout/LegacyShell'));
 const AdminPage = lazy(() => import('./pages/AdminPage/AdminPage'));
 const HomePage = lazy(() => import('./pages/HomePage/HomePage'));
@@ -59,18 +61,20 @@ const App = () => (
       <Routes>
         {/* Memphis: the song experience */}
         <Route element={<AppShell />}>
-          <Route path="/" element={<DiscoverPage />} />
+          <Route path="/" element={<SongsPage />} />
+          <Route path="/unheard" element={<UnheardPage />} />
           <Route path="/search" element={<ProductSearchPage />} />
           <Route path="/songs/:slug" element={<SongPage />} />
           <Route path="/people/:slug" element={<PersonPage />} />
           <Route path="/compare" element={<ComparePage />} />
           <Route path="/updates" element={<UpdatesPage />} />
-          <Route path="/you" element={<YouPage />} />
-          <Route path="/auth" element={<UnifiedAuthPage />} />
+          <Route path="/saved" element={<SavedPage />} />
+          <Route path="/you" element={<Navigate to="/saved" replace />} />
+          <Route path="/auth" element={<SignInPage />} />
           <Route path="/signin" element={<Navigate to="/auth" replace />} />
+          <Route path="/login" element={<Navigate to="/auth" replace />} />
+          <Route path="/register" element={<Navigate to="/auth" replace />} />
           <Route path="/about" element={<AboutPage />} />
-          <Route path="/login" element={<AuthLoginRedirect />} />
-          <Route path="/register" element={<AuthRegisterRedirect />} />
           <Route path="*" element={<NotFoundPage />} />
         </Route>
 
@@ -80,6 +84,7 @@ const App = () => (
           <Route path="/archive/home" element={<HomePage />} />
           <Route path="/archive/search" element={<SearchPage />} />
           <Route path="/auth/callback" element={<AuthCallbackPage />} />
+          <Route path="/archive/auth" element={<UnifiedAuthPage />} />
 
           <Route path="/artist/:id" element={<CollectionPage type="artist" />} />
           <Route path="/playlist/:id" element={<CollectionPage type="playlist" />} />

@@ -4,18 +4,19 @@ import {
   compareWorks,
   connectionsFor,
   creditsForPerson,
+  cleanSubmission,
   markUpdates,
-  readAttention,
   searchCatalog,
   summarize,
 } from './catalogLogic.js';
 
 // The collection is small and curated, so it is read whole and computed in memory.
 export class CatalogService {
-  constructor({ workModel, personModel, updateModel }) {
+  constructor({ workModel, personModel, updateModel, submissionModel }) {
     this.workModel = workModel;
     this.personModel = personModel;
     this.updateModel = updateModel;
+    this.submissionModel = submissionModel;
   }
 
   allWorks() {
@@ -28,10 +29,7 @@ export class CatalogService {
 
   async listWorks() {
     const works = await this.allWorks();
-    return works.map((work) => ({
-      ...summarize(work),
-      attention: { status: work.attention?.status, reading: readAttention(work.attention?.points, work.released) },
-    }));
+    return works.map(summarize);
   }
 
   async getWork(slug) {
@@ -41,7 +39,6 @@ export class CatalogService {
     const { _id, __v, createdAt, ...rest } = work;
     return {
       ...rest,
-      reading: readAttention(work.attention?.points, work.released),
       connectionsResolved: connectionsFor(work, works),
       compareSuggestions: (work.compareWith || [])
         .map((other) => works.find((w) => w.slug === other))
@@ -96,6 +93,18 @@ export class CatalogService {
     const updates = await this.updateModel.find().sort({ date: -1 }).limit(50).lean();
     const clean = updates.map(({ _id, __v, createdAt, updatedAt, ...rest }) => rest);
     return markUpdates(clean, library);
+  }
+
+  // A song proposed for the Unheard room. Stored for review, never published as is.
+  async submit(input) {
+    const { submission, errors } = cleanSubmission(input);
+    if (errors.length) throw new AppError(errors[0], 400);
+    await this.submissionModel.create(submission);
+    return { received: true };
+  }
+
+  listSubmissions() {
+    return this.submissionModel.find().sort({ createdAt: -1 }).limit(200).lean();
   }
 
   async peopleBySlugs(slugs) {

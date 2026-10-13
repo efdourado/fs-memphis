@@ -1,17 +1,19 @@
 import { Link } from 'react-router-dom';
 
-export const Loading = ({ label = 'Loading' }) => (
-  <div className="m-state" role="status" aria-live="polite">
-    <span className="m-loader" aria-hidden="true" />
-    <span>{label}…</span>
+export const Loading = () => (
+  <div className="p-state p-state--center" role="status" aria-live="polite">
+    <span className="p-loader" aria-hidden="true" />
+    <span>Loading…</span>
   </div>
 );
 
 export const ErrorState = ({ message, onRetry, notFound }) => (
-  <div className="m-state m-state--error" role="alert">
-    <p>{notFound ? 'This page is not in the collection.' : message}</p>
-    {notFound ? <Link className="m-button" to="/">Back to Discover</Link> : onRetry && (
-      <button type="button" className="m-button" onClick={onRetry}>Try again</button>
-    )}
+  <div className="p-page p-page--read" role="alert">
+    <div className="p-state">
+      <p>{notFound ? 'That page isn’t on the shelf.' : message}</p>
+      {notFound
+        ? <Link className="p-btn" to="/">Back to the songs</Link>
+        : onRetry && <button type="button" className="p-btn" onClick={onRetry}>Try again</button>}
+    </div>
   </div>
 );

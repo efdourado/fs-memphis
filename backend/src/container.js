@@ -12,6 +12,7 @@ import InsightModel from './persistence/models/insightModel.js';
 import WorkModel from './persistence/models/workModel.js';
 import PersonModel from './persistence/models/personModel.js';
 import UpdateModel from './persistence/models/updateModel.js';
+import SubmissionModel from './persistence/models/submissionModel.js';
 
 // DAOs
 import { AlbumMongooseDAO } from './persistence/daos/albumMongooseDAO.js';
@@ -59,7 +60,7 @@ const tagService = new TagService(tagDAO);
 const podcastService = new PodcastService(podcastDAO);
 const listeningSessionService = new ListeningSessionService(listeningSessionDAO, insightDAO);
 const catalogModels = { workModel: WorkModel, personModel: PersonModel, updateModel: UpdateModel };
-const catalogService = new CatalogService(catalogModels);
+const catalogService = new CatalogService({ ...catalogModels, submissionModel: SubmissionModel });
 const libraryService = new LibraryService({ ...catalogModels, userModel: UserModel, sessionModel: ListeningSessionModel });
 
 // Controllers

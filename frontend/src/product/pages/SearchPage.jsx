@@ -1,10 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import { api, errorMessage } from '../api';
 import { usePageTitle } from '../hooks';
-import { PersonCard, Row, SongCard } from '../components/Cards';
+import { PersonTile, SongTile } from '../components/Tiles';
 
 const SUGGESTIONS = ['Max Martin', 'Finneas', 'Kate Bush', 'disco', 'synth-pop'];
 
@@ -19,6 +17,7 @@ export default function SearchPage() {
   useEffect(() => { if (!query) inputRef.current?.focus(); }, [query]);
   useEffect(() => { setText(query); }, [query]);
 
+  // Search as you type, a beat after the last keystroke.
   useEffect(() => {
     const trimmed = text.trim();
     const timer = setTimeout(() => {
@@ -43,35 +42,41 @@ export default function SearchPage() {
   const empty = results && !results.works.length && !results.people.length;
 
   return (
-    <div className="p-page">
-      <h1 className="p-page-title">Search</h1>
-      <form className="p-search" role="search" onSubmit={(event) => event.preventDefault()}>
-        <FontAwesomeIcon icon={faSearch} />
+    <div className="p-page" style={{ gap: 32 }}>
+      <form className="p-searchbox" role="search" onSubmit={(event) => event.preventDefault()}>
+        <svg viewBox="0 0 24 24" className="p-icon" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5" /><path d="m20 20-4.2-4.2" /></svg>
         <input
+          id="search"
           ref={inputRef}
           type="search"
           value={text}
           onChange={(event) => setText(event.target.value)}
-          placeholder="Songs, artists, producers..."
+          placeholder="A song, an artist, a producer"
           aria-label="Search"
         />
       </form>
 
       {!query && (
-        <div className="p-chips p-suggestions">
-          {SUGGESTIONS.map((s) => <button type="button" key={s} className="p-pill" onClick={() => setText(s)}>{s}</button>)}
+        <div className="p-chips">
+          {SUGGESTIONS.map((s) => <button type="button" key={s} className="p-btn p-btn--quiet p-btn--small" onClick={() => setText(s)}>{s}</button>)}
         </div>
       )}
 
-      {error && <p className="p-empty" role="alert">{error}</p>}
+      {error && <p className="p-error" role="alert">{error}</p>}
 
-      <div aria-live="polite">
-        {empty && <p className="p-empty">Nothing for “{query}” yet. Memphis is starting small — ten songs, done properly.</p>}
+      <div aria-live="polite" style={{ display: 'grid', gap: 40 }}>
+        {empty && <p className="p-notice">Nothing for “{query}” yet. The shelf is small on purpose.</p>}
         {results?.works.length > 0 && (
-          <Row title="Songs">{results.works.map((work) => <SongCard key={work.slug} work={work} />)}</Row>
+          <section className="p-sec">
+            <h2 className="p-md">Songs</h2>
+            <div className="p-grid-tiles">{results.works.map((work) => <SongTile key={work.slug} work={work} />)}</div>
+          </section>
         )}
         {results?.people.length > 0 && (
-          <Row title="People">{results.people.map((person) => <PersonCard key={person.slug} person={person} subtitle="See their songs" />)}</Row>
+          <section className="p-sec">
+            <h2 className="p-md">People</h2>
+            <div className="p-grid-tiles">{results.people.map((person) => <PersonTile key={person.slug} person={person} />)}</div>
+          </section>
         )}
       </div>
     </div>

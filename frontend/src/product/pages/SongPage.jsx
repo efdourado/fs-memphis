@@ -1,114 +1,126 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { Link, useLocation, useParams } from 'react-router-dom';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowUpRightFromSquare, faHeadphones } from '@fortawesome/free-solid-svg-icons';
-import { useAuth } from '../../context/AuthContext';
-import { api, errorMessage } from '../api';
+import { api } from '../api';
 import { formatDate, usePageTitle, useResource, yearOf } from '../hooks';
-import AttentionChart from '../components/AttentionChart';
-import { Avatar } from '../components/Cover';
-import Cover from '../components/Cover';
-import { SongCard } from '../components/Cards';
+import Cover, { Face } from '../components/Cover';
 import { FollowButton, SaveButton } from '../components/LibraryButtons';
 import Status from '../components/Status';
 import { ErrorState, Loading } from '../components/States';
-import { useLibrary } from '../LibraryContext';
+import { SongTile } from '../components/Tiles';
 
-const TABS = [
-  { id: 'change', label: 'What changed' },
-  { id: 'why', label: 'Why' },
-  { id: 'listen', label: 'Listen for' },
-  { id: 'people', label: 'Who made it' },
-  { id: 'next', label: 'Where next' },
-];
+const CELL_WORDS = ['silent', 'quiet', 'playing', 'somewhere'];
 
-const KIND = {
-  release: 'Release', chart: 'Charts', screen: 'On screen', social: 'Social',
-  award: 'Award', performance: 'Live', news: 'News',
-};
-
-function Section({ id, title, lead, children }) {
+function Block({ id, title, aside, children }) {
   return (
-    <section id={id} className="p-section" aria-labelledby={`${id}-title`}>
-      <div className="carousel__header">
-        <h2 id={`${id}-title`} className="carousel__title">{title}</h2>
-      </div>
-      {lead && <p className="p-section__lead">{lead}</p>}
+    <section id={id} className="p-block" aria-labelledby={`${id}-title`}>
+      <header>
+        <h2 id={`${id}-title`} className="p-md">{title}</h2>
+        {aside}
+      </header>
       {children}
     </section>
   );
 }
 
-function Note({ note, sources }) {
+// Which tag describes a whole block: the one all its lines share, if they do.
+const sharedStatus = (items) => {
+  const statuses = new Set(items.map((item) => item.status));
+  return statuses.size === 1 ? [...statuses][0] : null;
+};
+
+function Steps({ items, sources }) {
+  const common = sharedStatus(items);
   return (
-    <li className="p-note">
-      <div className="p-note__head">
-        <strong>{note.label}</strong>
-        <Status status={note.status} source={sources[note.sourceId]} />
+    <ol className="p-steps">
+      {items.map((item, index) => (
+        <li key={item.label}>
+          <span className="p-num">{index + 1}</span>
+          <div>
+            <h5>{item.label}</h5>
+            <p>{item.body}</p>
+            {!common && <Status status={item.status} source={sources[item.sourceId]} />}
+          </div>
+        </li>
+      ))}
+    </ol>
+  );
+}
+
+function ArrangementMap({ map, title }) {
+  const summary = map.layers
+    .map((layer) => `${layer.name}: ${layer.cells.map((cell, i) => (cell ? `${map.sections[i]} ${CELL_WORDS[cell]}` : null)).filter(Boolean).join(', ') || 'silent'}`)
+    .join('. ');
+  const unknown = map.layers.some((layer) => layer.cells.includes(3));
+  return (
+    <div className="p-mapbox">
+      <div className="p-mapscroll">
+        <div className="p-map" style={{ '--cols': map.sections.length }} role="img" aria-label={`What plays when in ${title}. ${summary}`}>
+          <span />
+          {map.sections.map((section, index) => <span key={`${section}-${index}`} className="p-map__head">{section}</span>)}
+          {map.layers.map((layer) => (
+            [
+              <span key={layer.name} className="p-map__name"><i className={`is-${layer.status}`} />{layer.name}</span>,
+              ...layer.cells.map((cell, index) => <span key={`${layer.name}-${index}`} className={`p-cell p-cell--${cell}`} />),
+            ]
+          ))}
+        </div>
       </div>
-      <p>{note.body}</p>
-    </li>
+      <div className="p-legend">
+        <span><span className="p-cell p-cell--2" />playing</span>
+        <span><span className="p-cell p-cell--1" />quiet</span>
+        {unknown && <span><span className="p-cell p-cell--3" />on the record, placement not documented</span>}
+        <Status status="verified" label="instrument is documented" />
+        <Status status="editorial" label="placed by ear" />
+      </div>
+    </div>
+  );
+}
+
+function Lines({ items, sources }) {
+  return (
+    <ul className="p-list">
+      {items.map((item) => (
+        <li key={item.label}>
+          <span>{item.label}</span>
+          <div>
+            <span>{item.body}</span>
+            <Status status={item.status} source={sources[item.sourceId]} />
+          </div>
+        </li>
+      ))}
+    </ul>
+  );
+}
+
+function People({ credits }) {
+  return (
+    <ul className="p-people">
+      {credits.map((c) => (
+        <li key={c.personSlug}>
+          <Link to={`/people/${c.personSlug}`}>
+            <Face variant="face" />
+            <span>
+              <span>{c.name}</span>
+              <span>{c.roles.join(', ')}</span>
+            </span>
+          </Link>
+          <FollowButton slug={c.personSlug} name={c.name} />
+        </li>
+      ))}
+    </ul>
   );
 }
 
 function ListenMenu({ links }) {
   return (
     <details className="p-listen">
-      <summary className="p-pill">
-        <FontAwesomeIcon icon={faHeadphones} /> Listen
-      </summary>
+      <summary className="p-btn">Listen</summary>
       <ul>
         {links.map((link) => (
-          <li key={link.service}>
-            <a href={link.url} target="_blank" rel="noreferrer">
-              {link.service} <FontAwesomeIcon icon={faArrowUpRightFromSquare} />
-            </a>
-          </li>
+          <li key={link.service}><a href={link.url} target="_blank" rel="noreferrer">Find it on {link.service}</a></li>
         ))}
       </ul>
     </details>
-  );
-}
-
-function QuestionBox({ work }) {
-  const { isAuthenticated } = useAuth();
-  const { requireAccount } = useLibrary();
-  const [text, setText] = useState('');
-  const [state, setState] = useState({ saving: false, error: '', saved: false });
-
-  const submit = async (event) => {
-    event.preventDefault();
-    if (!requireAccount()) return;
-    setState({ saving: true, error: '', saved: false });
-    try {
-      await api.addQuestion(work.slug, text);
-      setText('');
-      setState({ saving: false, error: '', saved: true });
-    } catch (error) {
-      setState({ saving: false, error: errorMessage(error), saved: false });
-    }
-  };
-
-  return (
-    <form className="p-question" onSubmit={submit}>
-      <label htmlFor="question">Got a question about this song?</label>
-      <textarea
-        id="question"
-        rows={3}
-        maxLength={280}
-        placeholder={work.question}
-        value={text}
-        onChange={(event) => { setText(event.target.value); setState((s) => ({ ...s, saved: false })); }}
-      />
-      <div className="p-question__footer">
-        <span aria-live="polite">
-          {state.error || (state.saved ? <>Kept in <Link to="/you">your library</Link>.</> : 'We’ll keep it in your library.')}
-        </span>
-        <button type="submit" className="p-pill p-pill--solid" disabled={state.saving || (isAuthenticated && !text.trim())}>
-          {isAuthenticated ? 'Keep it' : 'Log in to keep it'}
-        </button>
-      </div>
-    </form>
   );
 }
 
@@ -126,155 +138,132 @@ export default function SongPage() {
   if (error) return <ErrorState message={error} onRetry={reload} notFound={status === 404} />;
 
   const sources = Object.fromEntries(work.sources.map((s) => [s.id, s]));
-  const { reading } = work;
+  const full = work.depth === 'full';
+  const compareWith = work.compareSuggestions[0];
+  const artistSlug = work.artistSlugs[0];
 
   return (
-    <article className="p-page p-song">
-      <header className="p-song__header">
-        <Cover slug={work.slug} title={work.title} size="xl" />
-        <div className="p-song__details">
-          <p className="p-eyebrow">Song</p>
-          <h1 className="p-song__title">{work.title}</h1>
-          <p className="p-song__by">
-            By {work.artistSlugs[0] ? <Link to={`/people/${work.artistSlugs[0]}`}>{work.artist}</Link> : work.artist}
+    <article className="p-page p-page--read p-song">
+      <header className="p-songtop">
+        <Cover slug={work.slug} title={work.title} />
+        <div className="p-stack">
+          <p className="p-muted">
+            {artistSlug ? <Link to={`/people/${artistSlug}`} className="p-link">{work.artist}</Link> : work.artist}
+            {' · '}{yearOf(work.released)}{work.album && ` · ${work.album}`}
           </p>
-          <p className="p-song__meta">
-            {yearOf(work.released)}
-            {work.album && <><span className="meta-divider">•</span>{work.album}</>}
-            {work.genres[0] && <><span className="meta-divider">•</span>{work.genres.join(', ')}</>}
-          </p>
-          <p className="p-song__summary">{work.summary}</p>
-          <div className="p-actions">
+          <h1 className="p-xl">{work.title}</h1>
+          <p className="p-stand">{work.idea || work.summary}</p>
+          <div className="p-btns">
             <SaveButton slug={work.slug} />
             <ListenMenu links={work.listen} />
-            {work.compareSuggestions[0] && (
-              <Link className="p-pill" to={`/compare?a=${work.slug}&b=${work.compareSuggestions[0].slug}`}>Compare</Link>
-            )}
+            {compareWith && <Link className="p-btn" to={`/compare?a=${work.slug}&b=${compareWith.slug}`}>Compare</Link>}
           </div>
         </div>
       </header>
 
-      {work.question && (
-        <p className="p-big-question">“{work.question}”</p>
+      {full && (
+        <dl className="p-figs">
+          {work.figures.map((figure) => (
+            <div key={figure.label}><dt>{figure.label}</dt><dd>{figure.value}</dd></div>
+          ))}
+        </dl>
       )}
 
-      <nav className="p-tabs" aria-label="On this page">
-        {TABS.map((tab) => (
-          <a key={tab.id} href={`#${tab.id}`} className="hero-tab-button">{tab.label}</a>
-        ))}
-      </nav>
+      {!full && (
+        <p className="p-notice">
+          This page is still short. The making-of, the map and the things to try are being researched.
+          <Link to="/songs/dreams" className="p-link">See a finished page: Dreams</Link>
+        </p>
+      )}
 
-      <Section id="change" title="What changed">
-        <div className="p-panel">
-          <div className="p-panel__head">
-            <span>How much attention it got, over time</span>
-            <Status status="demo" />
-          </div>
-          <AttentionChart
-            points={work.attention.points}
-            events={work.events}
-            label={`${reading.label}. ${reading.explanation}`}
-          />
-          <div className="p-reading">
-            <strong>{reading.label}</strong>
-            <Status status="computed" />
-            <p>{reading.explanation}</p>
-          </div>
-          <p className="p-fine">Demo curve — real listening data is on the way. <Link to="/about#method">How we read it</Link></p>
-        </div>
-        {work.facts.length > 0 && (
-          <ul className="p-notes">
-            {work.facts.map((fact) => <Note key={fact.label} note={fact} sources={sources} />)}
-          </ul>
-        )}
-      </Section>
-
-      <Section id="why" title="Why it might have happened" lead="Timing isn’t proof — but it’s a good lead.">
-        <ol className="p-timeline">
-          {work.events.map((event, index) => (
-            <li key={`${event.date}-${event.title}`}>
-              <span className="p-timeline__pin">{index + 1}</span>
-              <div>
-                <p className="p-timeline__meta">{formatDate(event.date)} • {KIND[event.kind]}</p>
-                <h3>{event.title}</h3>
-                {event.body && <p>{event.body}</p>}
-                <Status status={event.status} source={sources[event.sourceId]} />
+      {full && (
+        <>
+          <Block id="made" title="How it was made" aside={sharedStatus(work.making) && <Status status={sharedStatus(work.making)} source={sources.wiki} />}>
+            <Steps items={work.making} sources={sources} />
+            {work.glossary.length > 0 && (
+              <div className="p-gloss">
+                <p className="p-mono">plain words</p>
+                <dl>
+                  {work.glossary.map((entry) => (
+                    <div key={entry.term}><dt>{entry.term}</dt><dd>{entry.body}</dd></div>
+                  ))}
+                </dl>
               </div>
-            </li>
-          ))}
-        </ol>
-      </Section>
+            )}
+          </Block>
 
-      <Section id="listen" title="Listen for" lead="Put it on and try this.">
-        <ol className="p-guide">
-          {work.guide.map((step, index) => (
-            <li key={step.label}>
-              <span className="p-guide__step">{index + 1}</span>
-              <div>
-                <strong>{step.label}</strong>
-                <p>{step.body}</p>
-                <Status status={step.status} source={sources[step.sourceId]} />
-              </div>
-            </li>
-          ))}
-        </ol>
-        <h3 className="p-subhead">Under the hood</h3>
-        <ul className="p-notes">
-          {work.observations.map((note) => <Note key={note.label} note={note} sources={sources} />)}
-        </ul>
-      </Section>
+          <Block id="map" title="What plays when" aside={<Status status="editorial" label="Map by ear · our take" />}>
+            <p className="p-small" style={{ maxWidth: '40rem' }}>Read it left to right while the song plays. {work.map.note}</p>
+            <ArrangementMap map={work.map} title={work.title} />
+            <Lines items={work.moments} sources={sources} />
+          </Block>
 
-      <Section id="people" title="Who made it">
-        <ul className="p-credits">
-          {work.credits.map((c) => (
-            <li key={c.personSlug}>
-              <Link to={`/people/${c.personSlug}`} className="p-credits__person">
-                <Avatar name={c.name} size="sm" />
-                <span>
-                  <strong>{c.name}</strong>
-                  <span>{c.roles.join(', ')}</span>
-                </span>
-              </Link>
-              <FollowButton slug={c.personSlug} name={c.name} />
-            </li>
-          ))}
-        </ul>
-        <p className="p-fine">Credits: <Status status="verified" source={sources.wiki} /></p>
-      </Section>
+          <Block id="why" title="Why it works" aside={<Status status="editorial" />}>
+            <div className="p-prose">{work.why.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}</div>
+          </Block>
 
-      <Section id="next" title="Where next">
-        {work.connectionsResolved.length > 0 && (
-          <div className="p-connections">
+          <Block id="try" title="Try it" aside={<Status status="editorial" label="For your own music" />}>
+            <ol className="p-try">
+              {work.tryIt.map((item, index) => (
+                <li key={item.title}>
+                  <span className="p-num">{index + 1}</span>
+                  <div><h5>{item.title}</h5><p>{item.body}</p></div>
+                </li>
+              ))}
+            </ol>
+          </Block>
+
+          <Block id="versions" title="Versions">
+            <Lines items={work.versions} sources={sources} />
+          </Block>
+        </>
+      )}
+
+      {!full && (
+        <>
+          {work.events.length > 0 && (
+            <Block id="story" title="What happened">
+              <ul className="p-list">
+                {work.events.map((event) => (
+                  <li key={`${event.date}-${event.title}`}>
+                    <span>{formatDate(event.date)}</span>
+                    <div>
+                      <span style={{ color: 'var(--ink)' }}>{event.title}</span>
+                      {event.body && <span>{event.body}</span>}
+                      <Status status={event.status} source={sources[event.sourceId]} />
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            </Block>
+          )}
+          <Block id="listen" title="Listen for">
+            <Lines items={[...work.guide, ...work.observations]} sources={sources} />
+          </Block>
+        </>
+      )}
+
+      <Block id="people" title="Who made it" aside={<Status status="verified" source={sources.wiki} />}>
+        <People credits={work.credits} />
+        {work.recorded && <p className="p-small">{work.recorded}</p>}
+      </Block>
+
+      {work.connectionsResolved.length > 0 && (
+        <Block id="next" title="Hear the same idea elsewhere">
+          <div className="p-shelf">
             {work.connectionsResolved.map((connection) => (
-              <div key={connection.work.slug} className="p-connection">
-                <SongCard work={connection.work} />
-                <p>{connection.reason}</p>
-                <Status status={connection.status} />
-              </div>
+              <SongTile key={connection.work.slug} work={connection.work} note={connection.reason} big />
             ))}
           </div>
-        )}
-        {work.compareSuggestions.length > 0 && (
-          <div className="p-compare-links">
-            <span>Put it side by side with</span>
-            {work.compareSuggestions.map((other) => (
-              <Link key={other.slug} className="p-pill" to={`/compare?a=${work.slug}&b=${other.slug}`}>{other.title}</Link>
-            ))}
-          </div>
-        )}
-        <QuestionBox work={work} />
-      </Section>
+        </Block>
+      )}
 
       <footer className="p-sources">
-        <h3 className="p-subhead">Sources</h3>
-        <ol>
-          {work.sources.map((source) => (
-            <li key={source.id}>
-              <a href={source.url} target="_blank" rel="noreferrer">{source.title}</a>
-              <span> — {source.publisher}, checked {formatDate(source.accessed)}</span>
-            </li>
-          ))}
-        </ol>
+        {work.sources.map((source) => (
+          <p key={source.id} className="p-mono">
+            <a href={source.url} target="_blank" rel="noreferrer">{source.title}</a>, {source.publisher}, checked {formatDate(source.accessed)}
+          </p>
+        ))}
       </footer>
     </article>
   );

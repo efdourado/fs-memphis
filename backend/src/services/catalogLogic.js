@@ -1,105 +1,5 @@
-// Pure functions behind the song experience. Nothing here touches the database,
+// Pure functions behind the song pages. Nothing here touches the database,
 // so every computed claim Memphis shows can be tested and explained.
-
-const monthIndex = (period) => {
-  const [year, month] = period.split('-').map(Number);
-  return year * 12 + (month - 1);
-};
-
-const periodFromIndex = (index) => {
-  const year = Math.floor(index / 12);
-  const month = (index % 12) + 1;
-  return `${year}-${String(month).padStart(2, '0')}`;
-};
-
-// Turns a few anchor points into a monthly series by linear interpolation.
-// Used only for demo timelines, which the interface labels as such.
-export function buildSeries(anchors) {
-  const sorted = [...anchors].sort((a, b) => monthIndex(a[0]) - monthIndex(b[0]));
-  const points = [];
-  for (let i = 0; i < sorted.length - 1; i += 1) {
-    const [fromPeriod, fromValue] = sorted[i];
-    const [toPeriod, toValue] = sorted[i + 1];
-    const start = monthIndex(fromPeriod);
-    const span = monthIndex(toPeriod) - start;
-    for (let step = 0; step < span; step += 1) {
-      const value = fromValue + ((toValue - fromValue) * step) / span;
-      points.push({ period: periodFromIndex(start + step), value: Math.round(value) });
-    }
-  }
-  const [lastPeriod, lastValue] = sorted.at(-1);
-  points.push({ period: lastPeriod, value: lastValue });
-  return points;
-}
-
-const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-const monthLabel = (period) => `${MONTHS[Number(period.slice(5, 7)) - 1]} ${period.slice(0, 4)}`;
-
-const average = (values) => (values.length ? values.reduce((sum, v) => sum + v, 0) / values.length : 0);
-
-// Separates sustained growth, a short spike and renewed attention to an older
-// recording, using only the series itself and the release year.
-export function readAttention(points = [], released = '') {
-  if (points.length < 6) {
-    return { pattern: 'insufficient', label: 'Not enough data yet', explanation: 'We need at least six points to call a pattern.' };
-  }
-
-  const values = points.map((p) => p.value);
-  const peakValue = Math.max(...values);
-  const peakIndex = values.indexOf(peakValue);
-  const peak = points[peakIndex];
-  const baseline = average(values.slice(0, 3));
-  const latest = average(values.slice(-3));
-  const releaseYear = Number(String(released).slice(0, 4));
-  const peakYear = Number(peak.period.slice(0, 4));
-  const yearsBetween = releaseYear ? peakYear - releaseYear : 0;
-  const retained = peakValue ? latest / peakValue : 0;
-
-  const facts = {
-    peak,
-    baseline: Math.round(baseline),
-    latest: Math.round(latest),
-    retainedShare: Math.round(retained * 100),
-    yearsFromReleaseToPeak: yearsBetween,
-  };
-
-  if (yearsBetween >= 10 && peakValue >= baseline * 2) {
-    return {
-      pattern: 'renewed',
-      label: 'Comeback',
-      explanation: `Peaked ${yearsBetween} years after release, far above where it started.`,
-      ...facts,
-    };
-  }
-
-  // A share of a peak only means something when the peak rose from a lower
-  // level; a series that starts at its highest point is new, not retained.
-  const sustainedShare = peakIndex > 0 ? 0.6 : 2;
-  if (retained >= sustainedShare) {
-    return {
-      pattern: 'sustained',
-      label: 'Built to last',
-      explanation: `Still holding ${Math.round(retained * 100)}% of its peak.`,
-      ...facts,
-    };
-  }
-
-  if (retained < 0.35 && peakIndex < points.length - 3) {
-    return {
-      pattern: 'spike',
-      label: 'Quick spike',
-      explanation: `Peaked in ${monthLabel(peak.period)}. Now at ${Math.round(retained * 100)}% of that.`,
-      ...facts,
-    };
-  }
-
-  return {
-    pattern: 'settling',
-    label: 'Cooling off',
-    explanation: `Peaked in ${monthLabel(peak.period)}, then settled at ${Math.round(retained * 100)}% of that.`,
-    ...facts,
-  };
-}
 
 const creditedSlugs = (work) => new Set((work.credits || []).map((c) => c.personSlug));
 
@@ -157,7 +57,10 @@ export function summarize(work) {
     album: work.album,
     genres: work.genres || [],
     summary: work.summary,
-    question: work.question || '',
+    hook: work.hook || '',
+    idea: work.idea || '',
+    depth: work.depth || 'short',
+    room: work.room || 'known',
   };
 }
 
@@ -171,10 +74,6 @@ export function compareWorks(a, b) {
     b: summarize(b),
     sharedPeople: sharedPeople(a, b),
     dimensions: labels.map((label) => ({ label, a: find(a, label), b: find(b, label) })),
-    attention: {
-      a: { points: a.attention?.points || [], status: a.attention?.status, reading: readAttention(a.attention?.points, a.released) },
-      b: { points: b.attention?.points || [], status: b.attention?.status, reading: readAttention(b.attention?.points, b.released) },
-    },
   };
 }
 
@@ -238,4 +137,38 @@ export function collaboratorsOf(slug, works) {
     }
   }
   return [...counts.values()].sort((a, b) => b.works.length - a.works.length || a.name.localeCompare(b.name));
+}
+
+// An arrangement map is a grid: one row per layer, one cell per section.
+// Cell values: 0 silent, 1 quiet, 2 playing, 3 present but placement unknown.
+export const MAP_CELLS = [0, 1, 2, 3];
+
+export function mapProblems(map) {
+  if (!map) return [];
+  const problems = [];
+  const width = (map.sections || []).length;
+  if (!width) problems.push('map has no sections');
+  for (const layer of map.layers || []) {
+    if ((layer.cells || []).length !== width) problems.push(`${layer.name}: ${layer.cells?.length} cells for ${width} sections`);
+    if ((layer.cells || []).some((cell) => !MAP_CELLS.includes(cell))) problems.push(`${layer.name}: unknown cell value`);
+  }
+  return problems;
+}
+
+// What a visitor sends to propose a song for the Unheard room.
+export function cleanSubmission(input = {}) {
+  const text = (value, max) => String(value ?? '').trim().slice(0, max);
+  const submission = {
+    artist: text(input.artist, 120),
+    title: text(input.title, 160),
+    link: text(input.link, 300),
+    contact: text(input.contact, 160),
+    story: text(input.story, 4000),
+  };
+  const errors = [];
+  if (!submission.artist) errors.push('Tell us who made it.');
+  if (!submission.title) errors.push('Give the song a title.');
+  if (!/^https?:\/\/\S+\.\S+/.test(submission.link)) errors.push('Add a link where we can hear it.');
+  if (submission.story.length < 80) errors.push('Tell us how you made it, in a few sentences.');
+  return { submission, errors };
 }

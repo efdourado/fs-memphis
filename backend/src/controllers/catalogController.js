@@ -35,6 +35,14 @@ export class CatalogController {
     res.json(await this.catalogService.updates(library));
   });
 
+  submit = asyncHandler(async (req, res) => {
+    res.status(201).json(await this.catalogService.submit(req.body));
+  });
+
+  listSubmissions = asyncHandler(async (req, res) => {
+    res.json(await this.catalogService.listSubmissions());
+  });
+
   getLibrary = asyncHandler(async (req, res) => {
     res.json(await this.libraryService.getLibrary(req.user._id));
   });
