@@ -1,33 +1,23 @@
 import { useEffect, useRef, useState } from 'react';
+import { experimentFor, settingsFor } from './soundExperiments';
+import { createSoundEngine } from './soundEngine';
 
-const PARTS = [
-  { name: 'Pulse', steps: [1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0] },
-  { name: 'Bass', steps: [1, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 0, 0, 1, 0] },
-  { name: 'Harmony', steps: [1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0] },
-  { name: 'Accents', steps: [0, 0, 1, 0, 0, 0, 1, 1, 0, 0, 1, 0, 0, 1, 1, 0] },
-];
-function tone(ctx, output, frequency, time, duration, volume, type = 'sine', fall = false) {
-  const osc = ctx.createOscillator(), gain = ctx.createGain();
-  osc.type = type;
-  osc.frequency.setValueAtTime(frequency, time);
-  if (fall) osc.frequency.exponentialRampToValueAtTime(38, time + duration);
-  gain.gain.setValueAtTime(0, time);
-  gain.gain.linearRampToValueAtTime(volume, time + .008);
-  gain.gain.exponentialRampToValueAtTime(.001, time + duration);
-  osc.connect(gain); gain.connect(output); osc.start(time); osc.stop(time + duration + .01);
-  osc.onended = () => { osc.disconnect(); gain.disconnect(); };
-}
-export default function SoundLab({ session }) {
-  const [enabled, setEnabled] = useState([true, true, false, false]);
+function Experiment({ session, experiment }) {
+  const [settings, setSettings] = useState(() => settingsFor(experiment));
   const [playing, setPlaying] = useState(false);
+  const [starting, setStarting] = useState(false);
   const [step, setStep] = useState(-1);
   const [error, setError] = useState('');
-  const engine = useRef(null), enabledRef = useRef(enabled), mounted = useRef(true), generation = useRef(0);
-  enabledRef.current = enabled;
+  const engine = useRef(null), controls = useRef(settings), mounted = useRef(true), generation = useRef(0);
+  controls.current = settings;
+  const preset = experiment.presets.find(item => item.id === settings.presetId);
+  const modified = preset.enabled.some(id => !settings.enabled.includes(id)) || settings.enabled.some(id => !preset.enabled.includes(id));
+
   const stop = () => {
-    generation.current += 1;
-    if (engine.current) { clearInterval(engine.current.timer); engine.current.ctx.close().catch(() => {}); engine.current = null; }
-    if (mounted.current) { setPlaying(false); setStep(-1); }
+    generation.current++;
+    engine.current?.stop();
+    engine.current = null;
+    if (mounted.current) { setPlaying(false); setStarting(false); setStep(-1); }
   };
   useEffect(() => {
     mounted.current = true;
@@ -35,46 +25,80 @@ export default function SoundLab({ session }) {
     document.addEventListener('visibilitychange', hide);
     return () => { mounted.current = false; stop(); document.removeEventListener('visibilitychange', hide); };
   }, []);
+
   const play = async () => {
     if (engine.current) { stop(); return; }
-    setError('');
+    setError(''); setStarting(true);
     const token = ++generation.current;
+    let ctx, nextEngine;
     try {
       const Audio = window.AudioContext || window.webkitAudioContext;
       if (!Audio) throw new Error('unavailable');
-      const ctx = new Audio();
-      const output = ctx.createGain(); output.gain.value = .38; output.connect(ctx.destination);
-      engine.current = { ctx };
+      ctx = new Audio();
+      nextEngine = createSoundEngine(ctx, experiment, () => controls.current, setStep);
+      engine.current = nextEngine;
       await ctx.resume();
-      if (!mounted.current || token !== generation.current) { ctx.close().catch(() => {}); return; }
-      let beat = 0, nextTime = ctx.currentTime + .04;
-      const interval = 60 / 108 / 4;
-      const queue = [];
-      const tick = () => {
-        while (nextTime < ctx.currentTime + .09) {
-          const current = beat % 16;
-          PARTS.forEach((part, index) => {
-            if (!enabledRef.current[index] || !part.steps[current]) return;
-            if (index === 0) tone(ctx, output, 140, nextTime, .19, .65, 'sine', true);
-            if (index === 1) tone(ctx, output, current < 8 ? 110 : 130.81, nextTime, .18, .2, 'triangle');
-            if (index === 2) [220, 261.63, 329.63].forEach(note => tone(ctx, output, note * (current < 8 ? 1 : .89), nextTime, .75, .075, 'triangle'));
-            if (index === 3) tone(ctx, output, current % 2 ? 1600 : 1100, nextTime, .04, .06, 'square');
-          });
-          queue.push({ time: nextTime, step: current }); nextTime += interval; beat++;
-        }
-        while (queue.length && queue[0].time <= ctx.currentTime) setStep(queue.shift().step);
-      };
-      tick(); engine.current.timer = setInterval(tick, 25); setPlaying(true);
+      if (!mounted.current || token !== generation.current) { nextEngine.stop(); return; }
+      nextEngine.start(); setPlaying(true); setStarting(false);
     } catch {
-      stop(); setError('Audio could not start in this browser. You can still explore the arrangement above.');
+      nextEngine?.stop();
+      if (ctx && !nextEngine && ctx.state !== 'closed') ctx.close().catch(() => {});
+      if (mounted.current && token === generation.current) {
+        stop(); setError('Audio could not start. Try again, or explore the arrangement above.');
+      }
     }
   };
-  return <section className="m-lab" aria-labelledby="lab-title">
-    <div className="p-rowhead"><div><p className="m-kicker">Make the idea audible</p><h3 id="lab-title">The less-is-more machine.</h3></div><span className="p-mono">108 BPM / original sound sketch</span></div>
-    <p className="p-small">{session.lab}</p>
-    <div className="m-sequencer">{PARTS.map((part, index) => <div className={`m-sequencer__row ${enabled[index] ? '' : 'is-muted'}`} key={part.name}><button aria-pressed={enabled[index]} aria-label={`${part.name} ${enabled[index] ? 'on' : 'off'}`} onClick={() => setEnabled(value => value.map((on, i) => i === index ? !on : on))}><span>{enabled[index] ? '●' : '○'}</span>{part.name}</button><div aria-hidden="true">{part.steps.map((hit, i) => <span key={i} className={`${hit ? 'is-hit' : ''} ${step === i ? 'is-current' : ''}`} />)}</div></div>)}</div>
-    <div className="p-btns"><button className="p-btn m-primary" onClick={play}>{playing ? '■ Stop sketch' : '▶ Play sketch'}</button><button className="p-btn" onClick={() => setEnabled([true, true, true, true])}>All four parts</button><button className="p-btn" onClick={() => setEnabled([true, true, false, false])}>Strip it back</button></div>
-    <p className="p-mono">An original Memphis exercise, not audio or stems from {session.title}. Tap a part to add or remove it.</p>
-    {error && <p role="alert" className="p-error">{error}</p>}
-  </section>;
+  const choose = selected => setSettings(current => ({ ...settingsFor(experiment, selected), amount: current.amount }));
+  const toggle = id => setSettings(current => ({ ...current, enabled: current.enabled.includes(id) ? current.enabled.filter(part => part !== id) : [...current.enabled, id] }));
+
+  return (
+    <section className="m-lab" aria-labelledby="lab-title">
+      <div className="p-rowhead">
+        <div><p className="m-kicker">Make the idea audible · {session.title}</p><h3 id="lab-title">{experiment.title}</h3></div>
+        <span className="p-mono">{settings.bpm} BPM / original sound sketch</span>
+      </div>
+      <p className="p-small">{experiment.instruction}</p>
+      <div className="m-lab-presets" role="group" aria-label={`Experiments for ${session.title}`}>
+        {experiment.presets.map((item, index) => (
+          <button key={item.id} aria-pressed={settings.presetId === item.id} onClick={() => choose(item)}>
+            <span className="p-mono">0{index + 1}</span><span>{item.name}</span>
+          </button>
+        ))}
+      </div>
+      <p className="m-lab-note" role="status">{modified ? 'Your variation: you changed the layers. Select a scene above to hear its starting arrangement again.' : preset.note}</p>
+      {experiment.control && (
+        <div className="m-lab-control">
+          <label htmlFor="lab-amount">{experiment.control.label}<output>{settings.amount}%</output></label>
+          <input id="lab-amount" type="range" min="0" max="100" value={settings.amount} onChange={event => setSettings(current => ({ ...current, amount: Number(event.target.value) }))} />
+          <div><span>{experiment.control.low}</span><span>{experiment.control.high}</span></div>
+          {!settings.enabled.some(id => experiment.parts.some(part => part.id === id && (experiment.control.id === 'width' ? part.spread : part.human))) && (
+            <p className="p-small">{experiment.control.id === 'width' ? 'Choose Lift or Chorus to hear the width change.' : 'Choose Let the accents in to hear the looseness change.'}</p>
+          )}
+        </div>
+      )}
+      <div className="m-sequencer">
+        {experiment.parts.map(part => (
+          <div className={`m-sequencer__row ${settings.enabled.includes(part.id) ? '' : 'is-muted'}`} key={part.id}>
+            <button aria-pressed={settings.enabled.includes(part.id)} aria-label={`${part.name} ${settings.enabled.includes(part.id) ? 'on' : 'off'}`} onClick={() => toggle(part.id)}>
+              <span aria-hidden="true">{settings.enabled.includes(part.id) ? '●' : '○'}</span>{part.name}
+            </button>
+            <div aria-hidden="true">{Array.from({ length: 16 }, (_, index) => <span key={index} className={`${part.hits.some(hit => hit.step === index) ? 'is-hit' : ''} ${step === index ? 'is-current' : ''}`} />)}</div>
+          </div>
+        ))}
+      </div>
+      <div className="p-btns">
+        <button className="p-btn m-primary" onClick={play}>{starting ? 'Cancel audio start' : playing ? '■ Stop experiment' : '▶ Play experiment'}</button>
+        <button className="p-btn" onClick={() => setSettings(settingsFor(experiment))}>Reset experiment</button>
+        <span className="p-small">{settings.enabled.length ? `${settings.enabled.length} layers active` : 'All layers muted. Turn one on to hear it.'}</span>
+      </div>
+      <p className="p-mono">{experiment.tip} Tap a layer to add or remove it.</p>
+      <p className="p-mono">An original Memphis demonstration of an idea in {session.title}. Not the recording, its stems, or a reconstruction.</p>
+      {error && <p role="alert" className="p-error">{error}</p>}
+    </section>
+  );
+}
+
+export default function SoundLab({ session }) {
+  const experiment = experimentFor(session.slug);
+  return experiment ? <Experiment key={session.slug} session={session} experiment={experiment} /> : null;
 }

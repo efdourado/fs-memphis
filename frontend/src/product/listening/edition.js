@@ -9,7 +9,6 @@ export const sessions = [
     question: 'What makes the chorus feel bigger?', options: ['The foundation changes', 'The space around it changes', 'Everything gets faster'], answer: 1,
     reveal: 'Our reading: the foundation stays steady while guitars and harmonies open up the space. Movement can come from the arrangement itself.',
     sections: [1, 3, 8], next: 'running-up-that-hill', bridge: 'A steady pulse can feel peaceful. Can it also feel restless?',
-    lab: 'Keep the pulse. Bring the harmony in and out. Hear how a room can grow around the same rhythm.',
   },
   {
     slug: 'bad-guy', title: 'bad guy', artist: 'Billie Eilish', year: '2019', duration: '3:14', color: '#b7c493',
@@ -19,7 +18,6 @@ export const sessions = [
     question: 'What takes the spotlight in the hook?', options: ['A wall of backing vocals', 'An instrumental riff', 'A guitar solo'], answer: 1,
     reveal: 'Our reading: the riff takes the role you might expect a sung chorus to play. Leaving room makes a small sound feel like the main event.',
     sections: [1, 3, 7], next: 'dreams', bridge: 'Two very different songs. One shared instinct: give each part room.',
-    lab: 'Start with all four parts, then remove two. Which parts do you actually miss?',
   },
   {
     slug: 'running-up-that-hill', title: 'Running Up That Hill', artist: 'Kate Bush', year: '1985', duration: '4:58', color: '#c4afd4',
@@ -29,7 +27,6 @@ export const sessions = [
     question: 'What gives the ending a different energy?', options: ['The rhythm disappears', 'The voice disappears', 'Played accents over the repeating pulse'], answer: 2,
     reveal: 'Our reading: the repeating machine rhythm sets an expectation. The played fills and guitar at the end feel expressive against that steady frame.',
     sections: [0, 4, 7], next: 'bad-guy', bridge: 'Kate holds the pulse. Billie changes it. Explore another way to make an ending land.',
-    lab: 'Let the pulse repeat, then bring in the high accents. Notice how a small addition changes the tension.',
   },
 ];
 export const sessionFor = slug => sessions.find(session => session.slug === slug);

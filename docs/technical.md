@@ -77,7 +77,11 @@ Songs sent from `/unheard` are stored in the `submissions` collection with statu
 
 `NotebookContext.jsx` keeps saved technique IDs (`song-slug:index`), private notes and furthest session stage under the versioned `memphis-listening-notebook-v1` browser key. `notebook.js` validates restored data and discards invalid references. Storage failures show an export/copy warning. Stage 3 means the listener explicitly finished. Reordering techniques will require stable IDs or a notebook migration before the next catalog edition.
 
-`SoundLab.jsx` uses native Web Audio with a short lookahead scheduler, four synthesized parts and explicit playback controls. It closes its audio context on unmount and when the document becomes hidden. It downloads no audio, uses no original-song material and does not autoplay. Its common 108 BPM sketch is separate from the song's actual tempo.
+`SoundLab.jsx` selects a dedicated experiment by song slug, resetting controls and closing playback when songs change. `soundExperiments.js` defines original scores, three scenes per song and a pure event planner: Dreams keeps its 112 BPM foundation while adding stereo width and harmony; bad guy hands the lead to a riff and shifts from 135 to 120 BPM with a longer sub bass; Running Up That Hill holds a 108 BPM machine pulse and adds a sustained drone and played-style accents with bounded timing/velocity variation. These are sketch tempos and original patterns, not recording transcriptions. Unknown songs receive no generic fallback experiment.
+
+`soundEngine.js` renders distinct filtered synth and noise voices, stereo panning, sustained envelopes and a master compressor. Its lookahead scheduler reads the live controls for each sixteenth note, so scene/tempo changes do not start additional loops. Playback stops and closes its audio context on unmount, hidden tabs and cancellation during audio startup. No audio downloads, original-song material, actual voices or autoplay are used.
+
+`soundExperiments.test.js` checks distinct scores, invariant foundations, the lead handoff, the ending's real tempo and bass changes, stereo width, accent-only humanization, muting/reset behavior, voice rendering and idempotent engine cleanup.
 
 `listening/listening.css` contains the responsive edition and room styles. The arrangement is deliberately a visual, by-ear interpretation; unknown layer placement remains distinct from silence.
 

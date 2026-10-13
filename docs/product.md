@@ -25,7 +25,7 @@ They read the same page. Neither needs to read music; studio terms are explained
 
 ## The listening experience
 
-The front door is a curated edition: **The art of less**. Three familiar songs become guided rooms with a listening prompt, an interactive arrangement, a playable original sound sketch and a takeaway to keep. The loop is **listen → explore → keep → follow the next idea**.
+The front door is a curated edition: **The art of less**. Three familiar songs become guided rooms with a listening prompt, an interactive arrangement, a song-specific original sound experiment and a takeaway to keep. The loop is **listen → explore → keep → follow the next idea**.
 
 The notebook at `/notebook` works without an account, stores techniques, notes and session progress on this device, and exports to Markdown. The full song pages remain the source and reference layer. Public browsing ships as a static edition of the reviewed catalog; accounts and submissions retain the existing backend.
 
@@ -95,7 +95,7 @@ One warm, dark listening environment with light typography, original vinyl artwo
 
 **Now — A complete three-song listening loop.** Invite a small group to listen, explore, keep an idea and follow a connection. Measure understanding through observation before adding tracking.
 
-**Next — Unheard bridges and distinct sound experiments.** Connect each showcase song to an independent artist through an audible technique. Add a dedicated experiment for each idea.
+**Next — Unheard bridges and listener validation.** Connect each showcase song to an independent artist through an audible technique. Test the three dedicated sound experiments with listeners and tune their sounds and prompts.
 
 **Later — Artist-led rooms, optional notebook sync and new editions.** Add community only with moderation and enough listeners to make it useful.
 

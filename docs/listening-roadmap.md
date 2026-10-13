@@ -14,7 +14,7 @@ Keep the full, sourced song pages as the reference layer. Let curiosity be the f
 - `/listen/:slug`: three stages per showcase song—listen closer, pull it apart, make it yours. The selected stage is shareable in the URL.
 - A prompt and reveal for each song, with original listening links and an explicit editorial point of view.
 - A section-by-section arrangement explorer using the existing reviewed maps. Unknown placement is shown as unknown.
-- An original four-part Web Audio sketch to try adding and removing layers. This is an educational exercise, not a reconstruction, original recording, stem player or automated analysis.
+- Three distinct original Web Audio experiments: a fixed groove with width and harmonies for Dreams; a voice-like lead/riff handoff and slower bass-heavy ending for bad guy; a machine pulse, sustained drone and variable played-style accents for Running Up That Hill. Each has three scenes, individual layer toggles and reset. These are educational synth exercises, not reconstructions, recordings, stems or automated analysis.
 - A device-local notebook: keep techniques, write a private reflection, resume sessions, mark completion, revisit, remove saved ideas, export Markdown.
 - A next-song handoff with an explicit musical reason, instead of an unrelated recommendation grid.
 - Static public catalog and original artwork, generated from the existing catalog. The three rooms, notebook, public song pages, credits, search and comparisons need no running backend. Account services and Unheard submissions still do.
@@ -37,13 +37,13 @@ A useful pilot signal: most participants can explain a concrete discovery in the
 | Priority | Idea | What makes it worth building | Smallest credible release | Release gate |
 | --- | --- | --- | --- | --- |
 | 1 | Artist-to-listener bridges | The same technique connects an established record to an artist you have never heard | Three permissioned Unheard songs, one paired with each showcase room, with a first-person making-of | Every pairing has a specific audible reason and reviewed artist permission |
-| 2 | A different experiment for each idea | People can feel an arrangement decision by changing it | A harmony/width exercise for Dreams, a riff-versus-voice exercise for bad guy, a machine-versus-played-accent exercise for Kate Bush, all using original sketches | Listeners can explain the difference without reading a tutorial |
+| 2 | Validate the three song-specific experiments | People can feel an arrangement decision by changing it | The first exercises are implemented; tune the sounds and prompts through listening sessions | Listeners can explain the difference without reading a tutorial |
 | 3 | Artist-led rooms | The person who made the music can demonstrate a decision | One short, permissioned artist walkthrough with their own musical examples and one practical challenge | Clear rights, useful playback, captions, reviewed claims |
 | 4 | A notebook that travels | Return visits retain accumulated taste across devices | Optional account sync, with explicit import of the existing local notebook and stable technique IDs | Nothing disappears during import; export and deletion are clear |
 | 5 | New listening editions | A coherent reason to return, not endless catalog growth | One researched three-song edition around an idea such as imperfect voices, borrowed sounds, or endings | Every room has a clear discovery, an experiment and a meaningful next step |
 | 6 | A shared listening table | Compare human interpretations without ranking popularity | Opt-in notes on one listening prompt, with moderation and no follower counts | A staffed review process and enough participants for useful conversation |
 
-Do not build all six at once. Validate the first edition, then build the Unheard bridge and the distinct experiments. Those deepen the core promise before adding account and community overhead.
+Do not build all six at once. Validate the first edition, then build the Unheard bridge and refine the distinct experiments with listener feedback. Those deepen the core promise before adding account and community overhead.
 
 ## Decisions still to make
 
